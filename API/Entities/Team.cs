@@ -1,4 +1,4 @@
-namespace API.Models
+namespace API.Entities
 {
 	public class Team : BaseClass
 	{

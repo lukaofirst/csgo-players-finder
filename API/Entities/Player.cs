@@ -1,4 +1,4 @@
-namespace API.Models
+namespace API.Entities
 {
 	public class Player : BaseClass
 	{
@@ -9,6 +9,6 @@ namespace API.Models
 		public bool IsActive { get; set; }
 		public int TeamId { get; set; }
 		public Team? Team { get; set; }
-		public List<Trophy>? Trophies { get; set; }
+		public List<PlayerTrophy>? PlayerTrophies { get; set; }
 	}
 }

@@ -1,5 +1,4 @@
-using API.Data.SeedData;
-using API.Models;
+using API.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -13,9 +12,17 @@ namespace API.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.ApplyConfiguration(new SeedTrophy());
-			modelBuilder.ApplyConfiguration(new SeedTeam());
-			modelBuilder.ApplyConfiguration(new SeedPlayer());
+			modelBuilder.Entity<PlayerTrophy>().HasKey(pt => new { pt.PlayerId, pt.TrophyId });
+
+			modelBuilder.Entity<PlayerTrophy>()
+				.HasOne<Player>(pt => pt.Player)
+				.WithMany(p => p.PlayerTrophies)
+				.HasForeignKey(pt => pt.PlayerId);
+
+			modelBuilder.Entity<PlayerTrophy>()
+				.HasOne<Trophy>(pt => pt.Trophy)
+				.WithMany(t => t.PlayerTrophies)
+				.HasForeignKey(pt => pt.TrophyId);
 		}
 
 		public DbSet<Player>? Players { get; set; }
