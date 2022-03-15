@@ -13,6 +13,7 @@ builder.Services.AddDbContext<DataContext>((opt) =>
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
+	opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 	opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 	opt.JsonSerializerOptions.WriteIndented = true;
 });
