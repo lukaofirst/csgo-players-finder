@@ -22,5 +22,15 @@ namespace API.Controllers
 
 			return Ok(teams);
 		}
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<Team>> GetTeamByName(int id)
+		{
+			var team = await _context.Teams!.FirstOrDefaultAsync(t => t.Id == id);
+
+			if (team == null) return NotFound();
+
+			return Ok(team);
+		}
 	}
 }
