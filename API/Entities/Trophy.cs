@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace API.Entities
 {
 	public class Trophy : BaseClass
@@ -5,6 +7,7 @@ namespace API.Entities
 		public string? Name { get; set; }
 		public int Year { get; set; }
 		public bool IsMajor { get; set; }
+		[JsonIgnore]
 		public List<PlayerTrophy>? PlayerTrophies { get; set; }
 	}
 }

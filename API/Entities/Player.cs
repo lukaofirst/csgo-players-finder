@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace API.Entities
 {
 	public class Player : BaseClass
@@ -7,6 +9,7 @@ namespace API.Entities
 		public int Age { get; set; }
 		public string? Nationality { get; set; }
 		public bool IsActive { get; set; }
+		[JsonIgnore]
 		public int TeamId { get; set; }
 		public Team? Team { get; set; }
 		public List<PlayerTrophy>? PlayerTrophies { get; set; }
