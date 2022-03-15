@@ -2,6 +2,7 @@
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220315004045_SeedingPartialData")]
+    partial class SeedingPartialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.3");
@@ -45,38 +47,6 @@ namespace API.Data.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Players");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Age = 27,
-                            IsActive = true,
-                            Name = "Epitácio Pessoa",
-                            Nationality = "Brazil",
-                            Nickname = "TACO",
-                            TeamId = 3
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Age = 30,
-                            IsActive = true,
-                            Name = "Gabriel Toledo",
-                            Nationality = "Brazil",
-                            Nickname = "FalleN",
-                            TeamId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Age = 25,
-                            IsActive = true,
-                            Name = "Andrei Piovezan",
-                            Nationality = "Brazil",
-                            Nickname = "arT",
-                            TeamId = 2
-                        });
                 });
 
             modelBuilder.Entity("API.Entities.PlayerTrophy", b =>
@@ -91,29 +61,7 @@ namespace API.Data.Migrations
 
                     b.HasIndex("TrophyId");
 
-                    b.ToTable("PlayerTrophies");
-
-                    b.HasData(
-                        new
-                        {
-                            PlayerId = 1,
-                            TrophyId = 1
-                        },
-                        new
-                        {
-                            PlayerId = 1,
-                            TrophyId = 2
-                        },
-                        new
-                        {
-                            PlayerId = 2,
-                            TrophyId = 1
-                        },
-                        new
-                        {
-                            PlayerId = 2,
-                            TrophyId = 2
-                        });
+                    b.ToTable("PlayerTrophy");
                 });
 
             modelBuilder.Entity("API.Entities.Team", b =>

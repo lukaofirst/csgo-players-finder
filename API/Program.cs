@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>((opt) =>
 {
-	opt.UseSqlite(builder.Configuration.GetConnectionString("connStr"));
+	opt.UseSqlite(builder.Configuration.GetConnectionString("connStr")).EnableSensitiveDataLogging();
 });
 
 builder.Services.AddControllers();

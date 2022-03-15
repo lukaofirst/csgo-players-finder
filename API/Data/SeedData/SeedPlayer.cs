@@ -17,7 +17,7 @@ namespace API.Data.SeedData
 					Age = 27,
 					Nationality = "Brazil",
 					IsActive = true,
-					TeamId = 3
+					TeamId = 3,
 				},
 				new Player
 				{
