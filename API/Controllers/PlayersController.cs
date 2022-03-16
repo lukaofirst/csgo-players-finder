@@ -1,7 +1,7 @@
 using API.Data;
-using API.DTO;
-using API.Entities;
 using AutoMapper;
+using Domain.DTO;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

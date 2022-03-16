@@ -1,4 +1,4 @@
-namespace API.DTO
+namespace Domain.DTO
 {
 	public class TeamDTO
 	{

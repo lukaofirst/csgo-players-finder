@@ -1,6 +1,6 @@
-using API.DTO;
-using API.Entities;
 using AutoMapper;
+using Domain.DTO;
+using Domain.Entities;
 
 namespace API.Helpers
 {

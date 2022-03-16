@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace API.Entities
+namespace Domain.Entities
 {
 	public class Player : BaseClass
 	{

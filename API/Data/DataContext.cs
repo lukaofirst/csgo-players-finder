@@ -1,5 +1,5 @@
 using API.Data.SeedData;
-using API.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
