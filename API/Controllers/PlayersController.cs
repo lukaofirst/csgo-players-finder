@@ -18,7 +18,7 @@ namespace API.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<List<Player>>> GetPlayers()
+		public async Task<ActionResult<List<Player>>> GetAll()
 		{
 			var players = await _context.Players!.Include(p => p.Team)
 				.Include(p => p.PlayerTrophies)!.ThenInclude(p => p.Trophy)
@@ -31,7 +31,7 @@ namespace API.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Player>> GetPlayerById(int id)
+		public async Task<ActionResult<Player>> GetById(int id)
 		{
 			var player = await _context.Players!.Include(p => p.Team)
 				.Include(p => p.PlayerTrophies)!
@@ -45,15 +45,11 @@ namespace API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<PlayerDTO>> PostPlayer(PlayerDTO playerDTO)
+		public async Task<ActionResult<PlayerDTO>> Post(PlayerDTO playerDTO)
 		{
-			var player = await _context.Players!.FindAsync(playerDTO.Id);
-
-			if (player != null) return NoContent();
-
 			var playerMap = _mapper.Map(playerDTO, new Player());
 
-			await _context.Players.AddAsync(playerMap);
+			await _context.Players!.AddAsync(playerMap);
 
 			var result = await _context.SaveChangesAsync() > 0;
 
@@ -63,7 +59,7 @@ namespace API.Controllers
 		}
 
 		[HttpDelete]
-		public async Task<ActionResult> DeletePlayer(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
 			var player = await _context.Players!
 				.AsNoTracking()
@@ -72,7 +68,7 @@ namespace API.Controllers
 
 			if (player == null) return BadRequest(new ProblemDetails
 			{
-				Title = $"The player with id: [{id}] has already been deleted"
+				Title = $"The player with id: [{id}] doesn't exist"
 			});
 
 			_context.Players!.Remove(player);
