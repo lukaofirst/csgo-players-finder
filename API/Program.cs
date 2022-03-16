@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using API.Data;
+using API.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,8 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
 	opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 	opt.JsonSerializerOptions.WriteIndented = true;
 });
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
