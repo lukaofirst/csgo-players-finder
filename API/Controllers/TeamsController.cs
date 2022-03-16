@@ -1,4 +1,4 @@
-using API.Data;
+using Data;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

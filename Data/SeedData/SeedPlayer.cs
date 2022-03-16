@@ -2,7 +2,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace API.Data.SeedData
+namespace Data.SeedData
 {
 	public class SeedPlayer : IEntityTypeConfiguration<Player>
 	{

@@ -1,8 +1,8 @@
-using API.Data.SeedData;
+using Data.SeedData;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Data
+namespace Data
 {
 	public class DataContext : DbContext
 	{
