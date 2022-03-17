@@ -15,7 +15,11 @@ builder.Services.AddDbContext<DataContext>((opt) =>
 	opt.UseSqlite(builder.Configuration.GetConnectionString("connStr"));
 });
 
+builder.Services.AddCors();
+
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<ITrophyRepository, TrophyRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
@@ -42,6 +46,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(opt =>
+{
+	opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http:localhost:3000");
+});
 
 app.MapControllers();
 

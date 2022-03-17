@@ -1,4 +1,5 @@
 using Data;
+using Data.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,16 +8,17 @@ namespace API.Controllers
 {
 	public class TrophiesController : BaseAPIController
 	{
-		private readonly DataContext _context;
-		public TrophiesController(DataContext context)
+		private readonly ITrophyRepository _trophyRepository;
+
+		public TrophiesController(ITrophyRepository trophyRepository)
 		{
-			_context = context;
+			_trophyRepository = trophyRepository;
 		}
 
 		[HttpGet]
 		public async Task<ActionResult<List<Trophy>>> GetAll()
 		{
-			var trophies = await _context.Trophies!.AsNoTracking().ToListAsync();
+			var trophies = await _trophyRepository.GetAll();
 
 			if (trophies == null) return NotFound();
 
@@ -26,31 +28,20 @@ namespace API.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Trophy>> Post(Trophy trophy)
 		{
-			await _context.Trophies!.AddAsync(trophy);
+			var entity = await _trophyRepository.Post(trophy);
 
-			var result = await _context.SaveChangesAsync() > 0;
-
-			if (result) return Ok(trophy);
-
-			return BadRequest(new ProblemDetails { Title = "We found an issue adding a trophy" });
+			return entity;
 		}
 
 		[HttpDelete]
 		public async Task<ActionResult> Delete(int id)
 		{
-			var trophy = await _context.Trophies!
-				.AsNoTracking()
-				.Where(t => t.Id == id)
-				.FirstOrDefaultAsync();
+			var trophy = await _trophyRepository.Delete(id);
 
-			if (trophy == null) return BadRequest(new ProblemDetails
+			if (!trophy) return BadRequest(new ProblemDetails
 			{
-				Title = $"The trophy with id: [{id}] doesn't exist"
+				Title = $"Trophy with id: [{id}] doesn't exist"
 			});
-
-			_context.Trophies!.Remove(trophy);
-
-			await _context.SaveChangesAsync();
 
 			return Ok($"The trophy with id: [{id}] has been deleted successfully!");
 		}

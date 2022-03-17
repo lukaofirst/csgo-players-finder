@@ -1,4 +1,5 @@
 using Data;
+using Data.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,16 +8,17 @@ namespace API.Controllers
 {
 	public class TeamsController : BaseAPIController
 	{
-		private readonly DataContext _context;
-		public TeamsController(DataContext context)
+		private readonly ITeamRepository _teamRepository;
+
+		public TeamsController(ITeamRepository teamRepository)
 		{
-			_context = context;
+			_teamRepository = teamRepository;
 		}
 
 		[HttpGet]
 		public async Task<ActionResult<List<Team>>> GetAll()
 		{
-			var teams = await _context.Teams!.AsNoTracking().ToListAsync();
+			var teams = await _teamRepository.GetAll();
 
 			if (teams == null) return NotFound();
 
@@ -26,9 +28,12 @@ namespace API.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Team>> GetById(int id)
 		{
-			var team = await _context.Teams!.FirstOrDefaultAsync(t => t.Id == id);
+			var team = await _teamRepository.GetById(id);
 
-			if (team == null) return NotFound();
+			if (team == null) return NotFound(new ProblemDetails
+			{
+				Title = "Team not found!"
+			});
 
 			return Ok(team);
 		}
@@ -36,31 +41,20 @@ namespace API.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Team>> Post(Team team)
 		{
-			await _context.Teams!.AddAsync(team);
+			var entity = await _teamRepository.Post(team);
 
-			var result = await _context.SaveChangesAsync() > 0;
-
-			if (result) return Ok(team);
-
-			return BadRequest(new ProblemDetails { Title = "We found an issue adding a team" });
+			return Ok(entity);
 		}
 
 		[HttpDelete]
 		public async Task<ActionResult> Delete(int id)
 		{
-			var team = await _context.Teams!
-				.AsNoTracking()
-				.Where(t => t.Id == id)
-				.FirstOrDefaultAsync();
+			var team = await _teamRepository.Delete(id);
 
-			if (team == null) return BadRequest(new ProblemDetails
+			if (!team) return BadRequest(new ProblemDetails
 			{
-				Title = $"The team with id: [{id}] doesn't exist"
+				Title = $"Team with id: [{id}] doesn't exist"
 			});
-
-			_context.Teams!.Remove(team);
-
-			await _context.SaveChangesAsync();
 
 			return Ok($"The team with id: [{id}] has been deleted successfully!");
 		}
