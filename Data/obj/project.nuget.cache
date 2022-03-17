@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gENGY93roNklwMRoQu2lYVm0yhVTPJu68ZYs4bWooNCJcOVyitDHnjRfEUNtynAu9DCUYESFqqE7lF3/kyYmnA==",
+  "dgSpecHash": "7JdK0LvKRDvN8WmaYh46uaFv3YWWLFEPYVSq9+lUgdSf7RLpAJWGirE21qr96d930ubZUAhJrALAJlOrdOC/Ow==",
   "success": true,
   "projectFilePath": "D:\\My Projects\\csgo-players-finder\\Data\\Data.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\lucas\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
+    "C:\\Users\\lucas\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
+    "C:\\Users\\lucas\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.3\\microsoft.entityframeworkcore.6.0.3.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\6.0.3\\microsoft.entityframeworkcore.abstractions.6.0.3.nupkg.sha512",
     "C:\\Users\\lucas\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\6.0.3\\microsoft.entityframeworkcore.analyzers.6.0.3.nupkg.sha512",

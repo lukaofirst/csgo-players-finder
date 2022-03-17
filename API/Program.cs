@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using API.Helpers;
 using Data;
+using Data.Interfaces;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DataContext>((opt) =>
 {
-	opt.UseSqlite(builder.Configuration.GetConnectionString("connStr")).EnableSensitiveDataLogging();
+	opt.UseSqlite(builder.Configuration.GetConnectionString("connStr"));
 });
+
+builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
