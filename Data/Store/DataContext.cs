@@ -1,6 +1,6 @@
-using Data.SeedData;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using SeedData;
 
 namespace Data
 {
