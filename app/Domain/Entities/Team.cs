@@ -8,7 +8,6 @@ namespace Domain.Entities
 		public string? Location { get; set; }
 		public string? Region { get; set; }
 		public int FoundedYear { get; set; }
-		[JsonIgnore]
 		public List<Player>? Players { get; set; }
 	}
 }

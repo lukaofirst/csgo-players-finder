@@ -15,6 +15,7 @@ namespace Data.Repositories
 		public async Task<List<Team>> GetAll()
 		{
 			var teams = await _context.Teams!
+				.Include(t => t.Players)
 				.AsNoTracking()
 				.ToListAsync();
 
@@ -24,6 +25,7 @@ namespace Data.Repositories
 		public async Task<Team> GetById(int id)
 		{
 			var team = await _context.Teams!
+				.Include(t => t.Players)
 				.FirstOrDefaultAsync(t => t.Id == id);
 
 			return team!;
