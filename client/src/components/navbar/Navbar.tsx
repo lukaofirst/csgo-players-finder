@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import NavbarLinks from './NavbarLinks';
+import NavLinks from './NavLinks';
 import Logo from './Logo';
 import Socials from './Socials';
 
@@ -7,7 +7,7 @@ const Navbar = () => {
     return (
         <Box className='navbar'>
             <Logo />
-            <NavbarLinks />
+            <NavLinks />
             <Socials />
         </Box>
     );

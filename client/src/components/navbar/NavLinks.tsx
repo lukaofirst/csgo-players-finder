@@ -1,12 +1,12 @@
 import { List, MenuItem, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
-const navbarLinks = ['Home', 'Players', 'Teams', 'Trophies'];
+const navLinks = ['Home', 'Players', 'Teams', 'Trophies'];
 
-const NavbarLinks = () => {
+const NavLinks = () => {
     return (
         <List className='navbar-ul'>
-            {navbarLinks.map((item) => (
+            {navLinks.map((item) => (
                 <MenuItem key={item}>
                     <NavLink
                         to={item === 'Home' ? '/' : `/${item}`}
@@ -22,4 +22,4 @@ const NavbarLinks = () => {
     );
 };
 
-export default NavbarLinks;
+export default NavLinks;

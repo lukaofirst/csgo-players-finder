@@ -1,17 +1,13 @@
-import { Link } from '@mui/material';
 import { Box } from '@mui/system';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import AnchorTag from '../utils/AnchorTag';
 
 const Socials = () => {
     return (
         <Box>
-            <Link
-                href='https://github.com/lukaofirst'
-                target='_blank'
-                rel='noreferrer'
-            >
+            <AnchorTag url='https://github.com/lukaofirst'>
                 <GitHubIcon fontSize='large' sx={IconStyle} />
-            </Link>
+            </AnchorTag>
         </Box>
     );
 };
