@@ -32,13 +32,8 @@ const Home = () => {
                 </Typography>
                 <Stack direction='row' justifyContent='center' spacing={10}>
                     <Box>
-                        <Button
-                            variant='outlined'
-                            sx={{ color: '#299cdd', borderColor: '#299cdd' }}
-                        >
-                            <ComputerIcon
-                                sx={{ margin: '0 5px 5px 0', color: '#299cdd' }}
-                            />
+                        <Button variant='outlined' sx={{ color: '#299cdd' }}>
+                            <ComputerIcon sx={{ margin: '0 5px 5px 0' }} />
                             Front-end
                         </Button>
                         <Stack direction='column' textAlign='center' my={2}>
@@ -54,10 +49,7 @@ const Home = () => {
                         </Stack>
                     </Box>
                     <Box>
-                        <Button
-                            variant='outlined'
-                            sx={{ color: '#299cdd', borderColor: '#299cdd' }}
-                        >
+                        <Button variant='outlined' sx={{ color: '#299cdd' }}>
                             <SettingsIcon sx={{ margin: '0 5px 5px 0' }} />
                             Back-end
                         </Button>
