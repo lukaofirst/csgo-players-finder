@@ -1,5 +1,6 @@
 import { Player } from '../../models/Player';
 import { Team } from '../../models/Team';
+import { Trophy } from '../../models/Trophy';
 
 export const playersArr: Player[] = [
     {
@@ -175,5 +176,26 @@ export const teamsArr: Team[] = [
                 team: 'CSGO Team',
             },
         ],
+    },
+];
+
+export const trophiesArr: Trophy[] = [
+    {
+        id: 1,
+        name: 'PGL Stockholm Major',
+        year: 2021,
+        isMajor: true,
+    },
+    {
+        id: 2,
+        name: 'IEM Katowice',
+        year: 2022,
+        isMajor: false,
+    },
+    {
+        id: 3,
+        name: 'ESL Pro League Season 15',
+        year: 2022,
+        isMajor: false,
     },
 ];
