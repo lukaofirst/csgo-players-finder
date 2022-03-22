@@ -1,12 +1,12 @@
 import { Stack } from '@mui/material';
-import { Player } from '../../models/Player';
-import PlayerItem from './PlayerItem';
+import { Team } from '../../models/Team';
+import TeamItem from './TeamItem';
 
 interface Props {
-    items: Player[];
+    items: Team[];
 }
 
-const PlayerList = ({ items }: Props) => {
+const TeamList = ({ items }: Props) => {
     return (
         <Stack
             direction='row'
@@ -15,10 +15,10 @@ const PlayerList = ({ items }: Props) => {
             flexWrap='wrap'
         >
             {items.map((item) => (
-                <PlayerItem key={item.id} item={item} />
+                <TeamItem key={item.id} item={item} />
             ))}
         </Stack>
     );
 };
 
-export default PlayerList;
+export default TeamList;

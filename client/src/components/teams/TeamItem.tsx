@@ -1,12 +1,14 @@
-import { Button, Paper, Typography } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
-import { Player } from '../../models/Player';
+import { Paper, Typography } from '@mui/material';
+import { Team } from '../../models/Team';
+
 interface Props {
-    item: Player;
+    item: Team;
 }
 
-const PlayerItem = ({ item }: Props) => {
-    const { nickname, name, age, nationality, team } = item;
+const TeamItem = ({ item }: Props) => {
+    const { name, location, region, foundedYear, players } = item;
+
+    console.log(players);
 
     return (
         <Paper
@@ -23,25 +25,19 @@ const PlayerItem = ({ item }: Props) => {
             }}
         >
             <Typography variant='h6' my={1} color='#299cdd'>
-                {nickname}
+                {name}
             </Typography>
             <Typography variant='body1' my={1}>
-                Name: {name}
+                Location: {location}
             </Typography>
             <Typography variant='body1' my={1}>
-                Age: {age} years
+                Region: {region}
             </Typography>
             <Typography variant='body1' my={1}>
-                Nationality: {nationality}
+                Founded Year: {foundedYear}
             </Typography>
-            <Typography variant='body1' my={1}>
-                Team: {team}
-            </Typography>
-            <Button variant='outlined' sx={{ m: 2, color: '#299cdd' }}>
-                <InfoIcon sx={{ marginRight: '5px' }} /> More Info
-            </Button>
         </Paper>
     );
 };
 
-export default PlayerItem;
+export default TeamItem;
