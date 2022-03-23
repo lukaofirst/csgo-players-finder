@@ -3,9 +3,10 @@ import { Button } from '@mui/material';
 
 interface Props {
     name: string;
+    onClick?: () => void;
 }
 
-const ActionBtn = ({ name }: Props) => {
+const ActionBtn = ({ name, onClick: onClickHandler }: Props) => {
     return (
         <Button
             variant='contained'
@@ -14,6 +15,7 @@ const ActionBtn = ({ name }: Props) => {
                 width: '120px',
                 height: '50px',
             }}
+            onClick={onClickHandler}
         >
             <AddIcon />
             {name}

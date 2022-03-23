@@ -1,6 +1,7 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
+import PlayerForm from './components/players/PlayerForm';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Players from './pages/Players';
@@ -13,9 +14,12 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='/Players' element={<Players />} />
-                <Route path='/Teams' element={<Teams />} />
-                <Route path='/Trophies' element={<Trophies />} />
+                <Route path='players'>
+                    <Route index={true} element={<Players />} />
+                    <Route path='add-player' element={<PlayerForm />} />
+                </Route>
+                <Route path='teams' element={<Teams />} />
+                <Route path='trophies' element={<Trophies />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
             <Footer />

@@ -12,6 +12,10 @@ const Players = () => {
         navigate(-1);
     };
 
+    const NavigateToAddPlayer = () => {
+        navigate('add-player');
+    };
+
     return (
         <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
             <Stack
@@ -20,7 +24,7 @@ const Players = () => {
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
-                <ActionBtn name='player' />
+                <ActionBtn name='player' onClick={NavigateToAddPlayer} />
             </Stack>
             <Box sx={{ my: 3 }}>
                 <TextField
