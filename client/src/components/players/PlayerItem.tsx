@@ -6,7 +6,7 @@ interface Props {
 }
 
 const PlayerItem = ({ item }: Props) => {
-    const { nickname, name, age, nationality, team } = item;
+    const { nickname, name, age, nationality } = item;
 
     return (
         <Paper
@@ -33,9 +33,6 @@ const PlayerItem = ({ item }: Props) => {
             </Typography>
             <Typography variant='body1' my={1}>
                 Nationality: {nationality}
-            </Typography>
-            <Typography variant='body1' my={1}>
-                Team: {team}
             </Typography>
             <Button variant='outlined' sx={{ m: 2, color: '#299cdd' }}>
                 <InfoIcon sx={{ marginRight: '5px' }} /> More Info

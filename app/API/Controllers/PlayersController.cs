@@ -47,7 +47,7 @@ namespace API.Controllers
 			return Ok(player);
 		}
 
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{
 			var player = await _playerRepository.Delete(id);

@@ -9,7 +9,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 2,
@@ -17,7 +16,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 3,
@@ -25,7 +23,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 4,
@@ -33,7 +30,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 5,
@@ -41,7 +37,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 6,
@@ -49,7 +44,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 7,
@@ -57,7 +51,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 8,
@@ -65,7 +58,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
     {
         id: 9,
@@ -73,7 +65,6 @@ export const playersArr: Player[] = [
         name: 'ipsum',
         age: 23,
         nationality: 'Brazil',
-        team: 'CSGO Team',
     },
 ];
 
@@ -84,32 +75,6 @@ export const teamsArr: Team[] = [
         location: 'Brazil',
         region: 'North America',
         foundedYear: 2018,
-        players: [
-            {
-                id: 1,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-            {
-                id: 2,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-            {
-                id: 3,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-        ],
     },
     {
         id: 2,
@@ -117,32 +82,6 @@ export const teamsArr: Team[] = [
         location: 'Brazil',
         region: 'Europe',
         foundedYear: 2016,
-        players: [
-            {
-                id: 4,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-            {
-                id: 5,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-            {
-                id: 6,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-        ],
     },
     {
         id: 3,
@@ -150,32 +89,6 @@ export const teamsArr: Team[] = [
         location: 'Brazil',
         region: 'South America',
         foundedYear: 2019,
-        players: [
-            {
-                id: 7,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-            {
-                id: 8,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-            {
-                id: 9,
-                nickname: 'lorem',
-                name: 'ipsum',
-                age: 23,
-                nationality: 'Brazil',
-                team: 'CSGO Team',
-            },
-        ],
     },
 ];
 

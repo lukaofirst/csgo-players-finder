@@ -45,12 +45,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
 
 app.UseCors(opt =>
 {
-	opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http:localhost:3000");
+	opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
 });
+
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -6,9 +6,7 @@ interface Props {
 }
 
 const TeamItem = ({ item }: Props) => {
-    const { name, location, region, foundedYear, players } = item;
-
-    console.log(players);
+    const { name, location, region, foundedYear } = item;
 
     return (
         <Paper
