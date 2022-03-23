@@ -1,12 +1,20 @@
 import { Box, Container, Stack, TextField } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayerList from '../components/players/PlayerList';
-import { playersArr } from '../components/tempData/data';
 import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { fetchPlayersAsync } from '../store/playersSlice';
 
 const Players = () => {
+    const playersList = useAppSelector((state) => state.players.playersList);
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(fetchPlayersAsync());
+    }, [dispatch]);
 
     const NavigateBack = () => {
         navigate(-1);
@@ -34,7 +42,7 @@ const Players = () => {
                     autoFocus
                 />
             </Box>
-            <PlayerList items={playersArr} />
+            <PlayerList items={playersList} />
         </Container>
     );
 };
