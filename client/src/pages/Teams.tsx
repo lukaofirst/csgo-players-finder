@@ -12,6 +12,10 @@ const Teams = () => {
         navigate(-1);
     };
 
+    const NavigateToAddTeam = () => {
+        navigate('add-team');
+    };
+
     return (
         <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
             <Stack
@@ -20,7 +24,7 @@ const Teams = () => {
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
-                <ActionBtn name='team' />
+                <ActionBtn name='team' onClick={NavigateToAddTeam} />
             </Stack>
             <Box sx={{ my: 3 }}>
                 <TextField

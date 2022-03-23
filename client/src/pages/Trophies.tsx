@@ -12,6 +12,10 @@ const Trophies = () => {
         navigate(-1);
     };
 
+    const NavigateToAddTrophy = () => {
+        navigate('add-trophy');
+    };
+
     return (
         <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
             <Stack
@@ -20,7 +24,7 @@ const Trophies = () => {
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
-                <ActionBtn name='trophy' />
+                <ActionBtn name='trophy' onClick={NavigateToAddTrophy} />
             </Stack>
             <Box sx={{ my: 3 }}>
                 <TextField

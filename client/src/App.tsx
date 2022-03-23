@@ -2,6 +2,8 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
 import PlayerForm from './components/players/PlayerForm';
+import TeamForm from './components/teams/TeamForm';
+import TrophyForm from './components/trophies/TrophyForm';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Players from './pages/Players';
@@ -18,8 +20,14 @@ function App() {
                     <Route index={true} element={<Players />} />
                     <Route path='add-player' element={<PlayerForm />} />
                 </Route>
-                <Route path='teams' element={<Teams />} />
-                <Route path='trophies' element={<Trophies />} />
+                <Route path='teams'>
+                    <Route index={true} element={<Teams />} />
+                    <Route path='add-team' element={<TeamForm />} />
+                </Route>
+                <Route path='trophies'>
+                    <Route index={true} element={<Trophies />} />
+                    <Route path='add-trophy' element={<TrophyForm />} />
+                </Route>
                 <Route path='*' element={<NotFound />} />
             </Routes>
             <Footer />
