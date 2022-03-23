@@ -1,10 +1,17 @@
 import { Box, Container, Stack, TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import PlayerList from '../components/players/PlayerList';
 import { playersArr } from '../components/tempData/data';
 import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
 
 const Players = () => {
+    const navigate = useNavigate();
+
+    const NavigateBack = () => {
+        navigate(-1);
+    };
+
     return (
         <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
             <Stack
@@ -12,7 +19,7 @@ const Players = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn />
+                <BackBtn onClick={NavigateBack} />
                 <ActionBtn name='player' />
             </Stack>
             <Box sx={{ my: 3 }}>

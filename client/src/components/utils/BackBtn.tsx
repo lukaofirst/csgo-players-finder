@@ -1,7 +1,11 @@
 import { Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const BackBtn = () => {
+interface Props {
+    onClick?: () => void;
+}
+
+const BackBtn = ({ onClick }: Props) => {
     return (
         <Button
             variant='outlined'
@@ -11,6 +15,7 @@ const BackBtn = () => {
                 borderRadius: '5px',
                 color: '#299cdd',
             }}
+            onClick={onClick}
         >
             <ArrowBackIcon />
             Back

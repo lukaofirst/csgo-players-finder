@@ -34,7 +34,7 @@ const TrophyList = ({ items }: Props) => {
                 </TableHead>
                 <TableBody>
                     {items.map((item) => (
-                        <TableRow>
+                        <TableRow key={item.id}>
                             <TableCell>
                                 {item.id.toString().padStart(4, '0')}
                             </TableCell>
