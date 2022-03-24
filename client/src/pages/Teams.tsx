@@ -1,12 +1,22 @@
 import { Box, Container, Stack, TextField } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeamList from '../components/teams/TeamList';
-import { teamsArr } from '../components/tempData/data';
 import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { fetchTeamsAsync } from '../store/teamsSlice';
 
 const Teams = () => {
+    const teamsList = useAppSelector((state) => state.teams.teamsList);
+
+    const dispatch = useAppDispatch();
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        dispatch(fetchTeamsAsync());
+    }, [dispatch]);
 
     const NavigateBack = () => {
         navigate(-1);
@@ -34,7 +44,7 @@ const Teams = () => {
                     autoFocus
                 />
             </Box>
-            <TeamList items={teamsArr} />
+            <TeamList items={teamsList} />
         </Container>
     );
 };

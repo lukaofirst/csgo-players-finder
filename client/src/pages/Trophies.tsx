@@ -1,11 +1,21 @@
 import { Box, Container, Stack, TextField } from '@mui/material';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { trophiesArr } from '../components/tempData/data';
 import TrophyList from '../components/trophies/TrophyList';
 import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
+import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { fetchTrophiesAsync } from '../store/trophiesSlice';
 
 const Trophies = () => {
+    const trophiesList = useAppSelector((state) => state.trophies.trophiesList);
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(fetchTrophiesAsync());
+    }, [dispatch]);
+
     const navigate = useNavigate();
 
     const NavigateBack = () => {
@@ -34,7 +44,7 @@ const Trophies = () => {
                     autoFocus
                 />
             </Box>
-            <TrophyList items={trophiesArr} />
+            <TrophyList items={trophiesList} />
         </Container>
     );
 };

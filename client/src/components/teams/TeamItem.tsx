@@ -1,12 +1,21 @@
-import { Paper, Typography } from '@mui/material';
+import { Button, Paper, Typography } from '@mui/material';
+import { useAppSelector } from '../../hooks/hooks';
 import { Team } from '../../models/Team';
+import InfoIcon from '@mui/icons-material/Info';
 
 interface Props {
     item: Team;
 }
 
 const TeamItem = ({ item }: Props) => {
-    const { name, location, region, foundedYear } = item;
+    const teamsList = useAppSelector((state) => state.teams.teamsList);
+    const { name, location, region, foundedYear, id } = item;
+
+    const onClickHandler = (id: number) => {
+        const team = teamsList.find((team) => team.id === id);
+
+        console.log(team);
+    };
 
     return (
         <Paper
@@ -34,6 +43,13 @@ const TeamItem = ({ item }: Props) => {
             <Typography variant='body1' my={1}>
                 Founded Year: {foundedYear}
             </Typography>
+            <Button
+                variant='outlined'
+                sx={{ m: 2, color: '#299cdd' }}
+                onClick={() => onClickHandler(id)}
+            >
+                <InfoIcon sx={{ marginRight: '5px' }} /> More Info
+            </Button>
         </Paper>
     );
 };
