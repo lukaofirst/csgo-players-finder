@@ -1,12 +1,22 @@
 import { Button, Paper, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Player } from '../../models/Player';
+import { useAppSelector } from '../../hooks/hooks';
+
 interface Props {
     item: Player;
 }
 
 const PlayerItem = ({ item }: Props) => {
-    const { nickname, name, age, nationality } = item;
+    const playersList = useAppSelector((state) => state.players.playersList);
+
+    const { nickname, name, age, nationality, id } = item;
+
+    const onClickHandler = (id: number) => {
+        const player = playersList.find((player) => player.id === id);
+
+        console.log(player);
+    };
 
     return (
         <Paper
@@ -34,7 +44,11 @@ const PlayerItem = ({ item }: Props) => {
             <Typography variant='body1' my={1}>
                 Nationality: {nationality}
             </Typography>
-            <Button variant='outlined' sx={{ m: 2, color: '#299cdd' }}>
+            <Button
+                variant='outlined'
+                sx={{ m: 2, color: '#299cdd' }}
+                onClick={() => onClickHandler(id)}
+            >
                 <InfoIcon sx={{ marginRight: '5px' }} /> More Info
             </Button>
         </Paper>
