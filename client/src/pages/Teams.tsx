@@ -1,18 +1,21 @@
 import { Box, Container, Stack, TextField } from '@mui/material';
-import { useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeamList from '../components/teams/TeamList';
 import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
+import LoadingComponent from '../components/utils/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { fetchTeamsAsync } from '../store/teamsSlice';
 
 const Teams = () => {
-    const teamsList = useAppSelector((state) => state.teams.teamsList);
-
     const dispatch = useAppDispatch();
-
     const navigate = useNavigate();
+
+    const { teamsList, teamsLoaded } = useAppSelector((state) => state.teams);
+
+    const [teamName, setTeamName] = useState<string>('');
+    const [teamLocation, setTeamLocation] = useState<string>('');
 
     useEffect(() => {
         dispatch(fetchTeamsAsync());
@@ -25,6 +28,21 @@ const Teams = () => {
     const NavigateToAddTeam = () => {
         navigate('add-team');
     };
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value !== null) {
+            setTeamName(e.target.value.trim());
+            setTeamLocation(e.target.value.trim());
+        }
+    };
+
+    const filteredTeams = teamsList.filter(
+        (team) =>
+            team.name.toLowerCase().includes(teamName) ||
+            team.location.toLowerCase().includes(teamLocation)
+    );
+
+    if (!teamsLoaded) return <LoadingComponent message='Loading Teams...' />;
 
     return (
         <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
@@ -40,11 +58,14 @@ const Teams = () => {
                 <TextField
                     fullWidth
                     variant='standard'
-                    label="Search by team's name"
+                    label="Search by team's name or location"
                     autoFocus
+                    onChange={onChangeHandler}
                 />
             </Box>
-            <TeamList items={teamsList} />
+            <TeamList
+                items={filteredTeams.length === 0 ? teamsList : filteredTeams}
+            />
         </Container>
     );
 };
