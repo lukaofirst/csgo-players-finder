@@ -1,5 +1,6 @@
 import { Provider } from 'react-redux';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
 import PlayerForm from './components/players/PlayerForm';
@@ -15,6 +16,7 @@ import { store } from './store/store';
 function App() {
     return (
         <Router>
+            <ToastContainer position='bottom-right' theme='colored' />
             <Navbar />
             <Provider store={store}>
                 <Routes>
