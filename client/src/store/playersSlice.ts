@@ -71,7 +71,7 @@ export const playersSlice = createSlice({
 
         builder.addCase(fetchPlayersAsync.rejected, (state, action) => {
             console.log(action.payload);
-            state.status = 'done';
+            state.status = 'failed';
         });
 
         builder.addCase(addPlayerAsync.pending, (state) => {
@@ -81,11 +81,10 @@ export const playersSlice = createSlice({
         builder.addCase(addPlayerAsync.fulfilled, (state, action) => {
             playersAdapter.upsertOne(state, action.payload);
             state.status = 'done';
-            state.playersLoaded = true;
         });
 
         builder.addCase(addPlayerAsync.rejected, (state) => {
-            state.status = 'done';
+            state.status = 'failed';
         });
     },
 });
