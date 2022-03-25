@@ -8,7 +8,7 @@ namespace Domain.Entities
 		public string? Nickname { get; set; }
 		public int Age { get; set; }
 		public string? Nationality { get; set; }
-		public bool IsActive { get; set; }
+		public string? IsActive { get; set; }
 		[JsonIgnore]
 		public int TeamId { get; set; }
 		public Team? Team { get; set; }

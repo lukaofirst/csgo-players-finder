@@ -20,7 +20,7 @@ export const fetchPlayersAsync = createAsyncThunk<Player[]>(
 
 export const addPlayerAsync = createAsyncThunk(
     'players/addPlayerAsync',
-    async (player: Player, thunkAPI) => {
+    async (player: any, thunkAPI) => {
         try {
             return await agent.Players.add(player);
         } catch (error: any) {

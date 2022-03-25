@@ -16,7 +16,7 @@ namespace SeedData
 					Nickname = "TACO",
 					Age = 27,
 					Nationality = "Brazil",
-					IsActive = true,
+					IsActive = "true",
 					TeamId = 3,
 				},
 				new Player
@@ -26,7 +26,7 @@ namespace SeedData
 					Nickname = "FalleN",
 					Age = 30,
 					Nationality = "Brazil",
-					IsActive = true,
+					IsActive = "true",
 					TeamId = 1
 				},
 				new Player
@@ -36,7 +36,7 @@ namespace SeedData
 					Nickname = "arT",
 					Age = 25,
 					Nationality = "Brazil",
-					IsActive = true,
+					IsActive = "true",
 					TeamId = 2,
 				}
 			);
