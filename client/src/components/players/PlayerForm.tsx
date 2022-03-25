@@ -160,12 +160,7 @@ const PlayerForm = () => {
                             />
                         ))}
                     </FormGroup>
-                    <Button
-                        type='submit'
-                        variant='contained'
-                        size='large'
-                        sx={{ my: 2 }}
-                    >
+                    <Button type='submit' variant='contained' size='large'>
                         <Add />
                         Player
                     </Button>

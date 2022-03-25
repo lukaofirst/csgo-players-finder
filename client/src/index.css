@@ -32,7 +32,8 @@ code {
     text-align: center;
     color: white;
     font-size: 1.5rem;
-    line-height: 50px;
+    height: 25px;
+    line-height: 25px;
 }
 
 .navbar-ul {
