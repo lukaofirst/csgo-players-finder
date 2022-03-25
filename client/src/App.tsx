@@ -1,6 +1,7 @@
 import { Provider } from 'react-redux';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
 import PlayerForm from './components/players/PlayerForm';
