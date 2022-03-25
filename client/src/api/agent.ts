@@ -4,9 +4,10 @@ import { Player } from '../models/Player';
 import { Team } from '../models/Team';
 import { Trophy } from '../models/Trophy';
 
-const sleep = () => new Promise((resolve) => setTimeout(resolve, 1500));
+const sleep = () => new Promise((resolve) => setTimeout(resolve, 300));
 
 axios.defaults.baseURL = 'http://localhost:5027/api/';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.interceptors.response.use(
     async (response) => {
@@ -17,6 +18,7 @@ axios.interceptors.response.use(
         const { data, status } = error.response!;
         switch (status) {
             case 400:
+                console.log(error.response);
                 toast.error(data.title);
                 break;
             case 404:
