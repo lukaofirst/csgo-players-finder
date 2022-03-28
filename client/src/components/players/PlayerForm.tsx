@@ -2,33 +2,35 @@ import { Add } from '@mui/icons-material';
 import {
     Box,
     Button,
-    Checkbox,
     Container,
     FormControl,
-    FormControlLabel,
-    FormGroup,
-    FormLabel,
-    Radio,
-    RadioGroup,
-    Select,
     Stack,
-    TextField,
     Typography,
 } from '@mui/material';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { addPlayerAsync } from '../../store/playersSlice';
 import { fetchTeamsAsync } from '../../store/teamsSlice';
 import { fetchTrophiesAsync } from '../../store/trophiesSlice';
+import { playerValidatorSchema } from '../../validators/playerValidatorSchema';
+import { yupResolver } from '@hookform/resolvers/yup';
 import BackBtn from '../utils/BackBtn';
 import LoadingComponent from '../utils/LoadingComponent';
+import AppTextInput from '../utils/AppTextInput';
+import AppRadioInput from '../utils/AppRadioInput';
+import AppSelectInput from '../utils/AppSelectInput';
+import AppCheckboxInput from '../utils/AppCheckboxInput';
+import { Trophy } from '../../models/Trophy';
+import { PlayerDTO } from '../../models/DTO/PlayerDTO';
 
 const PlayerForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { register, handleSubmit } = useForm();
+    const { handleSubmit, control } = useForm<FieldValues>({
+        resolver: yupResolver<any>(playerValidatorSchema),
+    });
 
     const { teamsList, teamsLoaded } = useAppSelector((state) => state.teams);
     const { trophiesList, trophiesLoaded } = useAppSelector(
@@ -44,12 +46,14 @@ const PlayerForm = () => {
         navigate(-1);
     };
 
-    const onSubmitHandler = (data: any) => {
-        const filteredTrophiesList = data.trophies.map((item: any) => ({
-            trophyId: item,
-        }));
+    const onSubmitHandler = (data: FieldValues) => {
+        const filteredTrophiesList: Trophy[] = data.trophies?.map(
+            (item: Trophy) => ({
+                trophyId: item,
+            })
+        );
 
-        const sendData = {
+        const sendData: PlayerDTO = {
             nickname: data.nickname,
             name: data.name,
             age: data.age,
@@ -89,77 +93,42 @@ const PlayerForm = () => {
                     onSubmit={handleSubmit(onSubmitHandler)}
                     sx={{ width: '500px', margin: '0 auto' }}
                 >
-                    <TextField
-                        variant='outlined'
+                    <AppTextInput
                         label='Nickname'
-                        sx={{ my: 1 }}
-                        {...register('nickname')}
+                        name='nickname'
+                        control={control}
                     />
-                    <TextField
-                        variant='outlined'
-                        label='Name'
-                        sx={{ my: 1 }}
-                        {...register('name')}
-                    />
-                    <TextField
-                        type='number'
-                        variant='outlined'
+                    <AppTextInput label='Name' name='name' control={control} />
+                    <AppTextInput
                         label='Age'
-                        sx={{ my: 1 }}
-                        {...register('age')}
+                        name='age'
+                        type='number'
+                        control={control}
                     />
-                    <TextField
-                        variant='outlined'
+                    <AppTextInput
                         label='Nationality'
-                        sx={{ my: 1 }}
-                        {...register('nationality')}
+                        name='nationality'
+                        control={control}
                     />
-                    <FormGroup sx={{ mt: 1 }}>
-                        <FormLabel component='legend'>Is Active?</FormLabel>
-                        <RadioGroup
-                            {...register('isActive')}
-                            sx={{ display: 'inline-block' }}
-                        >
-                            <FormControlLabel
-                                value='true'
-                                control={<Radio />}
-                                label='True'
-                            />
-                            <FormControlLabel
-                                value='false'
-                                control={<Radio />}
-                                label='False'
-                            />
-                        </RadioGroup>
-                    </FormGroup>
-                    <Select
-                        native
-                        sx={{ my: 1, textAlign: 'left' }}
-                        {...register('teamId')}
-                        defaultValue=''
-                    >
-                        <option value='' disabled>
-                            Team
-                        </option>
-                        {teamsList.map((team) => (
-                            <option key={team.id} value={team.id}>
-                                {team.name}
-                            </option>
-                        ))}
-                    </Select>
-                    <FormGroup sx={{ my: 2 }}>
-                        <FormLabel sx={{ textAlign: 'left', mb: 1 }}>
-                            Trophies
-                        </FormLabel>
-                        {trophiesList.map((trophy) => (
-                            <FormControlLabel
-                                key={trophy.id}
-                                {...register('trophies')}
-                                control={<Checkbox value={trophy.id} />}
-                                label={trophy.name}
-                            />
-                        ))}
-                    </FormGroup>
+                    <>
+                        <AppRadioInput
+                            label='Is Active'
+                            name='isActive'
+                            control={control}
+                            textposition='center'
+                        />
+                    </>
+                    <AppSelectInput
+                        teams={teamsList}
+                        name='teamId'
+                        control={control}
+                    />
+                    <AppCheckboxInput
+                        label='Trophies'
+                        trophies={trophiesList}
+                        name='trophies'
+                        control={control}
+                    />
                     <Button type='submit' variant='contained' size='large'>
                         <Add />
                         Player

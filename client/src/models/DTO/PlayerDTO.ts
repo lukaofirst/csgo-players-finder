@@ -1,7 +1,6 @@
-import { Trophy } from './Trophy';
+import { Trophy } from '../Trophy';
 
-export interface Player {
-    id: number;
+export interface PlayerDTO {
     nickname: string;
     name: string;
     age: number;
