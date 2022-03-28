@@ -6,7 +6,7 @@ namespace Domain.Entities
 	{
 		public string? Name { get; set; }
 		public int Year { get; set; }
-		public bool IsMajor { get; set; }
+		public string? IsMajor { get; set; }
 		[JsonIgnore]
 		public List<PlayerTrophy>? PlayerTrophies { get; set; }
 	}

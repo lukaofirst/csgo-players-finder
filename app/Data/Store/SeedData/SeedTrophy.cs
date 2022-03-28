@@ -14,14 +14,14 @@ namespace SeedData
 					Id = 1,
 					Name = "MLG Columbus",
 					Year = 2016,
-					IsMajor = true
+					IsMajor = "true"
 				},
 				new Trophy
 				{
 					Id = 2,
-					Name = "ESL Cologne",
+					Name = "ESL One Cologne",
 					Year = 2016,
-					IsMajor = true
+					IsMajor = "true"
 				}
 			);
 		}
