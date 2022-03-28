@@ -45,7 +45,7 @@ const Teams = () => {
     if (!teamsLoaded) return <LoadingComponent message='Loading Teams...' />;
 
     return (
-        <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
+        <Container maxWidth='lg' sx={{ mt: 2, pb: 8 }}>
             <Stack
                 direction='row'
                 justifyContent='space-between'

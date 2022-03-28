@@ -16,7 +16,7 @@ const AppSelectInput = (props: Props) => {
                 {...props}
                 error={!!fieldState.error}
                 native
-                sx={{ my: 1, textAlign: 'left' }}
+                sx={{ textAlign: 'left' }}
             >
                 <option value='' disabled>
                     Team

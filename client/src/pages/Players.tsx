@@ -48,7 +48,7 @@ const Players = () => {
         return <LoadingComponent message='Loading Players...' />;
 
     return (
-        <Container maxWidth='lg' sx={{ mt: 5, pb: 20 }}>
+        <Container maxWidth='lg' sx={{ mt: 2, pb: 8 }}>
             <Stack
                 direction='row'
                 justifyContent='space-between'

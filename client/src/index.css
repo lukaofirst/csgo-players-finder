@@ -51,7 +51,12 @@ code {
     text-align: center;
     color: white;
     text-decoration: none;
-    transform: 0.2s ease-in;
+    transition: 0.2s ease-in;
+    padding: 10px 20px;
+}
+
+.link {
+    padding: 0;
 }
 
 .navbar-li:hover,

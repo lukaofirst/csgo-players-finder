@@ -24,7 +24,7 @@ const TrophyForm = () => {
     };
 
     return (
-        <Container maxWidth='lg' sx={{ mt: 5 }}>
+        <Container maxWidth='lg' sx={{ mt: 2 }}>
             <Stack
                 direction='row'
                 justifyContent='space-between'
@@ -34,12 +34,13 @@ const TrophyForm = () => {
             </Stack>
             <Box
                 sx={{
-                    my: 5,
+                    mt: 2,
+                    mb: 5,
                     display: 'block',
                     textAlign: 'center',
                 }}
             >
-                <Typography variant='h5' sx={{ mb: 2, color: '#299cdd' }}>
+                <Typography variant='h5' sx={{ mb: 1, color: '#299cdd' }}>
                     Add a Trophy
                 </Typography>
                 <FormControl sx={{ width: '500px', margin: '0 auto' }}>

@@ -11,10 +11,7 @@ const ActionBtn = ({ name, onClick: onClickHandler }: Props) => {
         <Button
             variant='contained'
             color='success'
-            sx={{
-                width: '120px',
-                height: '50px',
-            }}
+            size='large'
             onClick={onClickHandler}
         >
             <AddIcon />

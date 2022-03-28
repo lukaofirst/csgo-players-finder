@@ -17,7 +17,7 @@ const AppCheckboxInput = (props: Props) => {
     const { field, fieldState } = useController({ ...props, defaultValue: '' });
 
     return (
-        <FormGroup sx={{ my: 2 }}>
+        <FormGroup sx={{ my: 1 }}>
             <FormLabel sx={{ textAlign: 'left', mb: 1 }}>
                 {props.label}
             </FormLabel>

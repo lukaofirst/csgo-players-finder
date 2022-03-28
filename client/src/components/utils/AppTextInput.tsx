@@ -14,7 +14,7 @@ const AppTextInput = (props: Props) => {
             {...field}
             {...props}
             variant='outlined'
-            sx={{ my: 1 }}
+            sx={{ mb: 1 }}
             type={props.type}
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
