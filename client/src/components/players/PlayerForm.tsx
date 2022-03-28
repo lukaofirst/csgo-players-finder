@@ -1,12 +1,5 @@
 import { Add } from '@mui/icons-material';
-import {
-    Box,
-    Button,
-    Container,
-    FormControl,
-    Stack,
-    Typography,
-} from '@mui/material';
+import { Box, Container, FormControl, Stack, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -24,11 +17,19 @@ import AppSelectInput from '../utils/AppSelectInput';
 import AppCheckboxInput from '../utils/AppCheckboxInput';
 import { Trophy } from '../../models/Trophy';
 import { PlayerDTO } from '../../models/DTO/PlayerDTO';
+import { LoadingButton } from '@mui/lab';
+import { toast } from 'react-toastify';
 
 const PlayerForm = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { handleSubmit, control } = useForm<FieldValues>({
+    const {
+        handleSubmit,
+        control,
+        formState: { isSubmitting },
+        reset,
+    } = useForm<FieldValues>({
+        mode: 'all',
         resolver: yupResolver<any>(playerValidatorSchema),
     });
 
@@ -46,7 +47,7 @@ const PlayerForm = () => {
         navigate(-1);
     };
 
-    const onSubmitHandler = (data: FieldValues) => {
+    const onSubmitHandler = async (data: FieldValues) => {
         const filteredTrophiesList: Trophy[] = data.trophies?.map(
             (item: Trophy) => ({
                 trophyId: item,
@@ -63,14 +64,20 @@ const PlayerForm = () => {
             trophies: filteredTrophiesList,
         };
 
-        dispatch(addPlayerAsync(JSON.stringify(sendData)));
+        try {
+            await dispatch(addPlayerAsync(JSON.stringify(sendData)));
+            reset();
+            toast.success('Player added successfully!');
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     if (!teamsLoaded || !trophiesLoaded)
         return <LoadingComponent message='Loading all the info needed...' />;
 
     return (
-        <Container maxWidth='lg' sx={{ mt: 5 }}>
+        <Container maxWidth='lg' sx={{ mt: 2 }}>
             <Stack
                 direction='row'
                 justifyContent='space-between'
@@ -80,12 +87,13 @@ const PlayerForm = () => {
             </Stack>
             <Box
                 sx={{
-                    my: 5,
+                    mt: 2,
+                    mb: 5,
                     display: 'block',
                     textAlign: 'center',
                 }}
             >
-                <Typography variant='h5' sx={{ mb: 2, color: '#299cdd' }}>
+                <Typography variant='h5' sx={{ mb: 1, color: '#299cdd' }}>
                     Add a player
                 </Typography>
                 <FormControl
@@ -129,10 +137,15 @@ const PlayerForm = () => {
                         name='trophies'
                         control={control}
                     />
-                    <Button type='submit' variant='contained' size='large'>
+                    <LoadingButton
+                        loading={isSubmitting}
+                        type='submit'
+                        variant='contained'
+                        size='large'
+                    >
                         <Add />
                         Player
-                    </Button>
+                    </LoadingButton>
                 </FormControl>
             </Box>
         </Container>
