@@ -17,6 +17,28 @@ export const fetchTeamsAsync = createAsyncThunk<Team[]>(
     }
 );
 
+export const addTeamAsync = createAsyncThunk(
+    'teams/addTeamAsync',
+    async (team: any, thunkAPI) => {
+        try {
+            return await agent.Teams.add(team);
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
+export const deleteTeamAsync = createAsyncThunk(
+    'teams/deleteTeamAsync',
+    async (id: number, thunkAPI) => {
+        try {
+            return await agent.Teams.delete(id);
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
 interface TeamState {
     teamsLoaded: boolean;
     teamsList: Team[];
@@ -47,6 +69,32 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(fetchTeamsAsync.rejected, (state) => {
+            state.status = 'failed';
+        });
+
+        builder.addCase(addTeamAsync.pending, (state) => {
+            state.status = 'pendingAddTeam';
+        });
+
+        builder.addCase(addTeamAsync.fulfilled, (state, action) => {
+            teamsAdapter.upsertOne(state, action.payload);
+            state.status = 'done';
+        });
+
+        builder.addCase(addTeamAsync.rejected, (state) => {
+            state.status = 'failed';
+        });
+
+        builder.addCase(deleteTeamAsync.pending, (state) => {
+            state.status = 'pendingDeleteTeam';
+        });
+
+        builder.addCase(deleteTeamAsync.fulfilled, (state, action) => {
+            teamsAdapter.removeOne(state, action.payload);
+            state.status = 'done';
+        });
+
+        builder.addCase(deleteTeamAsync.rejected, (state) => {
             state.status = 'failed';
         });
     },

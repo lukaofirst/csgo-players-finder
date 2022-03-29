@@ -1,21 +1,41 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Add } from '@mui/icons-material';
-import {
-    Container,
-    Stack,
-    Box,
-    Typography,
-    FormControl,
-    TextField,
-    Button,
-} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Container, Stack, Box, Typography, FormControl } from '@mui/material';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useAppDispatch } from '../../hooks/hooks';
+import { addTeamAsync } from '../../store/teamsSlice';
+import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
+import AppTextInput from '../utils/AppTextInput';
 import BackBtn from '../utils/BackBtn';
 
 const TeamForm = () => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {
+        handleSubmit,
+        control,
+        formState: { isSubmitting },
+        reset,
+    } = useForm<FieldValues>({
+        mode: 'all',
+        resolver: yupResolver<any>(teamValidatorSchema),
+    });
 
     const NavigateBack = () => {
         navigate(-1);
+    };
+
+    const onSubmitHandler = async (data: FieldValues) => {
+        try {
+            await dispatch(addTeamAsync(JSON.stringify(data)));
+            reset();
+            toast.success('Team added successfully');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -38,28 +58,38 @@ const TeamForm = () => {
                 <Typography variant='h5' sx={{ mb: 1, color: '#299cdd' }}>
                     Add a Team
                 </Typography>
-                <FormControl sx={{ width: '500px', margin: '0 auto' }}>
-                    <TextField variant='outlined' label='Name' sx={{ my: 1 }} />
-                    <TextField
-                        variant='outlined'
+                <FormControl
+                    component='form'
+                    onSubmit={handleSubmit(onSubmitHandler)}
+                    sx={{ width: '500px', margin: '0 auto' }}
+                >
+                    <AppTextInput label='Name' name='name' control={control} />
+                    <AppTextInput
                         label='Location'
-                        sx={{ my: 1 }}
+                        name='location'
+                        control={control}
                     />
-                    <TextField
-                        variant='outlined'
+                    <AppTextInput
                         label='Region'
-                        sx={{ my: 1 }}
+                        name='region'
+                        control={control}
                     />
-                    <TextField
+                    <AppTextInput
                         type='number'
-                        variant='outlined'
                         label='Founded Year'
-                        sx={{ my: 1 }}
+                        name='foundedYear'
+                        control={control}
                     />
-                    <Button variant='contained' size='large' sx={{ my: 2 }}>
+                    <LoadingButton
+                        loading={isSubmitting}
+                        type='submit'
+                        variant='contained'
+                        size='large'
+                        sx={{ my: 2 }}
+                    >
                         <Add />
                         Team
-                    </Button>
+                    </LoadingButton>
                 </FormControl>
             </Box>
         </Container>
