@@ -86,6 +86,19 @@ export const playersSlice = createSlice({
         builder.addCase(addPlayerAsync.rejected, (state) => {
             state.status = 'failed';
         });
+
+        builder.addCase(deletePlayerAsync.pending, (state) => {
+            state.status = 'pendingDeletePlayer';
+        });
+
+        builder.addCase(deletePlayerAsync.fulfilled, (state, action) => {
+            playersAdapter.removeOne(state, action.payload);
+            state.status = 'done';
+        });
+
+        builder.addCase(deletePlayerAsync.rejected, (state) => {
+            state.status = 'failed';
+        });
     },
 });
 
