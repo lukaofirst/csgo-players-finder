@@ -1,26 +1,42 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Add } from '@mui/icons-material';
-import {
-    Container,
-    Stack,
-    Box,
-    Typography,
-    FormControl,
-    TextField,
-    FormGroup,
-    FormControlLabel,
-    Button,
-    FormLabel,
-    Radio,
-    RadioGroup,
-} from '@mui/material';
+import { Container, Stack, Box, Typography, FormControl } from '@mui/material';
+import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/hooks';
+import { trophyValidatorSchema } from '../../validators/trophyValidatorSchema';
+import AppTextInput from '../utils/AppTextInput';
+import AppRadioInput from '../utils/AppRadioInput';
 import BackBtn from '../utils/BackBtn';
+import { addTrophyAsync } from '../../store/trophiesSlice';
+import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 
 const TrophyForm = () => {
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const {
+        handleSubmit,
+        control,
+        formState: { isSubmitting },
+        reset,
+    } = useForm({
+        mode: 'all',
+        resolver: yupResolver<any>(trophyValidatorSchema),
+    });
 
     const NavigateBack = () => {
         navigate(-1);
+    };
+
+    const onSubmitHandler = async (data: FieldValues) => {
+        try {
+            await dispatch(addTrophyAsync(JSON.stringify(data)));
+            reset();
+            toast.success('Trophy added successfully!');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -43,36 +59,34 @@ const TrophyForm = () => {
                 <Typography variant='h5' sx={{ mb: 1, color: '#299cdd' }}>
                     Add a Trophy
                 </Typography>
-                <FormControl sx={{ width: '500px', margin: '0 auto' }}>
-                    <TextField variant='outlined' label='Name' sx={{ my: 1 }} />
-                    <TextField
+                <FormControl
+                    component='form'
+                    onSubmit={handleSubmit(onSubmitHandler)}
+                    sx={{ width: '500px', margin: '0 auto' }}
+                >
+                    <AppTextInput label='Name' name='name' control={control} />
+                    <AppTextInput
                         type='number'
-                        variant='outlined'
-                        label='Founded Year'
-                        sx={{ my: 1 }}
+                        label="Title's Year"
+                        name='year'
+                        control={control}
                     />
-                    <FormGroup sx={{ mt: 1 }}>
-                        <FormLabel component='legend'>Is Major?</FormLabel>
-                        <RadioGroup
-                            name='IsMajor'
-                            sx={{ display: 'inline-block' }}
-                        >
-                            <FormControlLabel
-                                value='true'
-                                control={<Radio />}
-                                label='True'
-                            />
-                            <FormControlLabel
-                                value='false'
-                                control={<Radio />}
-                                label='False'
-                            />
-                        </RadioGroup>
-                    </FormGroup>
-                    <Button variant='contained' size='large' sx={{ my: 2 }}>
+                    <AppRadioInput
+                        label='Is Major?'
+                        name='isMajor'
+                        control={control}
+                        textposition='center'
+                    />
+                    <LoadingButton
+                        loading={isSubmitting}
+                        type='submit'
+                        variant='contained'
+                        size='large'
+                        sx={{ my: 2 }}
+                    >
                         <Add />
                         Trophy
-                    </Button>
+                    </LoadingButton>
                 </FormControl>
             </Box>
         </Container>

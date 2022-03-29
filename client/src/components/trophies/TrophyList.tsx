@@ -1,5 +1,4 @@
 import {
-    Button,
     Paper,
     Table,
     TableBody,
@@ -10,12 +9,29 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Trophy } from '../../models/Trophy';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { deleteTrophyAsync, setTrophyList } from '../../store/trophiesSlice';
+import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 
 interface Props {
     items: Trophy[];
 }
 
 const TrophyList = ({ items }: Props) => {
+    const dispatch = useAppDispatch();
+    const { status } = useAppSelector((state) => state.trophies);
+
+    const deleteTrophy = async (id: number, name: string) => {
+        try {
+            await dispatch(deleteTrophyAsync({ id, name }));
+            dispatch(setTrophyList(id));
+            toast.success('Trophy deleted successfully!');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <TableContainer component={Paper} sx={{ mt: 5 }}>
             <Table sx={{ minWidth: 600 }}>
@@ -42,13 +58,20 @@ const TrophyList = ({ items }: Props) => {
                             <TableCell>{item.name}</TableCell>
                             <TableCell>{item.isMajor.toString()}</TableCell>
                             <TableCell align='center'>
-                                <Button
+                                <LoadingButton
+                                    loading={
+                                        status ===
+                                        `pendingDeleteTrophy_${item.id}_${item.name}`
+                                    }
                                     variant='outlined'
                                     color='error'
                                     size='small'
+                                    onClick={() =>
+                                        deleteTrophy(item.id, item.name)
+                                    }
                                 >
                                     <DeleteIcon />
-                                </Button>
+                                </LoadingButton>
                             </TableCell>
                         </TableRow>
                     ))}
