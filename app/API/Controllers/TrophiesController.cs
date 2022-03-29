@@ -33,7 +33,7 @@ namespace API.Controllers
 			return entity;
 		}
 
-		[HttpDelete]
+		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{
 			var trophy = await _trophyRepository.Delete(id);
