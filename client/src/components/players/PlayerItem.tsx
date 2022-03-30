@@ -1,21 +1,23 @@
 import { Button, Paper, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Player } from '../../models/Player';
-import { useAppSelector } from '../../hooks/hooks';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../hooks/hooks';
+import { setPlayer } from '../../store/playersSlice';
 
 interface Props {
     item: Player;
 }
 
 const PlayerItem = ({ item }: Props) => {
-    const playersList = useAppSelector((state) => state.players.playersList);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const { nickname, name, age, nationality, id } = item;
 
     const onClickHandler = (id: number) => {
-        const player = playersList.find((player) => player.id === id);
-
-        console.log(player);
+        dispatch(setPlayer(id));
+        navigate(`${id}`);
     };
 
     return (
@@ -47,7 +49,7 @@ const PlayerItem = ({ item }: Props) => {
             <Button
                 variant='outlined'
                 sx={{ m: 2, color: '#299cdd' }}
-                onClick={() => onClickHandler(id)}
+                onClick={() => onClickHandler(id!)}
             >
                 <InfoIcon sx={{ marginRight: '5px' }} /> More Info
             </Button>

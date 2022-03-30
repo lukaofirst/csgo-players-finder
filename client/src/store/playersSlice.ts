@@ -2,6 +2,7 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
+    PayloadAction,
 } from '@reduxjs/toolkit';
 import agent from '../api/agent';
 import { Player } from '../models/Player';
@@ -43,12 +44,23 @@ export const deletePlayerAsync = createAsyncThunk(
 interface PlayerState {
     playersLoaded: boolean;
     playersList: Player[];
+    player: Player | undefined;
     status: string;
 }
 
 const initialState: PlayerState = {
     playersLoaded: false,
     playersList: [],
+    player: {
+        id: 0,
+        nickname: '',
+        name: '',
+        age: 0,
+        isActive: false,
+        nationality: '',
+        teamId: 0,
+        playerTrophies: [],
+    },
     status: 'started',
 };
 
@@ -57,7 +69,15 @@ const playersAdapter = createEntityAdapter<Player>();
 export const playersSlice = createSlice({
     name: 'players',
     initialState: playersAdapter.getInitialState(initialState),
-    reducers: {},
+    reducers: {
+        setPlayer(state, action: PayloadAction<number>) {
+            const player = state.playersList.find(
+                (player) => player.id === action.payload
+            );
+
+            state.player = player;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchPlayersAsync.pending, (state) => {
             state.status = 'pendingFetchPlayers';
@@ -101,6 +121,8 @@ export const playersSlice = createSlice({
         });
     },
 });
+
+export const { setPlayer } = playersSlice.actions;
 
 export const playersSelectors = playersAdapter.getSelectors(
     (state: RootState) => state.players

@@ -15,10 +15,10 @@ import AppTextInput from '../utils/AppTextInput';
 import AppRadioInput from '../utils/AppRadioInput';
 import AppSelectInput from '../utils/AppSelectInput';
 import AppCheckboxInput from '../utils/AppCheckboxInput';
-import { Trophy } from '../../models/Trophy';
-import { PlayerDTO } from '../../models/DTO/PlayerDTO';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-toastify';
+import { PlayerDTO } from '../../models/DTO/PlayerDTO';
+import { Trophy } from '../../models/Trophy';
 
 const PlayerForm = () => {
     const dispatch = useAppDispatch();

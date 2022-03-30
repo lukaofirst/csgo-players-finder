@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
-import { Player } from '../models/Player';
+import { PlayerDTO } from '../models/DTO/PlayerDTO';
 import { Team } from '../models/Team';
 import { Trophy } from '../models/Trophy';
 
@@ -43,7 +43,7 @@ const requests = {
 
 const Players = {
     list: () => requests.get('players'),
-    add: (player: Player) => requests.post('players', player),
+    add: (player: PlayerDTO) => requests.post('players', player),
     delete: (id: number) => requests.delete(`players/${id}`),
 };
 

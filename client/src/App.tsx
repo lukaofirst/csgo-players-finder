@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
+import PlayerDetailed from './components/players/PlayerDetailed';
 import PlayerForm from './components/players/PlayerForm';
 import TeamForm from './components/teams/TeamForm';
 import TrophyForm from './components/trophies/TrophyForm';
@@ -25,6 +26,7 @@ function App() {
                     <Route path='players'>
                         <Route index={true} element={<Players />} />
                         <Route path='add-player' element={<PlayerForm />} />
+                        <Route path=':id' element={<PlayerDetailed />} />
                     </Route>
                     <Route path='teams'>
                         <Route index={true} element={<Teams />} />

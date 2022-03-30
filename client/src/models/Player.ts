@@ -1,12 +1,14 @@
-import { Trophy } from './Trophy';
+import { TrophyObj } from './TrophyObj';
+import { Team } from './Team';
 
 export interface Player {
-    id: number;
+    id?: number;
     nickname: string;
     name: string;
     age: number;
     nationality: string;
     isActive: boolean;
     teamId: number;
-    trophies?: Trophy[];
+    playerTrophies?: TrophyObj[];
+    team?: Team;
 }
