@@ -29,6 +29,7 @@ const PlayerForm = () => {
         reset,
     } = useForm<FieldValues>({
         mode: 'all',
+        shouldUnregister: true,
         resolver: yupResolver<any>(playerValidatorSchema),
     });
 

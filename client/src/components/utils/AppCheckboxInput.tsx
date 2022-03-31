@@ -14,7 +14,7 @@ interface Props extends UseControllerProps {
 }
 
 const AppCheckboxInput = (props: Props) => {
-    const { field, fieldState } = useController({ ...props, defaultValue: '' });
+    const { field, fieldState } = useController({ ...props, defaultValue: [] });
 
     return (
         <FormGroup sx={{ my: 1 }}>
@@ -37,6 +37,9 @@ const AppCheckboxInput = (props: Props) => {
                                 );
                                 field.onChange(newTopics);
                             }}
+                            checked={field.value.some((t: any) => {
+                                return t === trophy.id;
+                            })}
                         />
                     }
                     label={trophy.name}
