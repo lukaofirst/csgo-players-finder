@@ -16,7 +16,6 @@ import AppRadioInput from '../utils/AppRadioInput';
 import AppSelectInput from '../utils/AppSelectInput';
 import AppCheckboxInput from '../utils/AppCheckboxInput';
 import { LoadingButton } from '@mui/lab';
-import { toast } from 'react-toastify';
 import { PlayerDTO } from '../../models/DTO/PlayerDTO';
 import { Trophy } from '../../models/Trophy';
 
@@ -73,7 +72,6 @@ const PlayerForm = () => {
         try {
             await dispatch(addPlayerAsync(JSON.stringify(sendData)));
             reset();
-            toast.success('Player added successfully!');
         } catch (err) {
             console.log(err);
         }

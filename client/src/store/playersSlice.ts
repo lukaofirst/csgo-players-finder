@@ -4,6 +4,7 @@ import {
     createSlice,
     PayloadAction,
 } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { Player } from '../models/Player';
 import { RootState } from './store';
@@ -101,6 +102,7 @@ export const playersSlice = createSlice({
         builder.addCase(addPlayerAsync.fulfilled, (state, action) => {
             playersAdapter.upsertOne(state, action.payload);
             state.status = 'done';
+            toast.success('Player added successfully!');
         });
 
         builder.addCase(addPlayerAsync.rejected, (state) => {
