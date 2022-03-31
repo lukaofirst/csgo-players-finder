@@ -6,11 +6,13 @@ import {
     FormLabel,
     Box,
 } from '@mui/material';
+import { ChangeEvent } from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
 interface Props extends UseControllerProps {
     label?: string;
     textposition?: string;
+    onClick?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const AppRadioInput = (props: Props) => {
@@ -21,7 +23,12 @@ const AppRadioInput = (props: Props) => {
             {props.label && (
                 <FormLabel error={!!fieldState.error}>{props.label}</FormLabel>
             )}
-            <RadioGroup sx={{ display: 'inline-block' }} {...field} {...props}>
+            <RadioGroup
+                sx={{ display: 'inline-block' }}
+                {...field}
+                {...props}
+                onClick={(e: any) => props.onClick!(e)}
+            >
                 <FormControlLabel
                     value='true'
                     control={<Radio />}

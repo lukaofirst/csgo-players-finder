@@ -6,6 +6,6 @@ export interface PlayerDTO {
     age: number;
     nationality: string;
     isActive: boolean;
-    teamId: number;
+    teamId?: number;
     trophies?: Trophy[];
 }

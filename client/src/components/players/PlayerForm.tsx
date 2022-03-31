@@ -1,6 +1,6 @@
 import { Add } from '@mui/icons-material';
 import { Box, Container, FormControl, Stack, Typography } from '@mui/material';
-import { useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
@@ -33,6 +33,8 @@ const PlayerForm = () => {
         resolver: yupResolver<any>(playerValidatorSchema),
     });
 
+    const [showSelectList, setShowSelectList] = useState('true');
+
     const { teamsList, teamsLoaded } = useAppSelector((state) => state.teams);
     const { trophiesList, trophiesLoaded } = useAppSelector(
         (state) => state.trophies
@@ -45,6 +47,10 @@ const PlayerForm = () => {
 
     const NavigateBack = () => {
         navigate(-1);
+    };
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setShowSelectList(e.target.value);
     };
 
     const onSubmitHandler = async (data: FieldValues) => {
@@ -60,8 +66,8 @@ const PlayerForm = () => {
             age: data.age,
             nationality: data.nationality,
             isActive: data.isActive,
-            teamId: data.teamId,
             trophies: filteredTrophiesList,
+            ...(data.isActive === 'true' && { teamId: parseInt(data.teamId) }),
         };
 
         try {
@@ -124,13 +130,16 @@ const PlayerForm = () => {
                             name='isActive'
                             control={control}
                             textposition='center'
+                            onClick={onChangeHandler}
                         />
                     </>
-                    <AppSelectInput
-                        teams={teamsList}
-                        name='teamId'
-                        control={control}
-                    />
+                    {showSelectList === 'true' && (
+                        <AppSelectInput
+                            teams={teamsList}
+                            name='teamId'
+                            control={control}
+                        />
+                    )}
                     <AppCheckboxInput
                         label='Trophies'
                         trophies={trophiesList}

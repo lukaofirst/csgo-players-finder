@@ -12,6 +12,17 @@ export const playerValidatorSchema = yup.object({
         .typeError('age must be a number type'),
     nationality: yup.string().notRequired(),
     isActive: yup.string().required(),
-    teamId: yup.number().notRequired().typeError('pick up a team'),
+    teamId: yup
+        .string()
+        .when('isActive', {
+            is: 'false',
+            then: yup.string().nullable(),
+        })
+        .when('isActive', {
+            is: 'true',
+            then: yup
+                .string()
+                .required('When the player is active, you must provide a Team'),
+        }),
     trophies: yup.array().nullable(),
 });

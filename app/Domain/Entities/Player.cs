@@ -10,7 +10,7 @@ namespace Domain.Entities
 		public string? Nationality { get; set; }
 		public string? IsActive { get; set; }
 		[JsonIgnore]
-		public int TeamId { get; set; }
+		public int? TeamId { get; set; }
 		public Team? Team { get; set; }
 		public List<PlayerTrophy>? PlayerTrophies { get; set; }
 	}
