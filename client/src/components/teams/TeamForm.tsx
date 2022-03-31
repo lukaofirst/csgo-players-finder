@@ -4,7 +4,6 @@ import { LoadingButton } from '@mui/lab';
 import { Container, Stack, Box, Typography, FormControl } from '@mui/material';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useAppDispatch } from '../../hooks/hooks';
 import { addTeamAsync } from '../../store/teamsSlice';
 import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
@@ -32,7 +31,6 @@ const TeamForm = () => {
         try {
             await dispatch(addTeamAsync(JSON.stringify(data)));
             reset();
-            toast.success('Team added successfully');
         } catch (error) {
             console.log(error);
         }

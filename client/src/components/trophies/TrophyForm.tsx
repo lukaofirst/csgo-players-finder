@@ -9,7 +9,6 @@ import AppTextInput from '../utils/AppTextInput';
 import AppRadioInput from '../utils/AppRadioInput';
 import BackBtn from '../utils/BackBtn';
 import { addTrophyAsync } from '../../store/trophiesSlice';
-import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 
 const TrophyForm = () => {
@@ -33,7 +32,6 @@ const TrophyForm = () => {
         try {
             await dispatch(addTrophyAsync(JSON.stringify(data)));
             reset();
-            toast.success('Trophy added successfully!');
         } catch (error) {
             console.log(error);
         }

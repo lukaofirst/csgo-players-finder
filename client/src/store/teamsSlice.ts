@@ -3,6 +3,7 @@ import {
     createEntityAdapter,
     createSlice,
 } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { Team } from '../models/Team';
 
@@ -79,6 +80,7 @@ export const teamsSlice = createSlice({
         builder.addCase(addTeamAsync.fulfilled, (state, action) => {
             teamsAdapter.upsertOne(state, action.payload);
             state.status = 'done';
+            toast.success('Team added successfully');
         });
 
         builder.addCase(addTeamAsync.rejected, (state) => {
@@ -92,6 +94,7 @@ export const teamsSlice = createSlice({
         builder.addCase(deleteTeamAsync.fulfilled, (state, action) => {
             teamsAdapter.removeOne(state, action.payload);
             state.status = 'done';
+            toast.success('Team deleted successfully');
         });
 
         builder.addCase(deleteTeamAsync.rejected, (state) => {

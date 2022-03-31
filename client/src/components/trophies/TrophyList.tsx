@@ -11,7 +11,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Trophy } from '../../models/Trophy';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { deleteTrophyAsync, setTrophyList } from '../../store/trophiesSlice';
-import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 
 interface Props {
@@ -26,7 +25,6 @@ const TrophyList = ({ items }: Props) => {
         try {
             await dispatch(deleteTrophyAsync({ id, name }));
             dispatch(setTrophyList(id));
-            toast.success('Trophy deleted successfully!');
         } catch (error) {
             console.log(error);
         }

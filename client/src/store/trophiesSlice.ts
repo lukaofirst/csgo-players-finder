@@ -3,6 +3,7 @@ import {
     createEntityAdapter,
     createSlice,
 } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import agent from '../api/agent';
 import { Trophy } from '../models/Trophy';
 
@@ -85,6 +86,7 @@ export const trophiesSlice = createSlice({
         builder.addCase(addTrophyAsync.fulfilled, (state, action) => {
             trophiesAdapter.upsertOne(state, action.payload);
             state.status = 'done';
+            toast.success('Trophy added successfully!');
         });
 
         builder.addCase(addTrophyAsync.rejected, (state) => {
@@ -97,6 +99,7 @@ export const trophiesSlice = createSlice({
 
         builder.addCase(deleteTrophyAsync.fulfilled, (state) => {
             state.status = 'done';
+            toast.success('Trophy deleted successfully!');
         });
 
         builder.addCase(deleteTrophyAsync.rejected, (state) => {
