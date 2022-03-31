@@ -78,25 +78,15 @@ const PlayerDetailed = () => {
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            Is Active:
+                            Team:
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant='h6' gutterBottom>
-                                {player?.isActive}
+                                {player?.isActive.toString() === 'true'
+                                    ? player?.team?.name
+                                    : 'No Team'}
                             </Typography>
                         </Grid>
-                        {player?.isActive && (
-                            <>
-                                <Grid item xs={6}>
-                                    Team:
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Typography variant='h6' gutterBottom>
-                                        {player?.team?.name}
-                                    </Typography>
-                                </Grid>
-                            </>
-                        )}
                     </Grid>
                 </Paper>
                 <Paper
@@ -128,15 +118,15 @@ const PlayerDetailed = () => {
                                         IsMajor
                                     </Grid>
                                     {player?.playerTrophies?.map(
-                                        (trophyObj) => (
-                                            <Fragment key={trophyObj.trophy.id}>
+                                        ({ trophy }) => (
+                                            <Fragment key={trophy.id}>
                                                 <Grid item xs={8}>
                                                     <Typography
                                                         variant='subtitle1'
                                                         fontWeight='bold'
                                                         gutterBottom
                                                     >
-                                                        {trophyObj.trophy.name}
+                                                        {trophy.name}
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
@@ -148,7 +138,7 @@ const PlayerDetailed = () => {
                                                         variant='subtitle1'
                                                         gutterBottom
                                                     >
-                                                        {trophyObj.trophy.year}
+                                                        {trophy.year}
                                                     </Typography>
                                                 </Grid>
                                                 <Grid
@@ -156,9 +146,12 @@ const PlayerDetailed = () => {
                                                     xs={2}
                                                     textAlign='center'
                                                 >
-                                                    {trophyObj.trophy
-                                                        .isMajor && (
-                                                        <EmojiEventsIcon color='primary' />
+                                                    {trophy.isMajor && (
+                                                        <EmojiEventsIcon
+                                                            sx={{
+                                                                color: '#299cdd',
+                                                            }}
+                                                        />
                                                     )}
                                                 </Grid>
                                             </Fragment>
