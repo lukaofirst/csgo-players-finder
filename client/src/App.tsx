@@ -18,7 +18,11 @@ import { store } from './store/store';
 function App() {
     return (
         <Router>
-            <ToastContainer position='bottom-right' theme='colored' />
+            <ToastContainer
+                style={{ width: 'fit-content' }}
+                position='bottom-right'
+                theme='colored'
+            />
             <Navbar />
             <Provider store={store}>
                 <Routes>
