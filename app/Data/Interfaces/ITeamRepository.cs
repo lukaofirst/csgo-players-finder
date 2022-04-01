@@ -6,7 +6,8 @@ namespace Data.Interfaces
 	{
 		Task<List<Team>> GetAll();
 		Task<Team> GetById(int id);
+		Task<bool> CheckByName(string name);
 		Task<Team> Post(Team team);
-		Task<bool> Delete(int id);
+		Task<int> Delete(int id);
 	}
 }

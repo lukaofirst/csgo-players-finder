@@ -31,6 +31,15 @@ namespace Data.Repositories
 			return team!;
 		}
 
+		public async Task<bool> CheckByName(string name)
+		{
+			var entityWithName = await _context.Teams!.AsNoTracking()
+				.AnyAsync(team => team.Name == name);
+
+			if (entityWithName == true) return true;
+			else return false;
+		}
+
 		public async Task<Team> Post(Team team)
 		{
 			await _context.Teams!.AddAsync(team);
@@ -40,22 +49,16 @@ namespace Data.Repositories
 			return team;
 		}
 
-		public async Task<bool> Delete(int id)
+		public async Task<int> Delete(int id)
 		{
-			bool entityExist = false;
-
 			var team = await _context.Teams!
 				.AsNoTracking()
 				.Where(t => t.Id == id)
 				.FirstOrDefaultAsync();
 
-			if (team == null) return entityExist;
+			_context.Teams!.Remove(team!);
 
-			_context.Teams!.Remove(team);
-
-			await _context.SaveChangesAsync();
-
-			return entityExist = true;
+			return await _context.SaveChangesAsync();
 		}
 	}
 }

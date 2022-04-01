@@ -22,6 +22,11 @@ axios.interceptors.response.use(
                 toast.error(data.title);
                 break;
             case 404:
+                console.log(error.response);
+                toast.error(data.title);
+                break;
+            case 409:
+                console.log(error.response);
                 toast.error(data.title);
                 break;
             case 500:

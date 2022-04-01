@@ -28,9 +28,19 @@ namespace API.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Trophy>> Post(Trophy trophy)
 		{
+			var existingTrophy = await _trophyRepository.CheckByName(trophy.Name!);
+
+			if (existingTrophy == true)
+			{
+				return Conflict(new ProblemDetails
+				{
+					Title = $"The trophy with name [{trophy.Name}] already exist"
+				});
+			}
+
 			var entity = await _trophyRepository.Post(trophy);
 
-			return entity;
+			return Ok(entity);
 		}
 
 		[HttpDelete("{id}")]
@@ -38,7 +48,7 @@ namespace API.Controllers
 		{
 			var trophy = await _trophyRepository.Delete(id);
 
-			if (!trophy) return BadRequest(new ProblemDetails
+			if (!trophy) return NotFound(new ProblemDetails
 			{
 				Title = $"Trophy with id: [{id}] doesn't exist"
 			});

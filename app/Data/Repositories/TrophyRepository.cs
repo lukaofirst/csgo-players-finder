@@ -22,6 +22,15 @@ namespace Data.Repositories
 			return trophies;
 		}
 
+		public async Task<bool> CheckByName(string name)
+		{
+			var existingWithName = await _context.Trophies!.AsNoTracking()
+				.AnyAsync(trophy => trophy.Name == name);
+
+			if (existingWithName == true) return true;
+			else return false;
+		}
+
 		public async Task<Trophy> Post(Trophy trophy)
 		{
 			await _context.Trophies!.AddAsync(trophy);

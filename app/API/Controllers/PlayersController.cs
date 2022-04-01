@@ -42,6 +42,16 @@ namespace API.Controllers
 		[HttpPost]
 		public async Task<ActionResult<PlayerDTO>> Post(PlayerDTO playerDTO)
 		{
+			var existingPlayer = await _playerRepository.CheckByNickname(playerDTO.Nickname!);
+
+			if (existingPlayer == true)
+			{
+				return Conflict(new ProblemDetails
+				{
+					Title = $"The nickname [{playerDTO.Nickname}] already exist"
+				});
+			}
+
 			var player = await _playerRepository.Post(playerDTO);
 
 			return Ok(player);
@@ -50,12 +60,17 @@ namespace API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{
-			var player = await _playerRepository.Delete(id);
+			var existingPlayer = await _playerRepository.GetById(id);
 
-			if (!player) return NotFound(new ProblemDetails
+			if (existingPlayer == null)
 			{
-				Title = $"Player with id: [{id}] doesn't exist"
-			});
+				return NotFound(new ProblemDetails
+				{
+					Title = $"Player with id: [{id}] doesn't exist"
+				});
+			}
+
+			var playerId = await _playerRepository.Delete(id);
 
 			return Ok($"The player with id: [{id}] has been deleted successfully!");
 		}

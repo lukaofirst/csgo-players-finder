@@ -9,6 +9,7 @@ namespace Data.Interfaces
 	public interface ITrophyRepository
 	{
 		Task<List<Trophy>> GetAll();
+		Task<bool> CheckByName(string name);
 		Task<Trophy> Post(Trophy trophy);
 		Task<bool> Delete(int id);
 	}

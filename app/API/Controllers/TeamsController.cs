@@ -41,6 +41,16 @@ namespace API.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Team>> Post(Team team)
 		{
+			var existingTeam = await _teamRepository.CheckByName(team.Name!);
+
+			if (existingTeam == true)
+			{
+				return Conflict(new ProblemDetails
+				{
+					Title = $"The team with name [{team.Name}] already exist"
+				});
+			}
+
 			var entity = await _teamRepository.Post(team);
 
 			return Ok(entity);
@@ -49,12 +59,14 @@ namespace API.Controllers
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{
-			var team = await _teamRepository.Delete(id);
+			var existingTeam = await _teamRepository.GetById(id);
 
-			if (!team) return BadRequest(new ProblemDetails
+			if (existingTeam == null) return NotFound(new ProblemDetails
 			{
 				Title = $"Team with id: [{id}] doesn't exist"
 			});
+
+			var team = await _teamRepository.Delete(id);
 
 			return Ok($"The team with id: [{id}] has been deleted successfully!");
 		}

@@ -37,6 +37,15 @@ namespace Data.Repositories
 			return player!;
 		}
 
+		public async Task<bool> CheckByNickname(string nickname)
+		{
+			var entityWithNickname = await _context.Players!.AsNoTracking()
+				.AnyAsync(player => player.Nickname == nickname);
+
+			if (entityWithNickname == true) return true;
+			else return false;
+		}
+
 		public async Task<Player> Post(PlayerDTO playerDTO)
 		{
 			var playerMap = _mapper.Map(playerDTO, new Player());
@@ -48,23 +57,16 @@ namespace Data.Repositories
 			return playerMap;
 		}
 
-		public async Task<bool> Delete(int id)
+		public async Task<int> Delete(int id)
 		{
-			bool entityExist = false;
-
 			var player = await _context.Players!
 				.AsNoTracking()
 				.Where(p => p.Id == id)
 				.FirstOrDefaultAsync();
 
-			if (player == null) return entityExist;
-
 			_context.Players!.Remove(player!);
 
-			await _context.SaveChangesAsync();
-
-			return entityExist = true;
-
+			return await _context.SaveChangesAsync();
 		}
 	}
 }
