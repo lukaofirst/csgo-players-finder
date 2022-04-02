@@ -2,6 +2,7 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
+    PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -43,12 +44,21 @@ export const deleteTeamAsync = createAsyncThunk(
 interface TeamState {
     teamsLoaded: boolean;
     teamsList: Team[];
+    team: Team | undefined;
     status: string;
 }
 
 const initialState: TeamState = {
     teamsLoaded: false,
     teamsList: [],
+    team: {
+        id: 0,
+        name: '',
+        location: '',
+        region: '',
+        foundedYear: 0,
+        players: [],
+    },
     status: 'started',
 };
 
@@ -57,7 +67,15 @@ const teamsAdapter = createEntityAdapter<Team>();
 export const teamsSlice = createSlice({
     name: 'teams',
     initialState: teamsAdapter.getInitialState(initialState),
-    reducers: {},
+    reducers: {
+        setTeam(state, action: PayloadAction<number>) {
+            const team = state.teamsList.find(
+                (team) => team.id === action.payload
+            );
+
+            state.team = team;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchTeamsAsync.pending, (state) => {
             state.status = 'pendingFetchTeams';
@@ -102,3 +120,5 @@ export const teamsSlice = createSlice({
         });
     },
 });
+
+export const { setTeam } = teamsSlice.actions;

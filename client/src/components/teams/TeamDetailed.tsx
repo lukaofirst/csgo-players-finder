@@ -1,14 +1,12 @@
 import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/hooks';
 import BackBtn from '../utils/BackBtn';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { Fragment } from 'react';
 
-const PlayerDetailed = () => {
+const TeamDetailed = () => {
     const navigate = useNavigate();
-
-    const { player } = useAppSelector((state) => state.players);
+    const { team } = useAppSelector((state) => state.teams);
 
     const NavigateBack = () => {
         navigate(-1);
@@ -32,7 +30,7 @@ const PlayerDetailed = () => {
                 <Paper
                     elevation={3}
                     sx={{
-                        width: '400px',
+                        width: '450px',
                         padding: '30px',
                     }}
                 >
@@ -42,49 +40,39 @@ const PlayerDetailed = () => {
                         pb={5}
                         textAlign='center'
                     >
-                        Player's Info
+                        Team's Info
                     </Typography>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            Nickname:
-                        </Grid>
-                        <Grid item xs={6}>
-                            <Typography variant='h6' gutterBottom>
-                                {player?.nickname}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={4}>
                             Name:
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <Typography variant='h6' gutterBottom>
-                                {player?.name}
+                                {team?.name}
                             </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                            Age:
+                        <Grid item xs={4}>
+                            Location:
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <Typography variant='h6' gutterBottom>
-                                {player?.age} years
+                                {team?.location}
                             </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                            Nationality:
+                        <Grid item xs={4}>
+                            Region:
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <Typography variant='h6' gutterBottom>
-                                {player?.nationality}
+                                {team?.region}
                             </Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                            Team:
+                        <Grid item xs={4}>
+                            Founded Year:
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <Typography variant='h6' gutterBottom>
-                                {player?.isActive.toString() === 'true'
-                                    ? player?.team?.name
-                                    : 'No Team'}
+                                {team?.foundedYear}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -96,7 +84,7 @@ const PlayerDetailed = () => {
                         padding: '30px',
                     }}
                 >
-                    {player?.playerTrophies?.length! > 0 ? (
+                    {team?.players?.length! > 0 ? (
                         <>
                             <Typography
                                 variant='h5'
@@ -104,45 +92,46 @@ const PlayerDetailed = () => {
                                 pb={5}
                                 textAlign='center'
                             >
-                                Achievements
+                                Players
                             </Typography>
                             <Grid container spacing={2}>
-                                <Grid item xs={8}>
-                                    Title's Name
+                                <Grid item xs={5}>
+                                    Nickname
+                                </Grid>
+                                <Grid item xs={5} textAlign='center'>
+                                    Nationality
                                 </Grid>
                                 <Grid item xs={2} textAlign='center'>
-                                    Year
+                                    Age
                                 </Grid>
-                                <Grid item xs={2} textAlign='center'>
-                                    IsMajor
-                                </Grid>
-                                {player?.playerTrophies?.map(({ trophy }) => (
-                                    <Fragment key={trophy.id}>
-                                        <Grid item xs={8}>
+                                {team?.players?.map((player) => (
+                                    <Fragment key={player.id}>
+                                        <Grid item xs={5}>
                                             <Typography
                                                 variant='subtitle1'
                                                 fontWeight='bold'
                                                 gutterBottom
                                             >
-                                                {trophy.name}
+                                                {player.nickname}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={5} textAlign='center'>
+                                            <Typography
+                                                variant='subtitle1'
+                                                fontWeight='bold'
+                                                gutterBottom
+                                            >
+                                                {player.nationality}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={2} textAlign='center'>
                                             <Typography
                                                 variant='subtitle1'
+                                                fontWeight='bold'
                                                 gutterBottom
                                             >
-                                                {trophy.year}
+                                                {player.age}
                                             </Typography>
-                                        </Grid>
-                                        <Grid item xs={2} textAlign='center'>
-                                            {trophy.isMajor && (
-                                                <EmojiEventsIcon
-                                                    sx={{
-                                                        color: '#299cdd',
-                                                    }}
-                                                />
-                                            )}
                                         </Grid>
                                     </Fragment>
                                 ))}
@@ -150,7 +139,7 @@ const PlayerDetailed = () => {
                         </>
                     ) : (
                         <Typography variant='h6' textAlign='center' color='red'>
-                            There's no Achievements
+                            There's no Players
                         </Typography>
                     )}
                 </Paper>
@@ -159,4 +148,4 @@ const PlayerDetailed = () => {
     );
 };
 
-export default PlayerDetailed;
+export default TeamDetailed;

@@ -1,20 +1,23 @@
 import { Button, Paper, Typography } from '@mui/material';
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch } from '../../hooks/hooks';
 import { Team } from '../../models/Team';
 import InfoIcon from '@mui/icons-material/Info';
+import { useNavigate } from 'react-router-dom';
+import { setTeam } from '../../store/teamsSlice';
 
 interface Props {
     item: Team;
 }
 
 const TeamItem = ({ item }: Props) => {
-    const teamsList = useAppSelector((state) => state.teams.teamsList);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+
     const { name, location, region, foundedYear, id } = item;
 
     const onClickHandler = (id: number) => {
-        const team = teamsList.find((team) => team.id === id);
-
-        console.log(team);
+        dispatch(setTeam(id));
+        navigate(`${id}`);
     };
 
     return (

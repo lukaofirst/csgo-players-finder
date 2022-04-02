@@ -6,6 +6,7 @@ import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
 import PlayerDetailed from './components/players/PlayerDetailed';
 import PlayerForm from './components/players/PlayerForm';
+import TeamDetailed from './components/teams/TeamDetailed';
 import TeamForm from './components/teams/TeamForm';
 import TrophyForm from './components/trophies/TrophyForm';
 import Home from './pages/Home';
@@ -35,6 +36,7 @@ function App() {
                     <Route path='teams'>
                         <Route index={true} element={<Teams />} />
                         <Route path='add-team' element={<TeamForm />} />
+                        <Route path=':id' element={<TeamDetailed />} />
                     </Route>
                     <Route path='trophies'>
                         <Route index={true} element={<Trophies />} />
