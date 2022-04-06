@@ -2,6 +2,7 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
+    PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -43,12 +44,19 @@ export const deleteTrophyAsync = createAsyncThunk<
 interface TrophyState {
     trophiesLoaded: boolean;
     trophiesList: Trophy[];
+    trophy: Trophy | undefined;
     status: string;
 }
 
 const initialState: TrophyState = {
     trophiesLoaded: false,
     trophiesList: [],
+    trophy: {
+        id: 0,
+        name: '',
+        isMajor: '',
+        year: 0,
+    },
     status: 'started',
 };
 
@@ -62,6 +70,13 @@ export const trophiesSlice = createSlice({
             state.trophiesList = state.trophiesList.filter(
                 (t) => t.id !== action.payload
             );
+        },
+        setTrophy(state, action: PayloadAction<number>) {
+            const trophy = state.trophiesList.find(
+                (trophy) => trophy.id === action.payload
+            );
+
+            state.trophy = trophy;
         },
     },
     extraReducers: (builder) => {
@@ -108,4 +123,4 @@ export const trophiesSlice = createSlice({
     },
 });
 
-export const { setTrophyList } = trophiesSlice.actions;
+export const { setTrophyList, setTrophy } = trophiesSlice.actions;
