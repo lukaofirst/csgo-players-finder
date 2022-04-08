@@ -1,18 +1,28 @@
 import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/hooks';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import BackBtn from '../utils/BackBtn';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
+import { fetchPlayerAsync } from '../../store/playersSlice';
+import LoadingComponent from '../utils/LoadingComponent';
 
 const PlayerDetailed = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { id } = useParams();
+    const { player, playersLoaded } = useAppSelector((state) => state.players);
 
-    const { player } = useAppSelector((state) => state.players);
+    useEffect(() => {
+        dispatch(fetchPlayerAsync(+id!));
+    }, [dispatch, id]);
 
     const NavigateBack = () => {
         navigate(-1);
     };
+
+    if (!playersLoaded)
+        return <LoadingComponent message="Loading Player's Info..." />;
 
     return (
         <Container maxWidth='lg' sx={{ mt: 2 }}>

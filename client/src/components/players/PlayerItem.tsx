@@ -2,8 +2,6 @@ import { Button, Paper, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { Player } from '../../models/Player';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks/hooks';
-import { setPlayer } from '../../store/playersSlice';
 
 interface Props {
     item: Player;
@@ -11,12 +9,10 @@ interface Props {
 
 const PlayerItem = ({ item }: Props) => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
     const { nickname, name, age, nationality, id } = item;
 
     const onClickHandler = (id: number) => {
-        dispatch(setPlayer(id));
         navigate(`${id}`);
     };
 

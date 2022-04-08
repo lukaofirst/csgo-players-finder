@@ -1,16 +1,27 @@
 import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
-import { Fragment } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/hooks';
+import { Fragment, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { fetchTeamAsync } from '../../store/teamsSlice';
 import BackBtn from '../utils/BackBtn';
+import LoadingComponent from '../utils/LoadingComponent';
 
 const TeamDetailed = () => {
     const navigate = useNavigate();
-    const { team } = useAppSelector((state) => state.teams);
+    const dispatch = useAppDispatch();
+    const { id } = useParams();
+    const { team, teamsLoaded } = useAppSelector((state) => state.teams);
+
+    useEffect(() => {
+        dispatch(fetchTeamAsync(+id!));
+    }, [dispatch, id]);
 
     const NavigateBack = () => {
         navigate(-1);
     };
+
+    if (!teamsLoaded)
+        return <LoadingComponent message="Loading Team's Info..." />;
 
     return (
         <Container maxWidth='lg' sx={{ mt: 2 }}>

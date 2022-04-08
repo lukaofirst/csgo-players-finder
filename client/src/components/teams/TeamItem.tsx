@@ -1,9 +1,7 @@
 import { Button, Paper, Typography } from '@mui/material';
-import { useAppDispatch } from '../../hooks/hooks';
 import { Team } from '../../models/Team';
 import InfoIcon from '@mui/icons-material/Info';
 import { useNavigate } from 'react-router-dom';
-import { setTeam } from '../../store/teamsSlice';
 
 interface Props {
     item: Team;
@@ -11,12 +9,10 @@ interface Props {
 
 const TeamItem = ({ item }: Props) => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
     const { name, location, region, foundedYear, id } = item;
 
     const onClickHandler = (id: number) => {
-        dispatch(setTeam(id));
         navigate(`${id}`);
     };
 

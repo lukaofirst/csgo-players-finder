@@ -2,7 +2,6 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
-    PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -14,6 +13,17 @@ export const fetchPlayersAsync = createAsyncThunk<Player[]>(
     async (_, thunkAPI) => {
         try {
             return await agent.Players.list();
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
+export const fetchPlayerAsync = createAsyncThunk(
+    'players/fetchPlayerAsync',
+    async (id: number, thunkAPI) => {
+        try {
+            return await agent.Players.getById(id);
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         }
@@ -70,15 +80,7 @@ const playersAdapter = createEntityAdapter<Player>();
 export const playersSlice = createSlice({
     name: 'players',
     initialState: playersAdapter.getInitialState(initialState),
-    reducers: {
-        setPlayer(state, action: PayloadAction<number>) {
-            const player = state.playersList.find(
-                (player) => player.id === action.payload
-            );
-
-            state.player = player;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchPlayersAsync.pending, (state) => {
             state.status = 'pendingFetchPlayers';
@@ -91,6 +93,22 @@ export const playersSlice = createSlice({
         });
 
         builder.addCase(fetchPlayersAsync.rejected, (state, action) => {
+            console.log(action.payload);
+            state.status = 'failed';
+        });
+
+        builder.addCase(fetchPlayerAsync.pending, (state) => {
+            state.playersLoaded = false;
+            state.status = 'pendingFetchPlayer';
+        });
+
+        builder.addCase(fetchPlayerAsync.fulfilled, (state, action) => {
+            state.player = action.payload;
+            state.status = 'done';
+            state.playersLoaded = true;
+        });
+
+        builder.addCase(fetchPlayerAsync.rejected, (state, action) => {
             console.log(action.payload);
             state.status = 'failed';
         });
@@ -123,8 +141,6 @@ export const playersSlice = createSlice({
         });
     },
 });
-
-export const { setPlayer } = playersSlice.actions;
 
 export const playersSelectors = playersAdapter.getSelectors(
     (state: RootState) => state.players

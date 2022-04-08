@@ -48,12 +48,14 @@ const requests = {
 
 const Players = {
     list: () => requests.get('players'),
+    getById: (id: number) => requests.get(`players/${id}`),
     add: (player: PlayerDTO) => requests.post('players', player),
     delete: (id: number) => requests.delete(`players/${id}`),
 };
 
 const Teams = {
     list: () => requests.get('teams'),
+    getById: (id: number) => requests.get(`teams/${id}`),
     add: (team: Team) => requests.post('teams', team),
     delete: (id: number) => requests.delete(`teams/${id}`),
 };

@@ -2,7 +2,6 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
-    PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -13,6 +12,17 @@ export const fetchTeamsAsync = createAsyncThunk<Team[]>(
     async (_, thunkAPI) => {
         try {
             return await agent.Teams.list();
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
+export const fetchTeamAsync = createAsyncThunk(
+    'teams/fetchTeamAsync',
+    async (id: number, thunkAPI) => {
+        try {
+            return await agent.Teams.getById(id);
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         }
@@ -67,15 +77,7 @@ const teamsAdapter = createEntityAdapter<Team>();
 export const teamsSlice = createSlice({
     name: 'teams',
     initialState: teamsAdapter.getInitialState(initialState),
-    reducers: {
-        setTeam(state, action: PayloadAction<number>) {
-            const team = state.teamsList.find(
-                (team) => team.id === action.payload
-            );
-
-            state.team = team;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchTeamsAsync.pending, (state) => {
             state.status = 'pendingFetchTeams';
@@ -88,6 +90,21 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(fetchTeamsAsync.rejected, (state) => {
+            state.status = 'failed';
+        });
+
+        builder.addCase(fetchTeamAsync.pending, (state) => {
+            state.teamsLoaded = false;
+            state.status = 'pendingFetchTeam';
+        });
+
+        builder.addCase(fetchTeamAsync.fulfilled, (state, action) => {
+            state.team = action.payload;
+            state.status = 'done';
+            state.teamsLoaded = true;
+        });
+
+        builder.addCase(fetchTeamAsync.rejected, (state) => {
             state.status = 'failed';
         });
 
@@ -120,5 +137,3 @@ export const teamsSlice = createSlice({
         });
     },
 });
-
-export const { setTeam } = teamsSlice.actions;
