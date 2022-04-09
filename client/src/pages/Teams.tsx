@@ -52,7 +52,13 @@ const Teams = () => {
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
-                <ActionBtn name='team' onClick={NavigateToAddTeam} />
+                <ActionBtn
+                    variant='contained'
+                    name='team'
+                    color='success'
+                    icon='add'
+                    onClick={NavigateToAddTeam}
+                />
             </Stack>
             <Box sx={{ my: 3 }}>
                 <TextField

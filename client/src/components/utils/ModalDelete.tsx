@@ -8,8 +8,6 @@ import {
     Button,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { deleteTrophyAsync, setTrophyList } from '../../store/trophiesSlice';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -25,24 +23,19 @@ const style = {
 
 interface Props {
     open: boolean;
+    type: string;
+    itemName: string;
     handleClose: () => void;
+    handleDelete: () => void;
 }
 
-export default function TrophyModalDelete({ open, handleClose }: Props) {
-    const dispatch = useAppDispatch();
-    const { trophy } = useAppSelector((state) => state.trophies);
-
-    const deleteTrophy = async (id: number, name: string) => {
-        handleClose();
-
-        try {
-            await dispatch(deleteTrophyAsync({ id, name }));
-            dispatch(setTrophyList(id));
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
+export default function ModalDelete({
+    open,
+    type,
+    itemName,
+    handleClose,
+    handleDelete,
+}: Props) {
     return (
         <Modal
             open={open}
@@ -79,13 +72,13 @@ export default function TrophyModalDelete({ open, handleClose }: Props) {
                     </Box>
                     <Box pt={3} textAlign='center'>
                         <Typography>
-                            Delete trophy
+                            Delete {type}
                             <Typography
                                 component='span'
                                 display='block'
                                 fontWeight='bold'
                             >
-                                {trophy!.name}
+                                {itemName}
                             </Typography>
                         </Typography>
                     </Box>
@@ -94,11 +87,9 @@ export default function TrophyModalDelete({ open, handleClose }: Props) {
                             fullWidth
                             variant='outlined'
                             color='error'
-                            onClick={() =>
-                                deleteTrophy(trophy!.id, trophy!.name)
-                            }
+                            onClick={handleDelete}
                         >
-                            Delete Trophy
+                            Delete {type}
                         </Button>
                     </Box>
                 </Box>

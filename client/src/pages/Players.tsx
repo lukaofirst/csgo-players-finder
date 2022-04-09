@@ -55,7 +55,13 @@ const Players = () => {
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
-                <ActionBtn name='player' onClick={NavigateToAddPlayer} />
+                <ActionBtn
+                    variant='contained'
+                    name='player'
+                    color='success'
+                    icon='add'
+                    onClick={NavigateToAddPlayer}
+                />
             </Stack>
             <Box sx={{ my: 3 }}>
                 <TextField

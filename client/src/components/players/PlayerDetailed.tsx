@@ -3,15 +3,21 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import BackBtn from '../utils/BackBtn';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { Fragment, useEffect } from 'react';
-import { fetchPlayerAsync } from '../../store/playersSlice';
+import { Fragment, useEffect, useState } from 'react';
+import { deletePlayerAsync, fetchPlayerAsync } from '../../store/playersSlice';
 import LoadingComponent from '../utils/LoadingComponent';
+import ActionBtn from '../utils/ActionBtn';
+import ModalDelete from '../utils/ModalDelete';
+import ReactDOM from 'react-dom';
 
 const PlayerDetailed = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { id } = useParams();
     const { player, playersLoaded } = useAppSelector((state) => state.players);
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
 
     useEffect(() => {
         dispatch(fetchPlayerAsync(+id!));
@@ -21,17 +27,54 @@ const PlayerDetailed = () => {
         navigate(-1);
     };
 
+    const openDeleteModal = () => {
+        setOpen(true);
+    };
+
+    const deletePlayer = async (id: number) => {
+        handleClose();
+
+        try {
+            await dispatch(deletePlayerAsync(id));
+
+            setTimeout(() => {
+                navigate('/players');
+            }, 3000);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     if (!playersLoaded)
         return <LoadingComponent message="Loading Player's Info..." />;
 
     return (
         <Container maxWidth='lg' sx={{ mt: 2 }}>
+            {ReactDOM.createPortal(
+                <ModalDelete
+                    open={open}
+                    type='player'
+                    itemName={`${player!.name.split(' ')[0]} "${
+                        player!.nickname
+                    }" ${player!.name.split(' ')[1]}`}
+                    handleDelete={() => deletePlayer(player?.id!)}
+                    handleClose={handleClose}
+                />,
+                document.getElementById('overlay-root')!
+            )}
             <Stack
                 direction='row'
                 justifyContent='space-between'
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
+                <ActionBtn
+                    variant='outlined'
+                    name='Player'
+                    color='error'
+                    icon='remove'
+                    onClick={openDeleteModal}
+                />
             </Stack>
             <Stack
                 direction='row'

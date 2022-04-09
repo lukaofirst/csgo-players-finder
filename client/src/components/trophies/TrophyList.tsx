@@ -10,11 +10,15 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Trophy } from '../../models/Trophy';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { setTrophy } from '../../store/trophiesSlice';
+import {
+    deleteTrophyAsync,
+    setTrophy,
+    setTrophyList,
+} from '../../store/trophiesSlice';
 import { LoadingButton } from '@mui/lab';
-import TrophyModalDelete from './TrophyModalDelete';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
+import ModalDelete from '../utils/ModalDelete';
 
 interface Props {
     items: Trophy[];
@@ -22,7 +26,7 @@ interface Props {
 
 const TrophyList = ({ items }: Props) => {
     const dispatch = useAppDispatch();
-    const { status } = useAppSelector((state) => state.trophies);
+    const { status, trophy } = useAppSelector((state) => state.trophies);
 
     const [open, setOpen] = useState(false);
     const handleClose = () => setOpen(false);
@@ -32,10 +36,27 @@ const TrophyList = ({ items }: Props) => {
         setOpen(true);
     };
 
+    const deleteTrophy = async (id: number, name: string) => {
+        handleClose();
+
+        try {
+            await dispatch(deleteTrophyAsync({ id, name }));
+            dispatch(setTrophyList(id));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
             {ReactDOM.createPortal(
-                <TrophyModalDelete open={open} handleClose={handleClose} />,
+                <ModalDelete
+                    open={open}
+                    type='trophy'
+                    itemName={trophy!.name}
+                    handleDelete={() => deleteTrophy(trophy!.id, trophy!.name)}
+                    handleClose={handleClose}
+                />,
                 document.getElementById('overlay-root')!
             )}
             <TableContainer component={Paper} sx={{ mt: 5 }}>

@@ -55,7 +55,13 @@ const Trophies = () => {
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
-                <ActionBtn name='trophy' onClick={NavigateToAddTrophy} />
+                <ActionBtn
+                    variant='contained'
+                    name='trophy'
+                    color='success'
+                    icon='add'
+                    onClick={NavigateToAddTrophy}
+                />
             </Stack>
             <Box sx={{ my: 3 }}>
                 <TextField

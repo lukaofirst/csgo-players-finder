@@ -92,8 +92,7 @@ export const playersSlice = createSlice({
             state.playersLoaded = true;
         });
 
-        builder.addCase(fetchPlayersAsync.rejected, (state, action) => {
-            console.log(action.payload);
+        builder.addCase(fetchPlayersAsync.rejected, (state) => {
             state.status = 'failed';
         });
 
@@ -108,8 +107,7 @@ export const playersSlice = createSlice({
             state.playersLoaded = true;
         });
 
-        builder.addCase(fetchPlayerAsync.rejected, (state, action) => {
-            console.log(action.payload);
+        builder.addCase(fetchPlayerAsync.rejected, (state) => {
             state.status = 'failed';
         });
 
@@ -134,6 +132,7 @@ export const playersSlice = createSlice({
         builder.addCase(deletePlayerAsync.fulfilled, (state, action) => {
             playersAdapter.removeOne(state, action.payload);
             state.status = 'done';
+            toast.success('Player deleted successfully!');
         });
 
         builder.addCase(deletePlayerAsync.rejected, (state) => {

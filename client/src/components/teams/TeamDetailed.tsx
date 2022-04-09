@@ -1,16 +1,22 @@
 import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchTeamAsync } from '../../store/teamsSlice';
+import { deleteTeamAsync, fetchTeamAsync } from '../../store/teamsSlice';
+import ActionBtn from '../utils/ActionBtn';
 import BackBtn from '../utils/BackBtn';
 import LoadingComponent from '../utils/LoadingComponent';
+import ModalDelete from '../utils/ModalDelete';
 
 const TeamDetailed = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { id } = useParams();
     const { team, teamsLoaded } = useAppSelector((state) => state.teams);
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
 
     useEffect(() => {
         dispatch(fetchTeamAsync(+id!));
@@ -20,17 +26,52 @@ const TeamDetailed = () => {
         navigate(-1);
     };
 
+    const openDeleteModal = () => {
+        setOpen(true);
+    };
+
+    const deleteTeam = async (id: number) => {
+        handleClose();
+
+        try {
+            await dispatch(deleteTeamAsync(id));
+
+            setTimeout(() => {
+                navigate('/teams');
+            }, 3000);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     if (!teamsLoaded)
         return <LoadingComponent message="Loading Team's Info..." />;
 
     return (
         <Container maxWidth='lg' sx={{ mt: 2 }}>
+            {ReactDOM.createPortal(
+                <ModalDelete
+                    open={open}
+                    type='team'
+                    itemName={team!.name}
+                    handleDelete={() => deleteTeam(team?.id!)}
+                    handleClose={handleClose}
+                />,
+                document.getElementById('overlay-root')!
+            )}
             <Stack
                 direction='row'
                 justifyContent='space-between'
                 alignItems='center'
             >
                 <BackBtn onClick={NavigateBack} />
+                <ActionBtn
+                    variant='outlined'
+                    name='Team'
+                    color='error'
+                    icon='remove'
+                    onClick={openDeleteModal}
+                />
             </Stack>
             <Stack
                 direction='row'
