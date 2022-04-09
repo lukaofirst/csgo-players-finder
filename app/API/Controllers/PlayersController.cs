@@ -57,6 +57,24 @@ namespace API.Controllers
 			return CreatedAtRoute("GetPlayer", new { id = player.Id }, player);
 		}
 
+		[HttpPut]
+		public async Task<ActionResult> Update(PlayerDTO playerDTO)
+		{
+			var existingPlayer = await _playerRepository.CheckByNickname(playerDTO.Nickname!);
+
+			if (existingPlayer != true)
+			{
+				return Conflict(new ProblemDetails
+				{
+					Title = $"The nickname [{playerDTO.Nickname}] doesn't exist in our database yet"
+				});
+			}
+
+			await _playerRepository.Update(playerDTO);
+
+			return NoContent();
+		}
+
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{

@@ -40,6 +40,15 @@ namespace Data.Repositories
 			return trophy;
 		}
 
+		public async Task<Trophy> Update(Trophy trophy)
+		{
+			_context.Trophies!.Update(trophy);
+
+			await _context.SaveChangesAsync();
+
+			return trophy;
+		}
+
 		public async Task<bool> Delete(int id)
 		{
 			bool entityExist = false;

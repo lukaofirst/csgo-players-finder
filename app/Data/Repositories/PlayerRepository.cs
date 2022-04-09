@@ -57,6 +57,17 @@ namespace Data.Repositories
 			return playerMap;
 		}
 
+		public async Task<Player> Update(PlayerDTO playerDTO)
+		{
+			var updatedPlayerMap = _mapper.Map(playerDTO, new Player());
+
+			_context.Players!.Update(updatedPlayerMap);
+
+			await _context.SaveChangesAsync();
+
+			return updatedPlayerMap;
+		}
+
 		public async Task<int> Delete(int id)
 		{
 			var player = await _context.Players!

@@ -11,6 +11,7 @@ namespace Data.Interfaces
 		Task<List<Trophy>> GetAll();
 		Task<bool> CheckByName(string name);
 		Task<Trophy> Post(Trophy trophy);
+		Task<Trophy> Update(Trophy trophy);
 		Task<bool> Delete(int id);
 	}
 }

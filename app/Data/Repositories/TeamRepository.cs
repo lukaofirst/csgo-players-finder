@@ -49,6 +49,14 @@ namespace Data.Repositories
 			return team;
 		}
 
+		public async Task<Team> Update(Team team)
+		{
+			_context.Teams!.Update(team);
+
+			await _context.SaveChangesAsync();
+
+			return team;
+		}
 		public async Task<int> Delete(int id)
 		{
 			var team = await _context.Teams!

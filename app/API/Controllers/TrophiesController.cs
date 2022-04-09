@@ -43,6 +43,14 @@ namespace API.Controllers
 			return Ok(entity);
 		}
 
+		[HttpPut]
+		public async Task<ActionResult> Update(Trophy trophy)
+		{
+			await _trophyRepository.Update(trophy);
+
+			return NoContent();
+		}
+
 		[HttpDelete("{id}")]
 		public async Task<ActionResult> Delete(int id)
 		{
