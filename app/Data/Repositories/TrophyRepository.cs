@@ -45,7 +45,6 @@ namespace Data.Repositories
 			bool entityExist = false;
 
 			var trophy = await _context.Trophies!
-				.AsNoTracking()
 				.Where(t => t.Id == id)
 				.FirstOrDefaultAsync();
 

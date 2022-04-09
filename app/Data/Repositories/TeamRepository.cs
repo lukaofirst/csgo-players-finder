@@ -52,9 +52,7 @@ namespace Data.Repositories
 		public async Task<int> Delete(int id)
 		{
 			var team = await _context.Teams!
-				.AsNoTracking()
-				.Where(t => t.Id == id)
-				.FirstOrDefaultAsync();
+				.FirstOrDefaultAsync(t => t.Id == id);
 
 			_context.Teams!.Remove(team!);
 

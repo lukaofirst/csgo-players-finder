@@ -60,7 +60,6 @@ namespace Data.Repositories
 		public async Task<int> Delete(int id)
 		{
 			var player = await _context.Players!
-				.AsNoTracking()
 				.Where(p => p.Id == id)
 				.FirstOrDefaultAsync();
 
