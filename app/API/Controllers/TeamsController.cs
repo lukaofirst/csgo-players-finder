@@ -25,7 +25,7 @@ namespace API.Controllers
 			return Ok(teams);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id}", Name = "GetTeam")]
 		public async Task<ActionResult<Team>> GetById(int id)
 		{
 			var team = await _teamRepository.GetById(id);
@@ -53,7 +53,7 @@ namespace API.Controllers
 
 			var entity = await _teamRepository.Post(team);
 
-			return Ok(entity);
+			return CreatedAtRoute("GetTeam", new { id = entity.Id }, entity);
 		}
 
 		[HttpDelete("{id}")]

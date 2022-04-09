@@ -26,7 +26,7 @@ namespace API.Controllers
 			return Ok(players);
 		}
 
-		[HttpGet("{id}")]
+		[HttpGet("{id}", Name = "GetPlayer")]
 		public async Task<ActionResult<Player>> GetById(int id)
 		{
 			var player = await _playerRepository.GetById(id);
@@ -54,7 +54,7 @@ namespace API.Controllers
 
 			var player = await _playerRepository.Post(playerDTO);
 
-			return Ok(player);
+			return CreatedAtRoute("GetPlayer", new { id = player.Id }, player);
 		}
 
 		[HttpDelete("{id}")]
