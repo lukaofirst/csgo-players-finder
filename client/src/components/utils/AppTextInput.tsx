@@ -5,6 +5,7 @@ interface Props extends UseControllerProps {
     label: string;
     type?: string;
     val?: string | number;
+    disabled?: boolean;
 }
 
 const AppTextInput = (props: Props) => {
@@ -22,6 +23,7 @@ const AppTextInput = (props: Props) => {
             type={props.type}
             error={!!fieldState.error}
             helperText={fieldState.error?.message}
+            disabled={props.disabled}
         />
     );
 };

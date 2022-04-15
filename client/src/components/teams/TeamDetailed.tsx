@@ -3,6 +3,7 @@ import { Fragment, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { setEditMode } from '../../store/teamsSlice';
 import { deleteTeamAsync, fetchTeamAsync } from '../../store/teamsSlice';
 import ActionBtn from '../utils/ActionBtn';
 import BackBtn from '../utils/BackBtn';
@@ -28,6 +29,11 @@ const TeamDetailed = () => {
 
     const openDeleteModal = () => {
         setOpen(true);
+    };
+
+    const editTeam = () => {
+        dispatch(setEditMode(true));
+        navigate('edit');
     };
 
     const deleteTeam = async (id: number) => {
@@ -72,7 +78,7 @@ const TeamDetailed = () => {
                             name='Team'
                             color='warning'
                             icon='edit'
-                            // onClick={openDeleteModal}
+                            onClick={editTeam}
                         />
                         <ActionBtn
                             variant='outlined'

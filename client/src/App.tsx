@@ -9,6 +9,7 @@ import PlayerFormAdd from './components/players/PlayerFormAdd';
 import PlayerFormEdit from './components/players/PlayerFormEdit';
 import TeamDetailed from './components/teams/TeamDetailed';
 import TeamForm from './components/teams/TeamForm';
+import TeamFormEdit from './components/teams/TeamFormEdit';
 import TrophyForm from './components/trophies/TrophyForm';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
@@ -39,6 +40,7 @@ function App() {
                         <Route index={true} element={<Teams />} />
                         <Route path='add' element={<TeamForm />} />
                         <Route path=':id' element={<TeamDetailed />} />
+                        <Route path=':id/edit' element={<TeamFormEdit />} />
                     </Route>
                     <Route path='trophies'>
                         <Route index={true} element={<Trophies />} />

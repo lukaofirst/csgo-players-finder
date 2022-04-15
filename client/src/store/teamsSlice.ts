@@ -2,6 +2,7 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
+    PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -40,6 +41,17 @@ export const addTeamAsync = createAsyncThunk(
     }
 );
 
+export const editTeamAsync = createAsyncThunk(
+    'teams/editTeamAsync',
+    async (team: any, thunkAPI) => {
+        try {
+            return await agent.Teams.edit(team);
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
 export const deleteTeamAsync = createAsyncThunk(
     'teams/deleteTeamAsync',
     async (id: number, thunkAPI) => {
@@ -56,6 +68,7 @@ interface TeamState {
     teamsList: Team[];
     team: Team | undefined;
     status: string;
+    editMode: boolean;
 }
 
 const initialState: TeamState = {
@@ -70,6 +83,7 @@ const initialState: TeamState = {
         players: [],
     },
     status: 'started',
+    editMode: false,
 };
 
 const teamsAdapter = createEntityAdapter<Team>();
@@ -77,7 +91,11 @@ const teamsAdapter = createEntityAdapter<Team>();
 export const teamsSlice = createSlice({
     name: 'teams',
     initialState: teamsAdapter.getInitialState(initialState),
-    reducers: {},
+    reducers: {
+        setEditMode(state, action: PayloadAction<boolean>) {
+            state.editMode = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchTeamsAsync.pending, (state) => {
             state.status = 'pendingFetchTeams';
@@ -122,6 +140,17 @@ export const teamsSlice = createSlice({
             state.status = 'failed';
         });
 
+        builder.addCase(editTeamAsync.pending, (state) => {
+            state.status = 'pendingEditTeam';
+        });
+
+        builder.addCase(editTeamAsync.fulfilled, (state, action) => {
+            teamsAdapter.updateOne(state, action.payload);
+            state.status = 'done';
+            toast.success('Team updated successfully!');
+            state.editMode = false;
+        });
+
         builder.addCase(deleteTeamAsync.pending, (state) => {
             state.status = 'pendingDeleteTeam';
         });
@@ -137,3 +166,5 @@ export const teamsSlice = createSlice({
         });
     },
 });
+
+export const { setEditMode } = teamsSlice.actions;

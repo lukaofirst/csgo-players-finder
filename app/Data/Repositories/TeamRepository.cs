@@ -51,7 +51,16 @@ namespace Data.Repositories
 
 		public async Task<Team> Update(Team team)
 		{
-			_context.Teams!.Update(team);
+			var existingTeam = await _context.Teams!
+				.Include(t => t.Players)
+				.FirstOrDefaultAsync(t => t.Id == team.Id);
+
+			_context.Teams!.Attach(existingTeam!);
+
+			existingTeam!.Name = team.Name;
+			existingTeam!.Location = team.Location;
+			existingTeam!.Region = team.Region;
+			existingTeam!.FoundedYear = team.FoundedYear;
 
 			await _context.SaveChangesAsync();
 

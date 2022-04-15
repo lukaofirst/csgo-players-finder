@@ -65,6 +65,7 @@ const Teams = {
     list: () => requests.get('teams'),
     getById: (id: number) => requests.get(`teams/${id}`),
     add: (team: Team) => requests.post('teams', team),
+    edit: (team: Team) => requests.put('teams', team),
     delete: (id: number) => requests.delete(`teams/${id}`),
 };
 
