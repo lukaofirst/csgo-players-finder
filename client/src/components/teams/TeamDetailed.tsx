@@ -66,13 +66,22 @@ const TeamDetailed = () => {
                     alignItems='center'
                 >
                     <BackBtn onClick={NavigateBack} />
-                    <ActionBtn
-                        variant='outlined'
-                        name='Team'
-                        color='error'
-                        icon='remove'
-                        onClick={openDeleteModal}
-                    />
+                    <Stack direction='row' alignItems='center' spacing={2}>
+                        <ActionBtn
+                            variant='outlined'
+                            name='Team'
+                            color='warning'
+                            icon='edit'
+                            // onClick={openDeleteModal}
+                        />
+                        <ActionBtn
+                            variant='outlined'
+                            name='Team'
+                            color='error'
+                            icon='remove'
+                            onClick={openDeleteModal}
+                        />
+                    </Stack>
                 </Stack>
                 <Stack
                     direction='row'

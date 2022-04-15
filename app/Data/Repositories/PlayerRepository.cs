@@ -61,7 +61,21 @@ namespace Data.Repositories
 		{
 			var updatedPlayerMap = _mapper.Map(playerDTO, new Player());
 
-			_context.Players!.Update(updatedPlayerMap);
+			var player = await _context.Players!.Include(p => p.Team)
+				.Include(p => p.PlayerTrophies)!
+				.ThenInclude(p => p.Trophy)
+				.AsNoTracking()
+				.FirstOrDefaultAsync(p => p.Id == playerDTO.Id);
+
+			_context.Players!.Attach(player!);
+
+			player!.Nickname = updatedPlayerMap.Nickname;
+			player!.Name = updatedPlayerMap.Name;
+			player!.Age = updatedPlayerMap.Age;
+			player!.Nationality = updatedPlayerMap.Nationality;
+			player!.IsActive = updatedPlayerMap.IsActive;
+			player!.TeamId = updatedPlayerMap.TeamId;
+			player!.PlayerTrophies = updatedPlayerMap.PlayerTrophies;
 
 			await _context.SaveChangesAsync();
 

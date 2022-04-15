@@ -28,7 +28,7 @@ const Trophies = () => {
     };
 
     const NavigateToAddTrophy = () => {
-        navigate('add-trophy');
+        navigate('add');
     };
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

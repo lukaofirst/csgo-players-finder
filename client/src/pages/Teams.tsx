@@ -26,7 +26,7 @@ const Teams = () => {
     };
 
     const NavigateToAddTeam = () => {
-        navigate('add-team');
+        navigate('add');
     };
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

@@ -13,13 +13,17 @@ interface Props extends UseControllerProps {
     label?: string;
     textposition?: string;
     onClick?: (e: ChangeEvent<HTMLInputElement>) => void;
+    val?: boolean;
 }
 
 const AppRadioInput = (props: Props) => {
-    const { field, fieldState } = useController({ ...props, defaultValue: '' });
+    const { field, fieldState } = useController({
+        ...props,
+        ...(props.val ? { defaultValue: props.val } : { defaultValue: '' }),
+    });
 
     return (
-        <Box display='flex' flexDirection='column' my={1}>
+        <Box display='flex' flexDirection='column' mb={1}>
             {props.label && (
                 <FormLabel error={!!fieldState.error}>{props.label}</FormLabel>
             )}
@@ -27,6 +31,7 @@ const AppRadioInput = (props: Props) => {
                 sx={{ display: 'inline-block' }}
                 {...field}
                 {...props}
+                value={props.val}
                 onClick={(e: any) => props.onClick!(e)}
             >
                 <FormControlLabel

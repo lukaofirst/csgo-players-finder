@@ -4,7 +4,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import BackBtn from '../utils/BackBtn';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { Fragment, useEffect, useState } from 'react';
-import { deletePlayerAsync, fetchPlayerAsync } from '../../store/playersSlice';
+import {
+    deletePlayerAsync,
+    fetchPlayerAsync,
+    setEditMode,
+} from '../../store/playersSlice';
 import LoadingComponent from '../utils/LoadingComponent';
 import ActionBtn from '../utils/ActionBtn';
 import ModalDelete from '../utils/ModalDelete';
@@ -29,6 +33,11 @@ const PlayerDetailed = () => {
 
     const openDeleteModal = () => {
         setOpen(true);
+    };
+
+    const editPlayer = () => {
+        dispatch(setEditMode(true));
+        navigate('edit');
     };
 
     const deletePlayer = async (id: number) => {
@@ -69,13 +78,22 @@ const PlayerDetailed = () => {
                     alignItems='center'
                 >
                     <BackBtn onClick={NavigateBack} />
-                    <ActionBtn
-                        variant='outlined'
-                        name='Player'
-                        color='error'
-                        icon='remove'
-                        onClick={openDeleteModal}
-                    />
+                    <Stack direction='row' alignItems='center' spacing={2}>
+                        <ActionBtn
+                            variant='outlined'
+                            name='Player'
+                            color='warning'
+                            icon='edit'
+                            onClick={editPlayer}
+                        />
+                        <ActionBtn
+                            variant='outlined'
+                            name='Player'
+                            color='error'
+                            icon='remove'
+                            onClick={openDeleteModal}
+                        />
+                    </Stack>
                 </Stack>
                 <Stack
                     direction='row'

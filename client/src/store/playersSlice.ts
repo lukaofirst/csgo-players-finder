@@ -2,6 +2,7 @@ import {
     createAsyncThunk,
     createEntityAdapter,
     createSlice,
+    PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
@@ -41,6 +42,17 @@ export const addPlayerAsync = createAsyncThunk(
     }
 );
 
+export const editPlayerAsync = createAsyncThunk(
+    'players/editPlayerAsync',
+    async (player: any, thunkAPI) => {
+        try {
+            return await agent.Players.edit(player);
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
 export const deletePlayerAsync = createAsyncThunk(
     'players/removePlayerAsync',
     async (id: number, thunkAPI) => {
@@ -57,6 +69,7 @@ interface PlayerState {
     playersList: Player[];
     player: Player | undefined;
     status: string;
+    editMode: boolean;
 }
 
 const initialState: PlayerState = {
@@ -73,6 +86,7 @@ const initialState: PlayerState = {
         playerTrophies: [],
     },
     status: 'started',
+    editMode: false,
 };
 
 const playersAdapter = createEntityAdapter<Player>();
@@ -80,7 +94,11 @@ const playersAdapter = createEntityAdapter<Player>();
 export const playersSlice = createSlice({
     name: 'players',
     initialState: playersAdapter.getInitialState(initialState),
-    reducers: {},
+    reducers: {
+        setEditMode(state, action: PayloadAction<boolean>) {
+            state.editMode = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchPlayersAsync.pending, (state) => {
             state.status = 'pendingFetchPlayers';
@@ -125,6 +143,17 @@ export const playersSlice = createSlice({
             state.status = 'failed';
         });
 
+        builder.addCase(editPlayerAsync.pending, (state) => {
+            state.status = 'pendingEditPlayer';
+        });
+
+        builder.addCase(editPlayerAsync.fulfilled, (state, action) => {
+            playersAdapter.updateOne(state, action.payload);
+            state.status = 'done';
+            toast.success('Player updated successfully!');
+            state.editMode = false;
+        });
+
         builder.addCase(deletePlayerAsync.pending, (state) => {
             state.status = 'pendingDeletePlayer';
         });
@@ -144,3 +173,5 @@ export const playersSlice = createSlice({
 export const playersSelectors = playersAdapter.getSelectors(
     (state: RootState) => state.players
 );
+
+export const { setEditMode } = playersSlice.actions;

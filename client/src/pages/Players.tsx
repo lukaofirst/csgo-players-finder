@@ -28,7 +28,7 @@ const Players = () => {
     };
 
     const NavigateToAddPlayer = () => {
-        navigate('add-player');
+        navigate('add');
     };
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
