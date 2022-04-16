@@ -25,6 +25,16 @@ namespace API.Controllers
 			return Ok(trophies);
 		}
 
+		[HttpGet("{id}", Name = "GetTrophy")]
+		public async Task<ActionResult<Trophy>> GetById(int id)
+		{
+			var trophy = await _trophyRepository.GetById(id);
+
+			if (trophy == null) return NotFound();
+
+			return Ok(trophy);
+		}
+
 		[HttpPost]
 		public async Task<ActionResult<Trophy>> Post(Trophy trophy)
 		{

@@ -11,7 +11,7 @@ import BackBtn from '../utils/BackBtn';
 import { addTrophyAsync } from '../../store/trophiesSlice';
 import { LoadingButton } from '@mui/lab';
 
-const TrophyForm = () => {
+const TrophyFormAdd = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {
@@ -91,4 +91,4 @@ const TrophyForm = () => {
     );
 };
 
-export default TrophyForm;
+export default TrophyFormAdd;

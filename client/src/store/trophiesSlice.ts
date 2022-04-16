@@ -19,11 +19,33 @@ export const fetchTrophiesAsync = createAsyncThunk(
     }
 );
 
+export const fetchTrophyAsync = createAsyncThunk(
+    'trophies/fetchTrophyAsync',
+    async (id: number, thunkAPI) => {
+        try {
+            return agent.Trophies.getById(id);
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
 export const addTrophyAsync = createAsyncThunk(
     'trophies/addTrophyAsync',
     async (trophy: any, thunkAPI) => {
         try {
             return await agent.Trophies.add(trophy);
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+);
+
+export const editTrophyAsync = createAsyncThunk(
+    'trophies/editTrophyAsync',
+    async (trophy: any, thunkAPI) => {
+        try {
+            return await agent.Trophies.edit(trophy);
         } catch (error: any) {
             return thunkAPI.rejectWithValue({ error: error.data });
         }
@@ -94,6 +116,19 @@ export const trophiesSlice = createSlice({
             state.status = 'failed';
         });
 
+        builder.addCase(fetchTrophyAsync.pending, (state) => {
+            state.status = 'pendingFetchTrophy';
+        });
+
+        builder.addCase(fetchTrophyAsync.fulfilled, (state, action) => {
+            state.trophy = action.payload;
+            state.status = 'done';
+        });
+
+        builder.addCase(fetchTrophyAsync.rejected, (state) => {
+            state.status = 'failed';
+        });
+
         builder.addCase(addTrophyAsync.pending, (state) => {
             state.status = 'pendingAddTrophy';
         });
@@ -105,6 +140,20 @@ export const trophiesSlice = createSlice({
         });
 
         builder.addCase(addTrophyAsync.rejected, (state) => {
+            state.status = 'failed';
+        });
+
+        builder.addCase(editTrophyAsync.pending, (state) => {
+            state.status = 'pendingEditTrophy';
+        });
+
+        builder.addCase(editTrophyAsync.fulfilled, (state, action) => {
+            trophiesAdapter.updateOne(state, action.payload);
+            state.status = 'done';
+            toast.success('Trophy updated successfully!');
+        });
+
+        builder.addCase(editTrophyAsync.rejected, (state) => {
             state.status = 'failed';
         });
 

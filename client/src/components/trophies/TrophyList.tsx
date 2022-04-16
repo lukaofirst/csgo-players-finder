@@ -1,4 +1,5 @@
 import {
+    Button,
     Paper,
     Table,
     TableBody,
@@ -19,12 +20,15 @@ import { LoadingButton } from '@mui/lab';
 import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import ModalDelete from '../utils/ModalDelete';
+import Edit from '@mui/icons-material/Edit';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     items: Trophy[];
 }
 
 const TrophyList = ({ items }: Props) => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { status, trophy } = useAppSelector((state) => state.trophies);
 
@@ -34,6 +38,10 @@ const TrophyList = ({ items }: Props) => {
     const openDeleteModal = (id: number) => {
         dispatch(setTrophy(id));
         setOpen(true);
+    };
+
+    const editTrophy = (id: number) => {
+        navigate(`${id}/edit`);
     };
 
     const deleteTrophy = async (id: number, name: string) => {
@@ -65,10 +73,10 @@ const TrophyList = ({ items }: Props) => {
                         <TableRow sx={{ backgroundColor: '#383838' }}>
                             <TableCell sx={{ color: 'white' }}>Id</TableCell>
                             <TableCell sx={{ color: 'white' }}>Year</TableCell>
-                            <TableCell sx={{ color: 'white' }}>
+                            <TableCell width={500} sx={{ color: 'white' }}>
                                 Title Name
                             </TableCell>
-                            <TableCell sx={{ color: 'white' }}>
+                            <TableCell width={100} sx={{ color: 'white' }}>
                                 Is Major?
                             </TableCell>
                             <TableCell sx={{ color: 'white' }} align='center'>
@@ -86,6 +94,15 @@ const TrophyList = ({ items }: Props) => {
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.isMajor.toString()}</TableCell>
                                 <TableCell align='center'>
+                                    <Button
+                                        variant='outlined'
+                                        color='warning'
+                                        size='small'
+                                        sx={{ mr: 1 }}
+                                        onClick={() => editTrophy(item.id)}
+                                    >
+                                        <Edit />
+                                    </Button>
                                     <LoadingButton
                                         loading={
                                             status ===

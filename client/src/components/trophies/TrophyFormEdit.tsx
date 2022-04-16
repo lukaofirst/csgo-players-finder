@@ -5,12 +5,13 @@ import { useEffect } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { editTeamAsync, fetchTeamAsync } from '../../store/teamsSlice';
-import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
+import { editTrophyAsync, fetchTrophyAsync } from '../../store/trophiesSlice';
+import { trophyValidatorSchema } from '../../validators/trophyValidatorSchema';
+import AppRadioInput from '../utils/AppRadioInput';
 import AppTextInput from '../utils/AppTextInput';
 import BackBtn from '../utils/BackBtn';
 
-const TeamFormEdit = () => {
+const TrophyFormEdit = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
@@ -19,15 +20,15 @@ const TeamFormEdit = () => {
         control,
         formState: { isSubmitting },
         reset,
-    } = useForm<FieldValues>({
+    } = useForm({
         mode: 'all',
-        resolver: yupResolver<any>(teamValidatorSchema),
+        resolver: yupResolver<any>(trophyValidatorSchema),
     });
 
-    const { team } = useAppSelector((state) => state.teams);
+    const { trophy } = useAppSelector((state) => state.trophies);
 
     useEffect(() => {
-        dispatch(fetchTeamAsync(+id!));
+        dispatch(fetchTrophyAsync(+id!));
     }, [dispatch, id]);
 
     const NavigateBack = () => {
@@ -36,13 +37,13 @@ const TeamFormEdit = () => {
 
     const onSubmitHandler = async (data: FieldValues) => {
         try {
-            await dispatch(editTeamAsync(JSON.stringify(data)));
+            await dispatch(editTrophyAsync(JSON.stringify(data)));
+
             reset({
                 id: '',
                 name: '',
-                location: '',
-                region: '',
-                foundedYear: '',
+                year: '',
+                isMajor: '',
             });
         } catch (error) {
             console.log(error);
@@ -67,46 +68,40 @@ const TeamFormEdit = () => {
                 }}
             >
                 <Typography variant='h5' sx={{ mb: 1, color: '#299cdd' }}>
-                    Edit a Team
+                    Edit a Trophy
                 </Typography>
                 <FormControl
                     component='form'
                     onSubmit={handleSubmit(onSubmitHandler)}
                     sx={{ width: '500px', margin: '0 auto' }}
                 >
-                    {team?.id! > 0 && (
+                    {trophy?.id! > 0 && (
                         <>
                             <AppTextInput
                                 label='Id'
                                 name='id'
                                 control={control}
-                                val={team?.id}
+                                val={trophy?.id}
                                 disabled={true}
                             />
                             <AppTextInput
                                 label='Name'
                                 name='name'
                                 control={control}
-                                val={team?.name}
-                            />
-                            <AppTextInput
-                                label='Location'
-                                name='location'
-                                control={control}
-                                val={team?.location}
-                            />
-                            <AppTextInput
-                                label='Region'
-                                name='region'
-                                control={control}
-                                val={team?.region}
+                                val={trophy?.name}
                             />
                             <AppTextInput
                                 type='number'
-                                label='Founded Year'
-                                name='foundedYear'
+                                label="Title's Year"
+                                name='year'
                                 control={control}
-                                val={team?.foundedYear}
+                                val={trophy?.year}
+                            />
+                            <AppRadioInput
+                                label='Is Major?'
+                                name='isMajor'
+                                control={control}
+                                textposition='center'
                             />
                             <LoadingButton
                                 loading={isSubmitting}
@@ -115,7 +110,7 @@ const TeamFormEdit = () => {
                                 size='large'
                                 sx={{ my: 2 }}
                             >
-                                Update Team
+                                Update Trophy
                             </LoadingButton>
                         </>
                     )}
@@ -125,4 +120,4 @@ const TeamFormEdit = () => {
     );
 };
 
-export default TeamFormEdit;
+export default TrophyFormEdit;

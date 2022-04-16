@@ -10,7 +10,7 @@ import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
 import AppTextInput from '../utils/AppTextInput';
 import BackBtn from '../utils/BackBtn';
 
-const TeamForm = () => {
+const TeamFormAdd = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const {
@@ -94,4 +94,4 @@ const TeamForm = () => {
     );
 };
 
-export default TeamForm;
+export default TeamFormAdd;

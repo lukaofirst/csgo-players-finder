@@ -8,9 +8,10 @@ import PlayerDetailed from './components/players/PlayerDetailed';
 import PlayerFormAdd from './components/players/PlayerFormAdd';
 import PlayerFormEdit from './components/players/PlayerFormEdit';
 import TeamDetailed from './components/teams/TeamDetailed';
-import TeamForm from './components/teams/TeamForm';
+import TeamFormAdd from './components/teams/TeamFormAdd';
 import TeamFormEdit from './components/teams/TeamFormEdit';
-import TrophyForm from './components/trophies/TrophyForm';
+import TrophyFormAdd from './components/trophies/TrophyFormAdd';
+import TrophyFormEdit from './components/trophies/TrophyFormEdit';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Players from './pages/Players';
@@ -38,13 +39,14 @@ function App() {
                     </Route>
                     <Route path='teams'>
                         <Route index={true} element={<Teams />} />
-                        <Route path='add' element={<TeamForm />} />
+                        <Route path='add' element={<TeamFormAdd />} />
                         <Route path=':id' element={<TeamDetailed />} />
                         <Route path=':id/edit' element={<TeamFormEdit />} />
                     </Route>
                     <Route path='trophies'>
                         <Route index={true} element={<Trophies />} />
-                        <Route path='add' element={<TrophyForm />} />
+                        <Route path='add' element={<TrophyFormAdd />} />
+                        <Route path=':id/edit' element={<TrophyFormEdit />} />
                     </Route>
                     <Route path='*' element={<NotFound />} />
                 </Routes>

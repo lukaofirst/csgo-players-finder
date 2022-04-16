@@ -71,7 +71,9 @@ const Teams = {
 
 const Trophies = {
     list: () => requests.get('trophies'),
+    getById: (id: number) => requests.get(`trophies/${id}`),
     add: (trophy: Trophy) => requests.post('trophies', trophy),
+    edit: (trophy: Trophy) => requests.put('trophies', trophy),
     delete: (id: number) => requests.delete(`trophies/${id}`),
 };
 

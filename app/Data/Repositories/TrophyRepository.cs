@@ -22,6 +22,15 @@ namespace Data.Repositories
 			return trophies;
 		}
 
+		public async Task<Trophy> GetById(int id)
+		{
+			var trophy = await _context.Trophies!
+				.AsNoTracking()
+				.FirstOrDefaultAsync(t => t.Id == id);
+
+			return trophy!;
+		}
+
 		public async Task<bool> CheckByName(string name)
 		{
 			var existingWithName = await _context.Trophies!.AsNoTracking()
@@ -42,7 +51,15 @@ namespace Data.Repositories
 
 		public async Task<Trophy> Update(Trophy trophy)
 		{
-			_context.Trophies!.Update(trophy);
+			var existingTrophy = await _context.Trophies!
+				.AsNoTracking()
+				.FirstOrDefaultAsync(t => t.Id == trophy.Id);
+
+			_context.Trophies!.Attach(existingTrophy!);
+
+			existingTrophy!.Name = trophy.Name;
+			existingTrophy!.Year = trophy.Year;
+			existingTrophy!.IsMajor = trophy.IsMajor;
 
 			await _context.SaveChangesAsync();
 
