@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -20,6 +21,19 @@ import Trophies from './pages/Trophies';
 import { store } from './store/store';
 
 function App() {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+
+    useEffect(() => {
+        window.addEventListener(
+            'resize',
+            () => {
+                const ismobile = window.innerWidth < 1200;
+                if (ismobile !== isMobile) setIsMobile(ismobile);
+            },
+            false
+        );
+    }, [isMobile]);
+
     return (
         <Router>
             <ToastContainer
@@ -27,10 +41,10 @@ function App() {
                 position='bottom-right'
                 theme='colored'
             />
-            <Navbar />
+            <Navbar isMobile={isMobile} />
             <Provider store={store}>
                 <Routes>
-                    <Route path='/' element={<Home />} />
+                    <Route path='/' element={<Home isMobile={isMobile} />} />
                     <Route path='players'>
                         <Route index={true} element={<Players />} />
                         <Route path='add' element={<PlayerFormAdd />} />
@@ -51,7 +65,7 @@ function App() {
                     <Route path='*' element={<NotFound />} />
                 </Routes>
             </Provider>
-            <Footer />
+            <Footer isMobile={isMobile} />
         </Router>
     );
 }

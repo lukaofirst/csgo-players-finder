@@ -23,15 +23,7 @@ const AppSelectInput = (props: Props) => {
                 native
                 sx={{ textAlign: 'left' }}
             >
-                {props.val ? (
-                    <option value='' disabled>
-                        Team
-                    </option>
-                ) : (
-                    <option value='' selected disabled>
-                        Team
-                    </option>
-                )}
+                <option value=''>Team</option>
                 {props.teams.map((team) => (
                     <option key={team.id} value={team.id}>
                         {team.name}

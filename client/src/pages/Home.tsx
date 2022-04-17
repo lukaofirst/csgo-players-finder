@@ -31,7 +31,11 @@ const techBack: string[] = [
     'SQLite',
 ];
 
-const Home = () => {
+interface Props {
+    isMobile: boolean;
+}
+
+const Home = ({ isMobile }: Props) => {
     const [showFront, setShowFront] = useState(false);
     const [showBack, setShowBack] = useState(false);
 
@@ -44,11 +48,17 @@ const Home = () => {
     };
 
     return (
-        <Container maxWidth='lg' sx={{ mt: 5 }}>
+        <Container maxWidth='lg' sx={{ mt: 2.5, mb: 7.5 }}>
             <Paper elevation={8} sx={{ p: 2.5 }}>
-                <Typography variant='h2' textAlign='center'>
-                    CSGOPlayersFinder
-                </Typography>
+                {isMobile ? (
+                    <Typography variant='h4' textAlign='center'>
+                        CSGOPlayersFinder
+                    </Typography>
+                ) : (
+                    <Typography variant='h2' textAlign='center'>
+                        CSGOPlayersFinder
+                    </Typography>
+                )}
                 <Typography variant='subtitle1' textAlign='center' mt={2}>
                     This project was made for educational purposes
                 </Typography>
@@ -62,14 +72,23 @@ const Home = () => {
                 <Typography variant='h6' textAlign='center' sx={{ m: 5 }}>
                     Technologies and Concepts applied to this project
                 </Typography>
-                <Stack direction='row' justifyContent='center' spacing={10}>
+                <Stack
+                    direction='row'
+                    justifyContent='center'
+                    spacing={isMobile ? 2 : 8}
+                >
                     <Box textAlign='center'>
                         <Button
                             onClick={btnFrontHandler}
                             variant='outlined'
-                            sx={{ color: '#299cdd', mb: 2 }}
+                            sx={{
+                                color: '#299cdd',
+                                mb: 2,
+                            }}
                         >
-                            <ComputerIcon sx={{ margin: '0 5px 5px 0' }} />
+                            {!isMobile && (
+                                <ComputerIcon sx={{ margin: '0 5px 5px 0' }} />
+                            )}
                             Front-end
                         </Button>
                         <Stack direction='column'>
@@ -90,9 +109,14 @@ const Home = () => {
                         <Button
                             onClick={btnBackHandler}
                             variant='outlined'
-                            sx={{ color: '#299cdd', mb: 2 }}
+                            sx={{
+                                color: '#299cdd',
+                                mb: 2,
+                            }}
                         >
-                            <SettingsIcon sx={{ margin: '0 5px 5px 0' }} />
+                            {!isMobile && (
+                                <SettingsIcon sx={{ margin: '0 5px 5px 0' }} />
+                            )}
                             Back-end
                         </Button>
                         <Stack direction='column'>

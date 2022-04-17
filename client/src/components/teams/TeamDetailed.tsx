@@ -93,6 +93,7 @@ const TeamDetailed = () => {
                     direction='row'
                     justifyContent='space-evenly'
                     alignItems='flex-start'
+                    flexWrap='wrap'
                     my={5}
                 >
                     <Paper
@@ -100,6 +101,7 @@ const TeamDetailed = () => {
                         sx={{
                             width: '450px',
                             padding: '30px',
+                            marginBottom: '20px',
                         }}
                     >
                         <Typography
@@ -150,6 +152,7 @@ const TeamDetailed = () => {
                         sx={{
                             width: '450px',
                             padding: '30px',
+                            marginBottom: '20px',
                         }}
                     >
                         {team?.players?.length! > 0 ? (

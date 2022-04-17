@@ -81,7 +81,7 @@ const TeamFormEdit = () => {
                 <FormControl
                     component='form'
                     onSubmit={handleSubmit(onSubmitHandler)}
-                    sx={{ width: '500px', margin: '0 auto' }}
+                    sx={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}
                 >
                     {team?.id! > 0 && (
                         <>

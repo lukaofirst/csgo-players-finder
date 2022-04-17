@@ -68,7 +68,7 @@ const TrophyFormAdd = () => {
                 <FormControl
                     component='form'
                     onSubmit={handleSubmit(onSubmitHandler)}
-                    sx={{ width: '500px', margin: '0 auto' }}
+                    sx={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}
                 >
                     <AppTextInput label='Name' name='name' control={control} />
                     <AppTextInput

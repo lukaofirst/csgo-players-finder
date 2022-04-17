@@ -99,6 +99,7 @@ const PlayerDetailed = () => {
                     direction='row'
                     justifyContent='space-evenly'
                     alignItems='flex-start'
+                    flexWrap='wrap'
                     my={5}
                 >
                     <Paper
@@ -106,6 +107,7 @@ const PlayerDetailed = () => {
                         sx={{
                             width: '400px',
                             padding: '30px',
+                            marginBottom: '20px',
                         }}
                     >
                         <Typography
@@ -166,6 +168,7 @@ const PlayerDetailed = () => {
                         sx={{
                             width: '450px',
                             padding: '30px',
+                            marginBottom: '20px',
                         }}
                     >
                         {player?.playerTrophies?.length! > 0 ? (

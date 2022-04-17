@@ -1,5 +1,6 @@
 import {
     Button,
+    Grid,
     Paper,
     Table,
     TableBody,
@@ -94,29 +95,41 @@ const TrophyList = ({ items }: Props) => {
                                 <TableCell>{item.name}</TableCell>
                                 <TableCell>{item.isMajor.toString()}</TableCell>
                                 <TableCell align='center'>
-                                    <Button
-                                        variant='outlined'
-                                        color='warning'
-                                        size='small'
-                                        sx={{ mr: 1 }}
-                                        onClick={() => editTrophy(item.id!)}
+                                    <Grid
+                                        display='flex'
+                                        justifyContent='center'
+                                        container
+                                        spacing={1}
                                     >
-                                        <Edit />
-                                    </Button>
-                                    <LoadingButton
-                                        loading={
-                                            status ===
-                                            `pendingDeleteTrophy_${item.id}_${item.name}`
-                                        }
-                                        variant='outlined'
-                                        color='error'
-                                        size='small'
-                                        onClick={() =>
-                                            openDeleteModal(item.id!)
-                                        }
-                                    >
-                                        <DeleteIcon />
-                                    </LoadingButton>
+                                        <Grid item>
+                                            <Button
+                                                variant='outlined'
+                                                color='warning'
+                                                size='small'
+                                                onClick={() =>
+                                                    editTrophy(item.id!)
+                                                }
+                                            >
+                                                <Edit />
+                                            </Button>
+                                        </Grid>
+                                        <Grid item>
+                                            <LoadingButton
+                                                loading={
+                                                    status ===
+                                                    `pendingDeleteTrophy_${item.id}_${item.name}`
+                                                }
+                                                variant='outlined'
+                                                color='error'
+                                                size='small'
+                                                onClick={() =>
+                                                    openDeleteModal(item.id!)
+                                                }
+                                            >
+                                                <DeleteIcon />
+                                            </LoadingButton>
+                                        </Grid>
+                                    </Grid>
                                 </TableCell>
                             </TableRow>
                         ))}

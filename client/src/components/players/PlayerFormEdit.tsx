@@ -179,7 +179,11 @@ const PlayerFormEdit = () => {
                 <FormControl
                     component='form'
                     onSubmit={onSubmitHandler}
-                    sx={{ width: '500px', margin: '0 auto' }}
+                    sx={{
+                        width: '100%',
+                        maxWidth: '500px',
+                        marginBottom: '20px',
+                    }}
                 >
                     <TextField
                         label='Id'
