@@ -10,6 +10,7 @@ import AppRadioInput from '../utils/AppRadioInput';
 import BackBtn from '../utils/BackBtn';
 import { addTrophyAsync } from '../../store/trophiesSlice';
 import { LoadingButton } from '@mui/lab';
+import { Trophy } from '../../models/Trophy';
 
 const TrophyFormAdd = () => {
     const dispatch = useAppDispatch();
@@ -29,8 +30,15 @@ const TrophyFormAdd = () => {
     };
 
     const onSubmitHandler = async (data: FieldValues) => {
+        const trophy: Trophy = {
+            id: data.id,
+            name: data.name,
+            year: data.year,
+            isMajor: data.isMajor,
+        };
+
         try {
-            await dispatch(addTrophyAsync(JSON.stringify(data)));
+            await dispatch(addTrophyAsync(trophy));
             reset();
         } catch (error) {
             console.log(error);

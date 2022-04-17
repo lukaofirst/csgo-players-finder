@@ -32,7 +32,7 @@ export const fetchTeamAsync = createAsyncThunk(
 
 export const addTeamAsync = createAsyncThunk(
     'teams/addTeamAsync',
-    async (team: any, thunkAPI) => {
+    async (team: Team, thunkAPI) => {
         try {
             return await agent.Teams.add(team);
         } catch (error: any) {
@@ -43,7 +43,7 @@ export const addTeamAsync = createAsyncThunk(
 
 export const editTeamAsync = createAsyncThunk(
     'teams/editTeamAsync',
-    async (team: any, thunkAPI) => {
+    async (team: Team, thunkAPI) => {
         try {
             return await agent.Teams.edit(team);
         } catch (error: any) {

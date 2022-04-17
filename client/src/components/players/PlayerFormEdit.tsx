@@ -18,7 +18,7 @@ import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { PlayerDTO } from '../../models/DTO/PlayerDTO';
-import { TObj } from '../../models/TObj';
+import { TrophyId } from '../../models/TrophyId';
 import { editPlayerAsync, fetchPlayerAsync } from '../../store/playersSlice';
 import { fetchTeamsAsync } from '../../store/teamsSlice';
 import { fetchTrophiesAsync } from '../../store/trophiesSlice';
@@ -118,11 +118,11 @@ const PlayerFormEdit = () => {
     const onSubmitHandler = async (e: any) => {
         e.preventDefault();
 
-        const filteredTrophiesList: TObj[] = userInput.trophies!.map(
+        const filteredTrophiesList: TrophyId[] = userInput.trophies!.map(
             (item: any) => ({ trophyId: item.trophy.id })
         );
 
-        const sendData: PlayerDTO = {
+        const playerDTO: PlayerDTO = {
             id: userInput.id,
             nickname: userInput.nickname!,
             name: userInput.name!,
@@ -136,7 +136,7 @@ const PlayerFormEdit = () => {
         };
 
         try {
-            await dispatch(editPlayerAsync(JSON.stringify(sendData)));
+            await dispatch(editPlayerAsync(playerDTO));
 
             setUserInput({
                 id: '',

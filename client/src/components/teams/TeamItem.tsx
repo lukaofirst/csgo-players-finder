@@ -45,7 +45,7 @@ const TeamItem = ({ item }: Props) => {
             <Button
                 variant='outlined'
                 sx={{ m: 2, color: '#299cdd' }}
-                onClick={() => onClickHandler(id)}
+                onClick={() => onClickHandler(id!)}
             >
                 <InfoIcon sx={{ marginRight: '5px' }} /> More Info
             </Button>

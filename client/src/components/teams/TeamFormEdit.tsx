@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { Team } from '../../models/Team';
 import { editTeamAsync, fetchTeamAsync } from '../../store/teamsSlice';
 import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
 import AppTextInput from '../utils/AppTextInput';
@@ -35,8 +36,16 @@ const TeamFormEdit = () => {
     };
 
     const onSubmitHandler = async (data: FieldValues) => {
+        const team: Team = {
+            id: data.id,
+            name: data.name,
+            location: data.location,
+            region: data.region,
+            foundedYear: data.foundedYear,
+        };
+
         try {
-            await dispatch(editTeamAsync(JSON.stringify(data)));
+            await dispatch(editTeamAsync(team));
             reset({
                 id: '',
                 name: '',

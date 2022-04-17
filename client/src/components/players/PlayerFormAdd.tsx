@@ -60,7 +60,8 @@ const PlayerFormAdd = () => {
                 trophyId: item,
             })
         );
-        const sendData: PlayerDTO = {
+
+        const playerDTO: PlayerDTO = {
             nickname: data.nickname,
             name: data.name,
             age: data.age,
@@ -71,8 +72,7 @@ const PlayerFormAdd = () => {
         };
 
         try {
-            await dispatch(addPlayerAsync(JSON.stringify(sendData)));
-
+            await dispatch(addPlayerAsync(playerDTO));
             reset();
         } catch (err) {
             console.log(err);

@@ -62,7 +62,7 @@ const TrophyList = ({ items }: Props) => {
                     open={open}
                     type='trophy'
                     itemName={trophy!.name}
-                    handleDelete={() => deleteTrophy(trophy!.id, trophy!.name)}
+                    handleDelete={() => deleteTrophy(trophy!.id!, trophy!.name)}
                     handleClose={handleClose}
                 />,
                 document.getElementById('overlay-root')!
@@ -88,7 +88,7 @@ const TrophyList = ({ items }: Props) => {
                         {items.map((item) => (
                             <TableRow key={item.id}>
                                 <TableCell>
-                                    {item.id.toString().padStart(4, '0')}
+                                    {item.id!.toString().padStart(4, '0')}
                                 </TableCell>
                                 <TableCell>{item.year}</TableCell>
                                 <TableCell>{item.name}</TableCell>
@@ -99,7 +99,7 @@ const TrophyList = ({ items }: Props) => {
                                         color='warning'
                                         size='small'
                                         sx={{ mr: 1 }}
-                                        onClick={() => editTrophy(item.id)}
+                                        onClick={() => editTrophy(item.id!)}
                                     >
                                         <Edit />
                                     </Button>
@@ -111,7 +111,9 @@ const TrophyList = ({ items }: Props) => {
                                         variant='outlined'
                                         color='error'
                                         size='small'
-                                        onClick={() => openDeleteModal(item.id)}
+                                        onClick={() =>
+                                            openDeleteModal(item.id!)
+                                        }
                                     >
                                         <DeleteIcon />
                                     </LoadingButton>

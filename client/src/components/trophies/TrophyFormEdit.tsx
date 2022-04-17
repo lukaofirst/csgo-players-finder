@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { Trophy } from '../../models/Trophy';
 import { editTrophyAsync, fetchTrophyAsync } from '../../store/trophiesSlice';
 import { trophyValidatorSchema } from '../../validators/trophyValidatorSchema';
 import AppRadioInput from '../utils/AppRadioInput';
@@ -36,8 +37,15 @@ const TrophyFormEdit = () => {
     };
 
     const onSubmitHandler = async (data: FieldValues) => {
+        const trophy: Trophy = {
+            id: data.id,
+            name: data.name,
+            year: data.year,
+            isMajor: data.isMajor,
+        };
+
         try {
-            await dispatch(editTrophyAsync(JSON.stringify(data)));
+            await dispatch(editTrophyAsync(trophy));
 
             reset({
                 id: '',

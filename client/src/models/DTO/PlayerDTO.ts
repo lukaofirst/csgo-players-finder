@@ -1,5 +1,5 @@
-import { TObj } from '../TObj';
 import { Trophy } from '../Trophy';
+import { TrophyId } from '../TrophyId';
 import { TrophyObj } from '../TrophyObj';
 
 export interface PlayerDTO {
@@ -10,5 +10,5 @@ export interface PlayerDTO {
     nationality: string;
     isActive: boolean | string;
     teamId?: number | string;
-    trophies?: Trophy[] | TrophyObj[] | TObj[];
+    trophies?: Trophy[] | TrophyObj[] | TrophyId[];
 }

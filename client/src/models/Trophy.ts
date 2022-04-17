@@ -1,5 +1,5 @@
 export interface Trophy {
-    id: number;
+    id?: number;
     name: string;
     year: number;
     isMajor: string;

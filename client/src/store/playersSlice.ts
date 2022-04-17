@@ -6,6 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 import agent from '../api/agent';
+import { PlayerDTO } from '../models/DTO/PlayerDTO';
 import { Player } from '../models/Player';
 import { RootState } from './store';
 
@@ -33,7 +34,7 @@ export const fetchPlayerAsync = createAsyncThunk(
 
 export const addPlayerAsync = createAsyncThunk(
     'players/addPlayerAsync',
-    async (player: any, thunkAPI) => {
+    async (player: PlayerDTO, thunkAPI) => {
         try {
             return await agent.Players.add(player);
         } catch (error: any) {
@@ -44,7 +45,7 @@ export const addPlayerAsync = createAsyncThunk(
 
 export const editPlayerAsync = createAsyncThunk(
     'players/editPlayerAsync',
-    async (player: any, thunkAPI) => {
+    async (player: PlayerDTO, thunkAPI) => {
         try {
             return await agent.Players.edit(player);
         } catch (error: any) {

@@ -15,7 +15,7 @@ const PlayerList = ({ items }: Props) => {
             flexWrap='wrap'
         >
             {items.map((item) => (
-                <PlayerItem key={item.id} item={item} />
+                <PlayerItem key={item.id!} item={item} />
             ))}
         </Stack>
     );

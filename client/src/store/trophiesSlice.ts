@@ -32,7 +32,7 @@ export const fetchTrophyAsync = createAsyncThunk(
 
 export const addTrophyAsync = createAsyncThunk(
     'trophies/addTrophyAsync',
-    async (trophy: any, thunkAPI) => {
+    async (trophy: Trophy, thunkAPI) => {
         try {
             return await agent.Trophies.add(trophy);
         } catch (error: any) {
@@ -43,7 +43,7 @@ export const addTrophyAsync = createAsyncThunk(
 
 export const editTrophyAsync = createAsyncThunk(
     'trophies/editTrophyAsync',
-    async (trophy: any, thunkAPI) => {
+    async (trophy: Trophy, thunkAPI) => {
         try {
             return await agent.Trophies.edit(trophy);
         } catch (error: any) {

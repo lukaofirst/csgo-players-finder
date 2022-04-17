@@ -5,6 +5,7 @@ import { Container, Stack, Box, Typography, FormControl } from '@mui/material';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/hooks';
+import { Team } from '../../models/Team';
 import { addTeamAsync } from '../../store/teamsSlice';
 import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
 import AppTextInput from '../utils/AppTextInput';
@@ -28,8 +29,15 @@ const TeamFormAdd = () => {
     };
 
     const onSubmitHandler = async (data: FieldValues) => {
+        const team: Team = {
+            name: data.name,
+            location: data.location,
+            region: data.region,
+            foundedYear: data.foundedYear,
+        };
+
         try {
-            await dispatch(addTeamAsync(JSON.stringify(data)));
+            await dispatch(addTeamAsync(team));
             reset();
         } catch (error) {
             console.log(error);
