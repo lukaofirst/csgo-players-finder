@@ -35,7 +35,6 @@ const PlayerFormAdd = () => {
 
     const [showSelectList, setShowSelectList] = useState('true');
 
-    const { editMode, player } = useAppSelector((state) => state.players);
     const { teamsList, teamsLoaded } = useAppSelector((state) => state.teams);
     const { trophiesList, trophiesLoaded } = useAppSelector(
         (state) => state.trophies
@@ -107,113 +106,51 @@ const PlayerFormAdd = () => {
                     onSubmit={handleSubmit(onSubmitHandler)}
                     sx={{ width: '500px', margin: '0 auto' }}
                 >
-                    {!editMode ? (
+                    <>
+                        <AppTextInput
+                            label='Nickname'
+                            name='nickname'
+                            control={control}
+                        />
+                        <AppTextInput
+                            label='Name'
+                            name='name'
+                            control={control}
+                        />
+                        <AppTextInput
+                            label='Age'
+                            name='age'
+                            type='number'
+                            control={control}
+                        />
+                        <AppTextInput
+                            label='Nationality'
+                            name='nationality'
+                            control={control}
+                        />
                         <>
-                            <AppTextInput
-                                label='Nickname'
-                                name='nickname'
+                            <AppRadioInput
+                                label='Is Active'
+                                name='isActive'
                                 control={control}
-                            />
-                            <AppTextInput
-                                label='Name'
-                                name='name'
-                                control={control}
-                            />
-                            <AppTextInput
-                                label='Age'
-                                name='age'
-                                type='number'
-                                control={control}
-                            />
-                            <AppTextInput
-                                label='Nationality'
-                                name='nationality'
-                                control={control}
-                            />
-                            <>
-                                <AppRadioInput
-                                    label='Is Active'
-                                    name='isActive'
-                                    control={control}
-                                    textposition='center'
-                                    onClick={onChangeHandler}
-                                />
-                            </>
-                            {showSelectList === 'true' && (
-                                <AppSelectInput
-                                    teams={teamsList}
-                                    name='teamId'
-                                    control={control}
-                                />
-                            )}
-                            <AppCheckboxInput
-                                label='Trophies'
-                                trophies={trophiesList}
-                                name='trophies'
-                                control={control}
+                                textposition='center'
+                                onClick={onChangeHandler}
                             />
                         </>
-                    ) : (
-                        <>
-                            <AppTextInput
-                                label='Nickname'
-                                name='nickname'
+                        {showSelectList === 'true' && (
+                            <AppSelectInput
+                                teams={teamsList}
+                                name='teamId'
                                 control={control}
-                                val={player?.nickname}
                             />
-                            <AppTextInput
-                                label='Name'
-                                name='name'
-                                control={control}
-                                val={player?.name}
-                            />
-                            <AppTextInput
-                                label='Age'
-                                name='age'
-                                type='number'
-                                control={control}
-                                val={+player?.age!}
-                            />
-                            <AppTextInput
-                                label='Nationality'
-                                name='nationality'
-                                control={control}
-                                val={player?.nationality}
-                            />
-                            <>
-                                <AppRadioInput
-                                    label='Is Active'
-                                    name='isActive'
-                                    control={control}
-                                    textposition='center'
-                                    onClick={onChangeHandler}
-                                    val={player?.isActive}
-                                />
-                            </>
-                            {showSelectList === 'true' && (
-                                <AppSelectInput
-                                    teams={teamsList}
-                                    name='teamId'
-                                    control={control}
-                                />
-                            )}
-                            {editMode ? (
-                                <AppCheckboxInput
-                                    label='Trophies'
-                                    trophies={trophiesList}
-                                    name='trophies'
-                                    control={control}
-                                />
-                            ) : (
-                                <AppCheckboxInput
-                                    label='Trophies'
-                                    trophies={trophiesList}
-                                    name='trophies'
-                                    control={control}
-                                />
-                            )}
-                        </>
-                    )}
+                        )}
+                        <AppCheckboxInput
+                            label='Trophies'
+                            trophies={trophiesList}
+                            name='trophies'
+                            control={control}
+                        />
+                    </>
                     <LoadingButton
                         loading={isSubmitting}
                         type='submit'
