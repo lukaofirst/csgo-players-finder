@@ -1,11 +1,3 @@
-using System.Text.Json.Serialization;
-using API.Helpers;
-using Data;
-using Data.Interfaces;
-using Data.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

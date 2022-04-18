@@ -1,0 +1,10 @@
+global using System.Text.Json.Serialization;
+global using API.Helpers;
+global using Data;
+global using Data.Interfaces;
+global using Data.Repositories;
+global using Microsoft.EntityFrameworkCore;
+global using AutoMapper;
+global using Domain.DTO;
+global using Domain.Entities;
+global using Microsoft.AspNetCore.Mvc;

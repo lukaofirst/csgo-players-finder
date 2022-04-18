@@ -1,11 +1,3 @@
-using AutoMapper;
-using Data;
-using Data.Interfaces;
-using Domain.DTO;
-using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
 namespace API.Controllers
 {
 	public class PlayersController : BaseAPIController

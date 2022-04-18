@@ -1,7 +1,3 @@
-using AutoMapper;
-using Domain.DTO;
-using Domain.Entities;
-
 namespace API.Helpers
 {
 	public class MappingProfiles : Profile
