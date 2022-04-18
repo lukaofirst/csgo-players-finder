@@ -6,12 +6,13 @@ import { Trophy } from '../models/Trophy';
 
 const sleep = () => new Promise((resolve) => setTimeout(resolve, 300));
 
-axios.defaults.baseURL = 'http://localhost:5027/api/';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 axios.interceptors.response.use(
     async (response) => {
-        await sleep();
+        if (process.env.NODE_ENV === 'development') await sleep();
+
         return response;
     },
     (error: AxiosError) => {
