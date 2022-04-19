@@ -38,21 +38,26 @@ const PlayerFormEdit = () => {
 
     const [showSelectList, setShowSelectList] = useState('true');
     const [userInput, setUserInput] = useState<PlayerDTO>({
-        id: player?.id,
-        nickname: player?.nickname!,
-        name: player?.name!,
-        age: player?.age!,
-        nationality: player?.nationality!,
-        isActive: player?.isActive!,
-        teamId: player?.team?.id,
+        id: 0,
+        nickname: '',
+        name: '',
+        age: 0,
+        nationality: '',
+        isActive: '',
+        teamId: '',
         trophies: [],
     });
 
     useEffect(() => {
-        dispatch(fetchPlayerAsync(+id!));
         dispatch(fetchTeamsAsync());
         dispatch(fetchTrophiesAsync());
+    }, [dispatch]);
 
+    useEffect(() => {
+        dispatch(fetchPlayerAsync(+id!));
+    }, [dispatch, id]);
+
+    useEffect(() => {
         setUserInput({
             id: player?.id,
             nickname: player?.nickname!,
@@ -64,8 +69,6 @@ const PlayerFormEdit = () => {
             trophies: [],
         });
     }, [
-        dispatch,
-        id,
         player?.age,
         player?.id,
         player?.isActive,
