@@ -36,7 +36,6 @@ const HamburguerMenu = () => {
     const handleClick = ({
         currentTarget: { textContent },
     }: React.MouseEvent<HTMLDivElement>) => {
-        console.log(textContent);
         if (textContent === 'HOME') {
             return navigate('/');
         }
