@@ -39,7 +39,7 @@ const TrophyFormAdd = () => {
 
         try {
             await dispatch(addTrophyAsync(trophy));
-            reset();
+            reset({});
         } catch (error) {
             console.log(error);
         }

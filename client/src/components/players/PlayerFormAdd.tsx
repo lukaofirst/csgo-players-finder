@@ -72,7 +72,7 @@ const PlayerFormAdd = () => {
 
         try {
             await dispatch(addPlayerAsync(playerDTO));
-            reset();
+            reset({});
         } catch (err) {
             console.log(err);
         }

@@ -38,7 +38,7 @@ const TeamFormAdd = () => {
 
         try {
             await dispatch(addTeamAsync(team));
-            reset();
+            reset({});
         } catch (error) {
             console.log(error);
         }
