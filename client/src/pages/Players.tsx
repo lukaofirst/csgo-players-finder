@@ -1,11 +1,12 @@
-import { Box, Container, Stack, TextField } from '@mui/material';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Box, Container, Stack, TextField, Typography } from '@mui/material';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayerList from '../components/players/PlayerList';
 import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
 import LoadingComponent from '../components/utils/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { Player } from '../models/Player';
 import { fetchPlayersAsync } from '../store/playersSlice';
 
 const Players = () => {
@@ -16,12 +17,16 @@ const Players = () => {
         (state) => state.players
     );
 
-    const [playerNickname, setPlayerNickname] = useState<string>('');
-    const [playerName, setPlayerName] = useState<string>('');
+    const [searchPlayer, setSearchPlayer] = useState<string>('');
+    const [playersListResult, setPlayersListResult] = useState<Player[]>([]);
 
     useEffect(() => {
         dispatch(fetchPlayersAsync());
     }, [dispatch]);
+
+    useEffect(() => {
+        setPlayersListResult(playersList);
+    }, [playersList]);
 
     const NavigateBack = () => {
         navigate(-1);
@@ -33,16 +38,20 @@ const Players = () => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value !== null) {
-            setPlayerNickname(e.target.value.trim());
-            setPlayerName(e.target.value.trim());
+            const filteredPlayers = playersList.filter(
+                (player) =>
+                    player.nickname
+                        .toLowerCase()
+                        .startsWith(e.target.value.trim().toLowerCase()) ||
+                    player.name
+                        .toLowerCase()
+                        .startsWith(e.target.value.trim().toLowerCase())
+            );
+
+            setPlayersListResult(filteredPlayers);
+            setSearchPlayer(e.target.value);
         }
     };
-
-    const filteredPlayers = playersList.filter(
-        (player) =>
-            player.nickname.toLowerCase().startsWith(playerNickname) ||
-            player.name.toLowerCase().startsWith(playerName)
-    );
 
     if (!playersLoaded)
         return <LoadingComponent message='Loading Players...' />;
@@ -70,13 +79,21 @@ const Players = () => {
                     label='Search by name or nickname'
                     autoFocus
                     onChange={onChangeHandler}
+                    value={searchPlayer}
                 />
             </Box>
-            <PlayerList
-                items={
-                    filteredPlayers.length === 0 ? playersList : filteredPlayers
-                }
-            />
+            {playersListResult.length > 0 ? (
+                <PlayerList items={playersListResult} />
+            ) : (
+                <Typography
+                    variant='h4'
+                    color='red'
+                    textAlign='center'
+                    marginY={5}
+                >
+                    No Players Registered
+                </Typography>
+            )}
         </Container>
     );
 };

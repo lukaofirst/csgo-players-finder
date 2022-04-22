@@ -1,4 +1,4 @@
-import { Box, Container, Stack, TextField } from '@mui/material';
+import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeamList from '../components/teams/TeamList';
@@ -6,6 +6,7 @@ import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
 import LoadingComponent from '../components/utils/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { Team } from '../models/Team';
 import { fetchTeamsAsync } from '../store/teamsSlice';
 
 const Teams = () => {
@@ -14,12 +15,16 @@ const Teams = () => {
 
     const { teamsList, teamsLoaded } = useAppSelector((state) => state.teams);
 
-    const [teamName, setTeamName] = useState<string>('');
-    const [teamLocation, setTeamLocation] = useState<string>('');
+    const [searchTeam, setSearchTeam] = useState<string>('');
+    const [teamsListResult, setTeamsListResult] = useState<Team[]>([]);
 
     useEffect(() => {
         dispatch(fetchTeamsAsync());
     }, [dispatch]);
+
+    useEffect(() => {
+        setTeamsListResult(teamsList);
+    }, [teamsList]);
 
     const NavigateBack = () => {
         navigate(-1);
@@ -31,16 +36,20 @@ const Teams = () => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value !== null) {
-            setTeamName(e.target.value.trim());
-            setTeamLocation(e.target.value.trim());
+            const filteredTeams = teamsList.filter(
+                (team) =>
+                    team.name
+                        .toLowerCase()
+                        .includes(e.target.value.trim().toLowerCase()) ||
+                    team.location
+                        .toLowerCase()
+                        .includes(e.target.value.trim().toLowerCase())
+            );
+
+            setTeamsListResult(filteredTeams);
+            setSearchTeam(e.target.value);
         }
     };
-
-    const filteredTeams = teamsList.filter(
-        (team) =>
-            team.name.toLowerCase().includes(teamName) ||
-            team.location.toLowerCase().includes(teamLocation)
-    );
 
     if (!teamsLoaded) return <LoadingComponent message='Loading Teams...' />;
 
@@ -67,11 +76,22 @@ const Teams = () => {
                     label="Search by team's name or location"
                     autoFocus
                     onChange={onChangeHandler}
+                    value={searchTeam}
                 />
             </Box>
-            <TeamList
-                items={filteredTeams.length === 0 ? teamsList : filteredTeams}
-            />
+
+            {teamsListResult.length > 0 ? (
+                <TeamList items={teamsListResult} />
+            ) : (
+                <Typography
+                    variant='h4'
+                    color='red'
+                    textAlign='center'
+                    marginY={5}
+                >
+                    No Teams Registered
+                </Typography>
+            )}
         </Container>
     );
 };

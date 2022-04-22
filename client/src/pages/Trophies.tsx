@@ -1,4 +1,4 @@
-import { Box, Container, Stack, TextField } from '@mui/material';
+import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrophyList from '../components/trophies/TrophyList';
@@ -6,6 +6,7 @@ import ActionBtn from '../components/utils/ActionBtn';
 import BackBtn from '../components/utils/BackBtn';
 import LoadingComponent from '../components/utils/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
+import { Trophy } from '../models/Trophy';
 import { fetchTrophiesAsync } from '../store/trophiesSlice';
 
 const Trophies = () => {
@@ -16,12 +17,16 @@ const Trophies = () => {
         (state) => state.trophies
     );
 
-    const [trophyName, setTrophyName] = useState<string>('');
-    const [trophyYear, setTrophyYear] = useState<number>(0);
+    const [searchTrophy, setSearchTrophy] = useState<string>('');
+    const [trophiesListResult, setTrophiesListResult] = useState<Trophy[]>([]);
 
     useEffect(() => {
         dispatch(fetchTrophiesAsync());
     }, [dispatch]);
+
+    useEffect(() => {
+        setTrophiesListResult(trophiesList);
+    }, [trophiesList]);
 
     const NavigateBack = () => {
         navigate(-1);
@@ -33,19 +38,21 @@ const Trophies = () => {
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.value !== null) {
-            setTrophyName(e.target.value.trim());
-            setTrophyYear(+e.target.value.trim());
+            const filteredTrophies = trophiesList.filter(
+                (trophy) =>
+                    trophy.name
+                        .toLowerCase()
+                        .includes(e.target.value.trim().toLowerCase()) ||
+                    trophy.year === +e.target.value.trim()
+            );
+
+            setTrophiesListResult(filteredTrophies);
+            setSearchTrophy(e.target.value);
         }
     };
 
     if (!trophiesLoaded)
         return <LoadingComponent message='Loading Trophies...' />;
-
-    const filteredTrophies = trophiesList.filter(
-        (trophy) =>
-            trophy.name.toLowerCase().includes(trophyName) ||
-            trophy.year === trophyYear
-    );
 
     return (
         <Container maxWidth='lg' sx={{ mt: 2, pb: 8 }}>
@@ -70,15 +77,21 @@ const Trophies = () => {
                     label="Search by title's name or year"
                     autoFocus
                     onChange={onChangeHandler}
+                    value={searchTrophy}
                 />
             </Box>
-            <TrophyList
-                items={
-                    filteredTrophies.length === 0
-                        ? trophiesList
-                        : filteredTrophies
-                }
-            />
+            {trophiesListResult.length > 0 ? (
+                <TrophyList items={trophiesListResult} />
+            ) : (
+                <Typography
+                    variant='h4'
+                    color='red'
+                    textAlign='center'
+                    marginY={5}
+                >
+                    No Trophies Registered
+                </Typography>
+            )}
         </Container>
     );
 };
