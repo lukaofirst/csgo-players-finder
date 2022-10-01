@@ -2,70 +2,111 @@ namespace API.Controllers
 {
 	public class TrophiesController : BaseAPIController
 	{
-		private readonly ITrophyRepository _trophyRepository;
+		private readonly ITrophyUseCase _trophyUseCase;
 
-		public TrophiesController(ITrophyRepository trophyRepository)
+		public TrophiesController(ITrophyUseCase trophyUseCase)
 		{
-			_trophyRepository = trophyRepository;
+			_trophyUseCase = trophyUseCase;
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<List<Trophy>>> GetAll()
+		public async Task<ActionResult<List<TrophyDTO>>> GetAll()
 		{
-			var trophies = await _trophyRepository.GetAll();
+			var trophies = await _trophyUseCase.GetAll();
 
-			if (trophies == null) return NotFound();
-
-			return Ok(trophies);
+			return Ok(new SuccessResponse((int)HttpStatusCode.OK, trophies));
 		}
 
 		[HttpGet("{id}", Name = "GetTrophy")]
-		public async Task<ActionResult<Trophy>> GetById(int id)
+		public async Task<ActionResult<TrophyDTO>> GetById(string id)
 		{
-			var trophy = await _trophyRepository.GetById(id);
+			try
+			{
+				var trophy = await _trophyUseCase.GetById(id);
 
-			if (trophy == null) return NotFound();
-
-			return Ok(trophy);
+				return Ok(new SuccessResponse((int)HttpStatusCode.OK, trophy));
+			}
+			catch (Exception ex)
+			{
+				return NotFound(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.NotFound,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Trophy>> Post(Trophy trophy)
+		public async Task<ActionResult<TrophyDTO>> Post(TrophyDTO trophyDTO)
 		{
-			var existingTrophy = await _trophyRepository.CheckByName(trophy.Name!);
-
-			if (existingTrophy == true)
+			try
 			{
-				return Conflict(new ProblemDetails
-				{
-					Title = $"The trophy with name [{trophy.Name}] already exist"
-				});
+				var trophy = await _trophyUseCase.Post(trophyDTO);
+
+				return CreatedAtRoute(
+					"GetTrophy",
+					new { id = trophy.Id },
+					new SuccessResponse((int)HttpStatusCode.OK, trophy)
+				);
 			}
-
-			var entity = await _trophyRepository.Post(trophy);
-
-			return Ok(entity);
+			catch (Exception ex)
+			{
+				return Conflict(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.Conflict,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 
 		[HttpPut]
-		public async Task<ActionResult> Update(Trophy trophy)
+		public async Task<ActionResult> Update(TrophyDTO trophy)
 		{
-			await _trophyRepository.Update(trophy);
+			try
+			{
+				var updatedTrophy = await _trophyUseCase.Update(trophy);
 
-			return NoContent();
+				return Ok(new SuccessResponse((int)HttpStatusCode.OK, updatedTrophy));
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.BadRequest,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(string id)
 		{
-			var trophy = await _trophyRepository.Delete(id);
-
-			if (!trophy) return NotFound(new ProblemDetails
+			try
 			{
-				Title = $"Trophy with id: [{id}] doesn't exist"
-			});
+				await _trophyUseCase.Delete(id);
 
-			return Ok($"The trophy with id: [{id}] has been deleted successfully!");
+				return Ok(new SuccessResponse(
+						(int)HttpStatusCode.OK,
+						$"The trophy with id: [{id}] has been deleted successfully!"
+					)
+				);
+			}
+			catch (Exception ex)
+			{
+				return NotFound(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.NotFound,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 	}
 }

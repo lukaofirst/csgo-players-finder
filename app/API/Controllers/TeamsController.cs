@@ -2,85 +2,107 @@ namespace API.Controllers
 {
 	public class TeamsController : BaseAPIController
 	{
-		private readonly ITeamRepository _teamRepository;
+		private readonly ITeamUseCase _teamUseCase;
 
-		public TeamsController(ITeamRepository teamRepository)
+		public TeamsController(ITeamUseCase teamUseCase)
 		{
-			_teamRepository = teamRepository;
+			_teamUseCase = teamUseCase;
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<List<Team>>> GetAll()
+		public async Task<ActionResult<List<TeamDTO>>> GetAll()
 		{
-			var teams = await _teamRepository.GetAll();
+			var teams = await _teamUseCase.GetAll();
 
-			if (teams == null) return NotFound();
-
-			return Ok(teams);
+			return Ok(new SuccessResponse((int)HttpStatusCode.OK, teams));
 		}
 
 		[HttpGet("{id}", Name = "GetTeam")]
-		public async Task<ActionResult<Team>> GetById(int id)
+		public async Task<ActionResult<TeamDTO>> GetById(string id)
 		{
-			var team = await _teamRepository.GetById(id);
-
-			if (team == null) return NotFound(new ProblemDetails
+			try
 			{
-				Title = "Team not found!"
-			});
+				var team = await _teamUseCase.GetById(id);
 
-			return Ok(team);
+				return Ok(new SuccessResponse((int)HttpStatusCode.OK, team));
+			}
+			catch (Exception ex)
+			{
+				return NotFound(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.NotFound,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Team>> Post(Team team)
+		public async Task<ActionResult<TeamDTO>> Post(TeamDTO teamDTO)
 		{
-			var existingTeam = await _teamRepository.CheckByName(team.Name!);
-
-			if (existingTeam == true)
+			try
 			{
-				return Conflict(new ProblemDetails
-				{
-					Title = $"The team with name [{team.Name}] already exist"
-				});
+				var team = await _teamUseCase.Post(teamDTO);
+
+				return CreatedAtRoute("GetTeam", new { id = team.Id }, team);
 			}
-
-			var entity = await _teamRepository.Post(team);
-
-			return CreatedAtRoute("GetTeam", new { id = entity.Id }, entity);
+			catch (Exception ex)
+			{
+				return Conflict(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.Conflict,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 
 		[HttpPut]
-		public async Task<ActionResult> Update(Team team)
+		public async Task<ActionResult> Update(TeamDTO team)
 		{
-			var existingTeam = await _teamRepository.CheckByName(team.Name!);
-
-			if (existingTeam != true)
+			try
 			{
-				return Conflict(new ProblemDetails
-				{
-					Title = $"The team with name [{team.Name}] doesn't exist in our database yet"
-				});
+				var updatedTeam = await _teamUseCase.Update(team);
+
+				return Ok(new SuccessResponse((int)HttpStatusCode.OK, updatedTeam));
 			}
-
-			await _teamRepository.Update(team);
-
-			return NoContent();
+			catch (Exception ex)
+			{
+				return BadRequest(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.BadRequest,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult> Delete(int id)
+		public async Task<ActionResult> Delete(string id)
 		{
-			var existingTeam = await _teamRepository.GetById(id);
-
-			if (existingTeam == null) return NotFound(new ProblemDetails
+			try
 			{
-				Title = $"Team with id: [{id}] doesn't exist"
-			});
+				await _teamUseCase.Delete(id);
 
-			var team = await _teamRepository.Delete(id);
-
-			return Ok($"The team with id: [{id}] has been deleted successfully!");
+				return Ok(new SuccessResponse(
+						(int)HttpStatusCode.OK,
+						$"The team with id: [{id}] has been deleted successfully!"
+					)
+				);
+			}
+			catch (Exception ex)
+			{
+				return NotFound(
+					new ErrorResponse(
+						ex.Message,
+						(int)HttpStatusCode.NotFound,
+						ex.StackTrace!
+					)
+				);
+			}
 		}
 	}
 }
