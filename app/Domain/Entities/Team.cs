@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Domain.Entities
 {
 	public class Team : BaseClass
@@ -8,6 +6,7 @@ namespace Domain.Entities
 		public string? Location { get; set; }
 		public string? Region { get; set; }
 		public int FoundedYear { get; set; }
-		public List<Player>? Players { get; set; }
+        public List<object>? PlayerIds { get; set; }
+        public List<Player>? Players { get; set; }
 	}
 }
