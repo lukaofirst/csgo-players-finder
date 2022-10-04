@@ -45,7 +45,11 @@ namespace API.Controllers
 			{
 				var team = await _teamUseCase.Post(teamDTO);
 
-				return CreatedAtRoute("GetTeam", new { id = team.Id }, team);
+				return CreatedAtRoute(
+					"GetTeam",
+					new { id = team.Id },
+					new SuccessResponse((int)HttpStatusCode.Created, team)
+				);
 			}
 			catch (Exception ex)
 			{

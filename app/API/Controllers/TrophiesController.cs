@@ -48,7 +48,7 @@ namespace API.Controllers
 				return CreatedAtRoute(
 					"GetTrophy",
 					new { id = trophy.Id },
-					new SuccessResponse((int)HttpStatusCode.OK, trophy)
+					new SuccessResponse((int)HttpStatusCode.Created, trophy)
 				);
 			}
 			catch (Exception ex)

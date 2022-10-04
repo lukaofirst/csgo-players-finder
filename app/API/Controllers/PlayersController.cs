@@ -47,7 +47,7 @@ namespace API.Controllers
 				return CreatedAtRoute(
 					"GetPlayer",
 					new { id = player.Id },
-					new SuccessResponse((int)HttpStatusCode.OK, player)
+					new SuccessResponse((int)HttpStatusCode.Created, player)
 				);
 			}
 			catch (Exception ex)
