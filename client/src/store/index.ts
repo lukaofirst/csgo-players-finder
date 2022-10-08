@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { playersSlice } from './playersSlice';
-import { teamsSlice } from './teamsSlice';
-import { trophiesSlice } from './trophiesSlice';
+import { playersSlice } from './stateSlices/playersSlice';
+import { teamsSlice } from './stateSlices/teamsSlice';
+import { trophiesSlice } from './stateSlices/trophiesSlice';
 
 export const store = configureStore({
     reducer: {

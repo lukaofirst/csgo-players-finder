@@ -1,67 +1,17 @@
 import {
-    createAsyncThunk,
     createEntityAdapter,
     createSlice,
     PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import agent from '../api/agent';
-import { Trophy } from '../models/Trophy';
-
-export const fetchTrophiesAsync = createAsyncThunk(
-    'trophies/fetchTrophiesAsync',
-    async (_, thunkAPI) => {
-        try {
-            return agent.Trophies.list();
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const fetchTrophyAsync = createAsyncThunk(
-    'trophies/fetchTrophyAsync',
-    async (id: number, thunkAPI) => {
-        try {
-            return agent.Trophies.getById(id);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const addTrophyAsync = createAsyncThunk(
-    'trophies/addTrophyAsync',
-    async (trophy: Trophy, thunkAPI) => {
-        try {
-            return await agent.Trophies.add(trophy);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const editTrophyAsync = createAsyncThunk(
-    'trophies/editTrophyAsync',
-    async (trophy: Trophy, thunkAPI) => {
-        try {
-            return await agent.Trophies.edit(trophy);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const deleteTrophyAsync = createAsyncThunk<
-    void,
-    { id: number; name?: string }
->('trophies/deleteTrophyAsync', async ({ id }, thunkAPI) => {
-    try {
-        await agent.Trophies.delete(id);
-    } catch (error: any) {
-        return thunkAPI.rejectWithValue({ error: error.data });
-    }
-});
+import { Trophy } from '../../models/Trophy';
+import {
+    fetchTrophiesAsync,
+    fetchTrophyAsync,
+    addTrophyAsync,
+    editTrophyAsync,
+    deleteTrophyAsync,
+} from '../asyncThunks/trophyAsyncThunks';
 
 interface TrophyState {
     trophiesLoaded: boolean;
@@ -74,9 +24,9 @@ const initialState: TrophyState = {
     trophiesLoaded: false,
     trophiesList: [],
     trophy: {
-        id: 0,
+        id: '',
         name: '',
-        isMajor: '',
+        isMajor: false,
         year: 0,
     },
     status: 'started',
@@ -88,17 +38,20 @@ export const trophiesSlice = createSlice({
     name: 'trophies',
     initialState: trophiesAdapter.getInitialState(initialState),
     reducers: {
-        setTrophyList(state, action) {
+        setUpdatedTrophyList(state, action) {
             state.trophiesList = state.trophiesList.filter(
                 (t) => t.id !== action.payload
             );
         },
-        setTrophy(state, action: PayloadAction<number>) {
+        setTrophy(state, action: PayloadAction<string>) {
             const trophy = state.trophiesList.find(
                 (trophy) => trophy.id === action.payload
             );
 
             state.trophy = trophy;
+        },
+        resetTrophyState(state) {
+            state.trophy = initialState.trophy;
         },
     },
     extraReducers: (builder) => {
@@ -107,7 +60,7 @@ export const trophiesSlice = createSlice({
         });
 
         builder.addCase(fetchTrophiesAsync.fulfilled, (state, action) => {
-            state.trophiesList = action.payload;
+            state.trophiesList = action.payload.body;
             state.trophiesLoaded = true;
             state.status = 'done';
         });
@@ -121,7 +74,7 @@ export const trophiesSlice = createSlice({
         });
 
         builder.addCase(fetchTrophyAsync.fulfilled, (state, action) => {
-            state.trophy = action.payload;
+            state.trophy = action.payload.body;
             state.status = 'done';
         });
 
@@ -134,7 +87,7 @@ export const trophiesSlice = createSlice({
         });
 
         builder.addCase(addTrophyAsync.fulfilled, (state, action) => {
-            trophiesAdapter.upsertOne(state, action.payload);
+            trophiesAdapter.upsertOne(state, action.payload.body);
             state.status = 'done';
             toast.success('Trophy added successfully!');
         });
@@ -148,7 +101,7 @@ export const trophiesSlice = createSlice({
         });
 
         builder.addCase(editTrophyAsync.fulfilled, (state, action) => {
-            trophiesAdapter.updateOne(state, action.payload);
+            trophiesAdapter.upsertOne(state, action.payload.body);
             state.status = 'done';
             toast.success('Trophy updated successfully!');
         });
@@ -158,7 +111,7 @@ export const trophiesSlice = createSlice({
         });
 
         builder.addCase(deleteTrophyAsync.pending, (state, action) => {
-            state.status = `pendingDeleteTrophy_${action.meta.arg.id}_${action.meta.arg.name}`;
+            state.status = `pendingDeleteTrophy_${action.meta.arg}`;
         });
 
         builder.addCase(deleteTrophyAsync.fulfilled, (state) => {
@@ -172,4 +125,5 @@ export const trophiesSlice = createSlice({
     },
 });
 
-export const { setTrophyList, setTrophy } = trophiesSlice.actions;
+export const { setUpdatedTrophyList, setTrophy, resetTrophyState } =
+    trophiesSlice.actions;

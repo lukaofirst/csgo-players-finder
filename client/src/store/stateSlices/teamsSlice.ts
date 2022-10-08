@@ -1,67 +1,17 @@
 import {
-    createAsyncThunk,
     createEntityAdapter,
     createSlice,
     PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import agent from '../api/agent';
-import { Team } from '../models/Team';
-
-export const fetchTeamsAsync = createAsyncThunk<Team[]>(
-    'teams/fetchTeamsAsync',
-    async (_, thunkAPI) => {
-        try {
-            return await agent.Teams.list();
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const fetchTeamAsync = createAsyncThunk(
-    'teams/fetchTeamAsync',
-    async (id: number, thunkAPI) => {
-        try {
-            return await agent.Teams.getById(id);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const addTeamAsync = createAsyncThunk(
-    'teams/addTeamAsync',
-    async (team: Team, thunkAPI) => {
-        try {
-            return await agent.Teams.add(team);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const editTeamAsync = createAsyncThunk(
-    'teams/editTeamAsync',
-    async (team: Team, thunkAPI) => {
-        try {
-            return await agent.Teams.edit(team);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const deleteTeamAsync = createAsyncThunk(
-    'teams/deleteTeamAsync',
-    async (id: number, thunkAPI) => {
-        try {
-            return await agent.Teams.delete(id);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
+import { Team } from '../../models/Team';
+import {
+    fetchTeamsAsync,
+    fetchTeamAsync,
+    addTeamAsync,
+    editTeamAsync,
+    deleteTeamAsync,
+} from '../asyncThunks/teamAsyncThunks';
 
 interface TeamState {
     teamsLoaded: boolean;
@@ -75,7 +25,7 @@ const initialState: TeamState = {
     teamsLoaded: false,
     teamsList: [],
     team: {
-        id: 0,
+        id: '',
         name: '',
         location: '',
         region: '',
@@ -102,7 +52,7 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(fetchTeamsAsync.fulfilled, (state, action) => {
-            state.teamsList = action.payload;
+            state.teamsList = action.payload.body;
             state.status = 'done';
             state.teamsLoaded = true;
         });
@@ -117,7 +67,7 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(fetchTeamAsync.fulfilled, (state, action) => {
-            state.team = action.payload;
+            state.team = action.payload.body;
             state.status = 'done';
             state.teamsLoaded = true;
         });
@@ -131,7 +81,7 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(addTeamAsync.fulfilled, (state, action) => {
-            teamsAdapter.upsertOne(state, action.payload);
+            teamsAdapter.upsertOne(state, action.payload.body);
             state.status = 'done';
             toast.success('Team added successfully');
         });
@@ -145,7 +95,7 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(editTeamAsync.fulfilled, (state, action) => {
-            teamsAdapter.updateOne(state, action.payload);
+            teamsAdapter.upsertOne(state, action.payload.body);
             state.status = 'done';
             toast.success('Team updated successfully!');
             state.editMode = false;
@@ -156,7 +106,7 @@ export const teamsSlice = createSlice({
         });
 
         builder.addCase(deleteTeamAsync.fulfilled, (state, action) => {
-            teamsAdapter.removeOne(state, action.payload);
+            teamsAdapter.removeOne(state, action.meta.arg);
             state.status = 'done';
             toast.success('Team deleted successfully');
         });

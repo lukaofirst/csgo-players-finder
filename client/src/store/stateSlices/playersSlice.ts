@@ -1,74 +1,23 @@
 import {
-    createAsyncThunk,
     createEntityAdapter,
     createSlice,
     PayloadAction,
 } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import agent from '../api/agent';
-import { PlayerDTO } from '../models/DTO/PlayerDTO';
-import { Player } from '../models/Player';
-import { RootState } from './store';
-
-export const fetchPlayersAsync = createAsyncThunk<Player[]>(
-    'players/fetchPlayersAsync',
-    async (_, thunkAPI) => {
-        try {
-            return await agent.Players.list();
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const fetchPlayerAsync = createAsyncThunk(
-    'players/fetchPlayerAsync',
-    async (id: number, thunkAPI) => {
-        try {
-            return await agent.Players.getById(id);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const addPlayerAsync = createAsyncThunk(
-    'players/addPlayerAsync',
-    async (player: PlayerDTO, thunkAPI) => {
-        try {
-            return await agent.Players.add(player);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const editPlayerAsync = createAsyncThunk(
-    'players/editPlayerAsync',
-    async (player: PlayerDTO, thunkAPI) => {
-        try {
-            return await agent.Players.edit(player);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
-
-export const deletePlayerAsync = createAsyncThunk(
-    'players/removePlayerAsync',
-    async (id: number, thunkAPI) => {
-        try {
-            return await agent.Players.delete(id);
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data });
-        }
-    }
-);
+import { Player } from '../../models/Player';
+import { RootState } from '..';
+import {
+    fetchPlayersAsync,
+    fetchPlayerAsync,
+    addPlayerAsync,
+    editPlayerAsync,
+    deletePlayerAsync,
+} from '../asyncThunks/playerAsyncThunk';
 
 interface PlayerState {
     playersLoaded: boolean;
     playersList: Player[];
-    player: Player | undefined;
+    player: Player;
     status: string;
     editMode: boolean;
 }
@@ -77,14 +26,16 @@ const initialState: PlayerState = {
     playersLoaded: false,
     playersList: [],
     player: {
-        id: 0,
+        id: '',
         nickname: '',
         name: '',
         age: 0,
         isActive: false,
         nationality: '',
-        teamId: 0,
-        playerTrophies: [],
+        teamId: '',
+        team: null,
+        trophyIds: [],
+        trophies: [],
     },
     status: 'started',
     editMode: false,
@@ -106,7 +57,7 @@ export const playersSlice = createSlice({
         });
 
         builder.addCase(fetchPlayersAsync.fulfilled, (state, action) => {
-            state.playersList = action.payload;
+            state.playersList = action.payload.body;
             state.status = 'done';
             state.playersLoaded = true;
         });
@@ -121,7 +72,7 @@ export const playersSlice = createSlice({
         });
 
         builder.addCase(fetchPlayerAsync.fulfilled, (state, action) => {
-            state.player = action.payload;
+            state.player = action.payload.body;
             state.status = 'done';
             state.playersLoaded = true;
         });
@@ -135,7 +86,7 @@ export const playersSlice = createSlice({
         });
 
         builder.addCase(addPlayerAsync.fulfilled, (state, action) => {
-            playersAdapter.upsertOne(state, action.payload);
+            playersAdapter.upsertOne(state, action.payload.body);
             state.status = 'done';
             toast.success('Player added successfully!');
         });
@@ -149,7 +100,7 @@ export const playersSlice = createSlice({
         });
 
         builder.addCase(editPlayerAsync.fulfilled, (state, action) => {
-            playersAdapter.updateOne(state, action.payload);
+            playersAdapter.upsertOne(state, action.payload.body);
             state.status = 'done';
             toast.success('Player updated successfully!');
             state.editMode = false;
@@ -160,7 +111,7 @@ export const playersSlice = createSlice({
         });
 
         builder.addCase(deletePlayerAsync.fulfilled, (state, action) => {
-            playersAdapter.removeOne(state, action.payload);
+            playersAdapter.removeOne(state, action.meta.arg);
             state.status = 'done';
             toast.success('Player deleted successfully!');
         });
