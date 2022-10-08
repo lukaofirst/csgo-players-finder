@@ -47,10 +47,10 @@
 		</td>
 		<td>
 			<p>.NET Core 6</p>
-			<p>Entity Framework Core</p>
 			<p>AutoMapper</p>
 			<p>Swagger</p>
-			<p>SQL Lite</p>
+			<p>MongoDB</p>
+			<p>Clean Architecture</p>
 		</td>
 	</tr>
 </table>
@@ -107,10 +107,10 @@
 		</td>
 		<td>
 			<p>.NET Core 6</p>
-			<p>Entity Framework Core</p>
 			<p>AutoMapper</p>
 			<p>Swagger</p>
-			<p>SQL Lite</p>
+			<p>MongoDB</p>
+			<p>Clean Architecture</p>
 		</td>
 	</tr>
 </table>
