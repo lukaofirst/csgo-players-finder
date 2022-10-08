@@ -11,7 +11,10 @@ export const playerValidatorSchema = yup.object({
         .required('age has a minimum age of 15 years old')
         .typeError('age must be a number type'),
     nationality: yup.string().notRequired(),
-    isActive: yup.string().required(),
+    isActive: yup
+        .boolean()
+        .required()
+        .typeError('select if the player is active or not'),
     teamId: yup
         .string()
         .when('isActive', {

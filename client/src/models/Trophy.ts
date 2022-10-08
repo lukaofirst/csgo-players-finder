@@ -1,6 +1,6 @@
 export interface Trophy {
-    id?: number;
+    id: string | null;
     name: string;
     year: number;
-    isMajor: string;
+    isMajor: boolean;
 }

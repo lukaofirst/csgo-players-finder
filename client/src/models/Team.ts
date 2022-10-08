@@ -1,7 +1,7 @@
 import { Player } from './Player';
 
 export interface Team {
-    id?: number;
+    id: string | null;
     name: string;
     location: string;
     region: string;
