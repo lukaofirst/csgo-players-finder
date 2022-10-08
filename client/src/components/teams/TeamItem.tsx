@@ -3,16 +3,16 @@ import { Team } from '../../models/Team';
 import InfoIcon from '@mui/icons-material/Info';
 import { useNavigate } from 'react-router-dom';
 
-interface Props {
+interface ITeamItem {
     item: Team;
 }
 
-const TeamItem = ({ item }: Props) => {
+const TeamItem = ({ item }: ITeamItem) => {
     const navigate = useNavigate();
 
     const { name, location, region, foundedYear, id } = item;
 
-    const onClickHandler = (id: number) => {
+    const onClickHandler = (id: string) => {
         navigate(`${id}`);
     };
 

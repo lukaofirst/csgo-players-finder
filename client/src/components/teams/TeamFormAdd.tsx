@@ -5,31 +5,29 @@ import { Container, Stack, Box, Typography, FormControl } from '@mui/material';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/hooks';
+import { StatusCode } from '../../models/Enums/StatusCode';
 import { Team } from '../../models/Team';
-import { addTeamAsync } from '../../store/teamsSlice';
+import { addTeamAsync } from '../../store/asyncThunks/teamAsyncThunks';
 import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
-import AppTextInput from '../utils/AppTextInput';
-import BackBtn from '../utils/BackBtn';
+import AppTextInput from '../shared/AppTextInput';
+import BackButton from '../shared/BackButton';
 
 const TeamFormAdd = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const {
         handleSubmit,
         control,
         formState: { isSubmitting },
-        reset,
+        reset: resetForm,
     } = useForm<FieldValues>({
         mode: 'all',
         resolver: yupResolver<any>(teamValidatorSchema),
     });
 
-    const NavigateBack = () => {
-        navigate(-1);
-    };
-
     const onSubmitHandler = async (data: FieldValues) => {
         const team: Team = {
+            id: null,
             name: data.name,
             location: data.location,
             region: data.region,
@@ -37,8 +35,13 @@ const TeamFormAdd = () => {
         };
 
         try {
-            await dispatch(addTeamAsync(team));
-            reset({});
+            const result = await dispatch(addTeamAsync(team)).unwrap();
+
+            if (result.statusCode === StatusCode.Created) {
+                resetForm({});
+
+                navigate('/teams');
+            }
         } catch (error) {
             console.log(error);
         }
@@ -51,7 +54,7 @@ const TeamFormAdd = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
+                <BackButton />
             </Stack>
             <Box
                 sx={{

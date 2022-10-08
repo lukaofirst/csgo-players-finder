@@ -3,12 +3,16 @@ import { Fragment, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { setEditMode } from '../../store/teamsSlice';
-import { deleteTeamAsync, fetchTeamAsync } from '../../store/teamsSlice';
-import ActionBtn from '../utils/ActionBtn';
-import BackBtn from '../utils/BackBtn';
-import LoadingComponent from '../utils/LoadingComponent';
-import ModalDelete from '../utils/ModalDelete';
+import {
+    deleteTeamAsync,
+    fetchTeamAsync,
+} from '../../store/asyncThunks/teamAsyncThunks';
+import { setEditMode } from '../../store/stateSlices/teamsSlice';
+import NavigateActionButtons from '../shared/NavigateActionButtons';
+import ActionButton from '../shared/ActionButton';
+import LoadingComponent from '../shared/LoadingComponent';
+import ModalDelete from '../shared/ModalDelete';
+import { StatusCode } from '../../models/Enums/StatusCode';
 
 const TeamDetailed = () => {
     const navigate = useNavigate();
@@ -20,12 +24,8 @@ const TeamDetailed = () => {
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        dispatch(fetchTeamAsync(+id!));
+        dispatch(fetchTeamAsync(id!));
     }, [dispatch, id]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const openDeleteModal = () => {
         setOpen(true);
@@ -36,15 +36,15 @@ const TeamDetailed = () => {
         navigate('edit');
     };
 
-    const deleteTeam = async (id: number) => {
+    const deleteTeam = async (id: string) => {
         handleClose();
 
         try {
-            await dispatch(deleteTeamAsync(id));
+            const result = await dispatch(deleteTeamAsync(id)).unwrap();
 
-            setTimeout(() => {
+            if (result.statusCode === StatusCode.Success) {
                 navigate('/teams');
-            }, 3000);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -66,29 +66,26 @@ const TeamDetailed = () => {
                 document.getElementById('overlay-root')!
             )}
             <Container maxWidth='lg' sx={{ mt: 2 }}>
-                <Stack
-                    direction='row'
-                    justifyContent='space-between'
-                    alignItems='center'
-                >
-                    <BackBtn onClick={NavigateBack} />
-                    <Stack direction='row' alignItems='center' spacing={2}>
-                        <ActionBtn
-                            variant='outlined'
-                            name='Team'
-                            color='warning'
-                            icon='edit'
-                            onClick={editTeam}
-                        />
-                        <ActionBtn
-                            variant='outlined'
-                            name='Team'
-                            color='error'
-                            icon='remove'
-                            onClick={openDeleteModal}
-                        />
-                    </Stack>
-                </Stack>
+                <NavigateActionButtons
+                    children={
+                        <Stack direction='row' alignItems='center' spacing={2}>
+                            <ActionButton
+                                variant='outlined'
+                                name='Team'
+                                color='warning'
+                                icon='edit'
+                                onClick={editTeam}
+                            />
+                            <ActionButton
+                                variant='outlined'
+                                name='Team'
+                                color='error'
+                                icon='remove'
+                                onClick={openDeleteModal}
+                            />
+                        </Stack>
+                    }
+                />
                 <Stack
                     direction='row'
                     justifyContent='space-evenly'

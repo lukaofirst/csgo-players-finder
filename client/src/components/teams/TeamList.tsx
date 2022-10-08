@@ -2,11 +2,11 @@ import { Stack } from '@mui/material';
 import { Team } from '../../models/Team';
 import TeamItem from './TeamItem';
 
-interface Props {
+interface ITeamList {
     items: Team[];
 }
 
-const TeamList = ({ items }: Props) => {
+const TeamList = ({ items }: ITeamList) => {
     return (
         <Stack
             direction='row'

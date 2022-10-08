@@ -5,15 +5,19 @@ import { useEffect } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { StatusCode } from '../../models/Enums/StatusCode';
 import { Team } from '../../models/Team';
-import { editTeamAsync, fetchTeamAsync } from '../../store/teamsSlice';
+import {
+    fetchTeamAsync,
+    editTeamAsync,
+} from '../../store/asyncThunks/teamAsyncThunks';
 import { teamValidatorSchema } from '../../validators/teamValidatorSchema';
-import AppTextInput from '../utils/AppTextInput';
-import BackBtn from '../utils/BackBtn';
+import AppTextInput from '../shared/AppTextInput';
+import BackButton from '../shared/BackButton';
 
 const TeamFormEdit = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { id } = useParams();
     const {
         handleSubmit,
@@ -28,12 +32,8 @@ const TeamFormEdit = () => {
     const { team } = useAppSelector((state) => state.teams);
 
     useEffect(() => {
-        dispatch(fetchTeamAsync(+id!));
+        dispatch(fetchTeamAsync(id!));
     }, [dispatch, id]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const onSubmitHandler = async (data: FieldValues) => {
         const team: Team = {
@@ -45,14 +45,19 @@ const TeamFormEdit = () => {
         };
 
         try {
-            await dispatch(editTeamAsync(team));
-            reset({
-                id: '',
-                name: '',
-                location: '',
-                region: '',
-                foundedYear: '',
-            });
+            const result = await dispatch(editTeamAsync(team)).unwrap();
+
+            if (result.statusCode === StatusCode.Success) {
+                reset({
+                    id: '',
+                    name: '',
+                    location: '',
+                    region: '',
+                    foundedYear: '',
+                });
+
+                navigate('/teams');
+            }
         } catch (error) {
             console.log(error);
         }
@@ -65,7 +70,7 @@ const TeamFormEdit = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
+                <BackButton />
             </Stack>
             <Box
                 sx={{
@@ -83,13 +88,13 @@ const TeamFormEdit = () => {
                     onSubmit={handleSubmit(onSubmitHandler)}
                     sx={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}
                 >
-                    {team?.id! > 0 && (
+                    {team?.id! !== '' && (
                         <>
                             <AppTextInput
                                 label='Id'
                                 name='id'
                                 control={control}
-                                val={team?.id}
+                                val={team?.id!}
                                 disabled={true}
                             />
                             <AppTextInput
