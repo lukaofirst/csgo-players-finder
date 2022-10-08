@@ -17,7 +17,7 @@ namespace Infra.Repositories
 		{
 			var teams = await _teamsCollection
 				.Aggregate()
-				.Lookup<Player, Team>(foreignPlayerCollectionName, "PlayerIds", "_id", @as: "Players")
+				.Lookup<Player, Team>(foreignPlayerCollectionName, "PlayerIds", "TeamId", @as: "Players")
 				.ToListAsync();
 
 			return teams;
@@ -28,7 +28,7 @@ namespace Infra.Repositories
 			var team = await _teamsCollection
 				.Aggregate()
 				.Match($"{{ _id: ObjectId('{id}')}}")
-				.Lookup<Player, Team>(foreignPlayerCollectionName, "PlayerIds", "_id", @as: "Players")
+				.Lookup<Player, Team>(foreignPlayerCollectionName, "PlayerIds", "TeamId", @as: "Players")
 				.SingleOrDefaultAsync();
 
 			return team;

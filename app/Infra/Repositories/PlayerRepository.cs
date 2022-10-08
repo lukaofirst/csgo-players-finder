@@ -59,8 +59,11 @@ namespace Infra.Repositories
 
 			if (!playerExist)
 			{
-				player.Id = ObjectId.GenerateNewId();
-				player.TeamId = ObjectId.Parse(player.TeamId!.ToString());
+				var generateGuid = ObjectId.GenerateNewId();
+				var parsedTeamId = ObjectId.Parse(player.TeamId!.ToString());
+
+				player.Id = generateGuid;
+				player.TeamId = parsedTeamId;
 
 				if (player.TrophyIds != null)
 				{
@@ -71,6 +74,13 @@ namespace Infra.Repositories
 				}
 
 				await _playersCollection.InsertOneAsync(player);
+
+				var pushPlayerIdToTeam = Builders<Team>.Update.Push(t => t.PlayerIds, parsedTeamId);
+
+				var result = await _teamsCollection.UpdateOneAsync(
+					$"{{ _id: ObjectId('{player.TeamId}')}}",
+					pushPlayerIdToTeam
+				);
 
 				return player;
 			}
