@@ -1,7 +1,7 @@
 import { ButtonBase, List, Typography } from '@mui/material';
 import { NavLink } from 'react-router-dom';
 
-const navLinks = ['Home', 'Players', 'Teams', 'Trophies'];
+const navLinks = ['home', 'players', 'teams', 'trophies'];
 
 const NavLinks = () => {
     return (
@@ -9,12 +9,14 @@ const NavLinks = () => {
             {navLinks.map((item) => (
                 <ButtonBase key={item}>
                     <NavLink
-                        to={item === 'Home' ? '/' : `/${item}`}
+                        to={item === 'home' ? '/' : `/${item}`}
                         className={({ isActive }) =>
                             isActive ? 'navbar-li active' : 'navbar-li'
                         }
                     >
-                        <Typography variant='h6'>{item}</Typography>
+                        <Typography variant='h6'>
+                            {item.charAt(0).toUpperCase() + item.slice(1)}
+                        </Typography>
                     </NavLink>
                 </ButtonBase>
             ))}

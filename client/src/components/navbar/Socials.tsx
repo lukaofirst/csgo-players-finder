@@ -1,13 +1,14 @@
 import { Box } from '@mui/system';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import AnchorTag from '../utils/AnchorTag';
+import AnchorTag from '../shared/AnchorTag';
 
 const Socials = () => {
     return (
         <Box>
-            <AnchorTag url='https://github.com/lukaofirst'>
-                <GitHubIcon fontSize='large' sx={IconStyle} />
-            </AnchorTag>
+            <AnchorTag
+                url='https://github.com/lukaofirst'
+                children={<GitHubIcon fontSize='large' sx={IconStyle} />}
+            />
         </Box>
     );
 };
