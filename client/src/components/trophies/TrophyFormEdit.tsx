@@ -1,26 +1,32 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
-import { Container, Stack, Box, Typography, FormControl } from '@mui/material';
+import { Container, Box, Typography, FormControl } from '@mui/material';
 import { useEffect } from 'react';
 import { useForm, FieldValues } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { StatusCode } from '../../models/Enums/StatusCode';
 import { Trophy } from '../../models/Trophy';
-import { editTrophyAsync, fetchTrophyAsync } from '../../store/trophiesSlice';
+import {
+    fetchTrophyAsync,
+    editTrophyAsync,
+} from '../../store/asyncThunks/trophyAsyncThunks';
+import { resetTrophyState } from '../../store/stateSlices/trophiesSlice';
 import { trophyValidatorSchema } from '../../validators/trophyValidatorSchema';
-import AppRadioInput from '../utils/AppRadioInput';
-import AppTextInput from '../utils/AppTextInput';
-import BackBtn from '../utils/BackBtn';
+import NavigateActionButtons from '../shared/NavigateActionButtons';
+import AppRadioInput from '../shared/AppRadioInput';
+import AppTextInput from '../shared/AppTextInput';
 
 const TrophyFormEdit = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { id } = useParams();
+
     const {
         handleSubmit,
         control,
         formState: { isSubmitting },
-        reset,
+        reset: resetForm,
     } = useForm({
         mode: 'all',
         resolver: yupResolver<any>(trophyValidatorSchema),
@@ -29,12 +35,8 @@ const TrophyFormEdit = () => {
     const { trophy } = useAppSelector((state) => state.trophies);
 
     useEffect(() => {
-        dispatch(fetchTrophyAsync(+id!));
+        dispatch(fetchTrophyAsync(id!));
     }, [dispatch, id]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const onSubmitHandler = async (data: FieldValues) => {
         const trophy: Trophy = {
@@ -45,14 +47,20 @@ const TrophyFormEdit = () => {
         };
 
         try {
-            await dispatch(editTrophyAsync(trophy));
+            const result = await dispatch(editTrophyAsync(trophy)).unwrap();
 
-            reset({
-                id: '',
-                name: '',
-                year: '',
-                isMajor: '',
-            });
+            if (result.statusCode === StatusCode.Success) {
+                resetForm({
+                    id: '',
+                    name: '',
+                    year: '',
+                    isMajor: '',
+                });
+
+                navigate('/trophies');
+            }
+
+            dispatch(resetTrophyState());
         } catch (error) {
             console.log(error);
         }
@@ -60,13 +68,7 @@ const TrophyFormEdit = () => {
 
     return (
         <Container maxWidth='lg' sx={{ mt: 2 }}>
-            <Stack
-                direction='row'
-                justifyContent='space-between'
-                alignItems='center'
-            >
-                <BackBtn onClick={NavigateBack} />
-            </Stack>
+            <NavigateActionButtons />
             <Box
                 sx={{
                     mt: 2,
@@ -83,14 +85,14 @@ const TrophyFormEdit = () => {
                     onSubmit={handleSubmit(onSubmitHandler)}
                     sx={{ width: '100%', maxWidth: '500px', margin: '0 auto' }}
                 >
-                    {trophy?.id! > 0 && (
+                    {trophy?.id !== '' && (
                         <>
                             <AppTextInput
                                 label='Id'
                                 name='id'
                                 control={control}
-                                val={trophy?.id}
-                                disabled={true}
+                                val={trophy?.id!}
+                                disabled
                             />
                             <AppTextInput
                                 label='Name'
