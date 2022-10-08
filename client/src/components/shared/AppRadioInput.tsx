@@ -12,7 +12,7 @@ interface Props extends UseControllerProps {
     label?: string;
     textposition?: string;
     onClick?: (e: any) => void;
-    val?: boolean | string;
+    val?: boolean;
 }
 
 const AppRadioInput = (props: Props) => {
@@ -35,12 +35,12 @@ const AppRadioInput = (props: Props) => {
                     onClick={(e: any) => props.onClick!(e)}
                 >
                     <FormControlLabel
-                        value='true'
+                        value={true}
                         control={<Radio />}
                         label='True'
                     />
                     <FormControlLabel
-                        value='false'
+                        value={false}
                         control={<Radio />}
                         label='False'
                     />
@@ -53,12 +53,12 @@ const AppRadioInput = (props: Props) => {
                     value={props.val}
                 >
                     <FormControlLabel
-                        value='true'
+                        value={true}
                         control={<Radio />}
                         label='True'
                     />
                     <FormControlLabel
-                        value='false'
+                        value={false}
                         control={<Radio />}
                         label='False'
                     />

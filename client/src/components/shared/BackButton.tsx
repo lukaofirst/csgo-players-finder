@@ -1,11 +1,14 @@
 import { Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
-interface Props {
-    onClick?: () => void;
-}
+const BackButton = () => {
+    const navigate = useNavigate();
 
-const BackBtn = ({ onClick }: Props) => {
+    const NavigateBack = () => {
+        navigate(-1);
+    };
+
     return (
         <Button
             variant='outlined'
@@ -15,7 +18,7 @@ const BackBtn = ({ onClick }: Props) => {
                 borderRadius: '5px',
                 color: '#299cdd',
             }}
-            onClick={onClick}
+            onClick={NavigateBack}
         >
             <ArrowBackIcon />
             Back
@@ -23,4 +26,4 @@ const BackBtn = ({ onClick }: Props) => {
     );
 };
 
-export default BackBtn;
+export default BackButton;

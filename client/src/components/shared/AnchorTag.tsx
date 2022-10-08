@@ -1,12 +1,13 @@
 import { Link } from '@mui/material';
 import { ReactNode } from 'react';
 
-interface Props {
-    children: ReactNode;
+interface IAnchorTag {
     url: string;
+    name?: string;
+    children?: ReactNode;
 }
 
-const AnchorTag = ({ children, url }: Props) => {
+const AnchorTag = ({ url, name, children }: IAnchorTag) => {
     return (
         <Link
             href={url}
@@ -14,6 +15,7 @@ const AnchorTag = ({ children, url }: Props) => {
             rel='noreferrer'
             sx={{ textDecoration: 'none', color: '#299cdd' }}
         >
+            {name}
             {children}
         </Link>
     );

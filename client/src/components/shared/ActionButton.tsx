@@ -11,7 +11,7 @@ interface Props {
     onClick?: () => void;
 }
 
-const ActionBtn = ({
+const ActionButton = ({
     name,
     color,
     icon,
@@ -33,4 +33,4 @@ const ActionBtn = ({
     );
 };
 
-export default ActionBtn;
+export default ActionButton;

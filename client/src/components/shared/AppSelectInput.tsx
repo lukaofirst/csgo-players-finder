@@ -25,7 +25,7 @@ const AppSelectInput = (props: Props) => {
             >
                 <option value=''>Team</option>
                 {props.teams.map((team) => (
-                    <option key={team.id} value={team.id}>
+                    <option key={team.id} value={team.id!}>
                         {team.name}
                     </option>
                 ))}
