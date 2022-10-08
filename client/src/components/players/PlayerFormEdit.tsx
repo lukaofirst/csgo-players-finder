@@ -1,11 +1,9 @@
 import { LoadingButton } from '@mui/lab';
 import {
     Box,
-    Checkbox,
     Container,
     FormControl,
     FormControlLabel,
-    FormGroup,
     FormLabel,
     Radio,
     RadioGroup,
@@ -17,17 +15,33 @@ import {
 import { useState, useEffect, ChangeEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { PlayerDTO } from '../../models/DTO/PlayerDTO';
-import { TrophyId } from '../../models/TrophyId';
-import { editPlayerAsync, fetchPlayerAsync } from '../../store/playersSlice';
-import { fetchTeamsAsync } from '../../store/teamsSlice';
-import { fetchTrophiesAsync } from '../../store/trophiesSlice';
-import BackBtn from '../utils/BackBtn';
-import LoadingComponent from '../utils/LoadingComponent';
+import { StatusCode } from '../../models/Enums/StatusCode';
+import { Player } from '../../models/Player';
+import {
+    editPlayerAsync,
+    fetchPlayerAsync,
+} from '../../store/asyncThunks/playerAsyncThunk';
+import { fetchTeamsAsync } from '../../store/asyncThunks/teamAsyncThunks';
+import { fetchTrophiesAsync } from '../../store/asyncThunks/trophyAsyncThunks';
+import BackButton from '../shared/BackButton';
+import LoadingComponent from '../shared/LoadingComponent';
+
+const customCheckboxStyle = {
+    width: '1rem',
+    height: '1rem',
+    marginRight: '0.5rem',
+};
+
+const customCheckboxDivStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: '0.25rem',
+};
 
 const PlayerFormEdit = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { id } = useParams();
 
     const { player, status } = useAppSelector((state) => state.players);
@@ -37,16 +51,19 @@ const PlayerFormEdit = () => {
     );
 
     const [showSelectList, setShowSelectList] = useState('true');
-    const [userInput, setUserInput] = useState<PlayerDTO>({
-        id: 0,
+    const [userInput, setUserInput] = useState<Player>({
+        id: '',
         nickname: '',
         name: '',
         age: 0,
         nationality: '',
-        isActive: '',
+        isActive: false,
         teamId: '',
+        team: null,
+        trophyIds: [],
         trophies: [],
     });
+    const [filteredTrophiesList, setFilteredTrophiesList] = useState<any[]>([]);
 
     useEffect(() => {
         dispatch(fetchTeamsAsync());
@@ -54,10 +71,12 @@ const PlayerFormEdit = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(fetchPlayerAsync(+id!));
+        dispatch(fetchPlayerAsync(id!));
     }, [dispatch, id]);
 
     useEffect(() => {
+        setFilteredTrophiesList(player.trophyIds);
+
         setUserInput({
             id: player?.id,
             nickname: player?.nickname!,
@@ -65,8 +84,10 @@ const PlayerFormEdit = () => {
             age: player?.age!,
             nationality: player?.nationality!,
             isActive: player?.isActive!,
-            teamId: player?.team?.id,
-            trophies: [],
+            teamId: player?.teamId,
+            team: player?.team!,
+            trophyIds: player?.trophyIds!,
+            trophies: player?.trophies,
         });
     }, [
         player?.age,
@@ -75,88 +96,80 @@ const PlayerFormEdit = () => {
         player?.name,
         player?.nationality,
         player?.nickname,
-        player?.team?.id,
+        player?.teamId,
+        player?.team,
+        player?.trophyIds,
+        player?.trophies,
     ]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setShowSelectList(e.target.value);
     };
 
     const enteredData = (e: any) => {
-        if (e.target.name === 'trophies') {
-            const checkboxPlayerTrophies: NodeList =
-                document.querySelectorAll('[name=trophies]');
+        setUserInput((prevState) => {
+            return { ...prevState, [e.target.name]: e.target.value };
+        });
+    };
 
-            let playerTrophiesArr: any[] = [];
+    const handleCheck = (id: any) => {
+        if (player && trophiesList) {
+            if (filteredTrophiesList.includes(id)) {
+                const newArrWithRemovedTrophy = filteredTrophiesList.filter(
+                    (item) => item !== id
+                );
 
-            checkboxPlayerTrophies.forEach((item: any) => {
-                const trophyObj = { trophy: { id: +item.value } };
+                setFilteredTrophiesList(newArrWithRemovedTrophy);
+            } else {
+                const newArrWithAddedTrophy = [...filteredTrophiesList, id];
 
-                if (item.checked === true) {
-                    if (!playerTrophiesArr.includes(trophyObj)) {
-                        playerTrophiesArr.push(trophyObj);
-                    } else {
-                        playerTrophiesArr = playerTrophiesArr.filter(
-                            (t) => t.trophyId !== trophyObj.trophy.id
-                        );
-                    }
-                }
-            });
-
-            setUserInput((prevState) => {
-                userInput.trophies = playerTrophiesArr;
-                return { ...prevState };
-            });
-        } else {
-            setUserInput((prevState) => {
-                return { ...prevState, [e.target.name]: e.target.value };
-            });
+                setFilteredTrophiesList(newArrWithAddedTrophy);
+            }
         }
     };
 
     const onSubmitHandler = async (e: any) => {
         e.preventDefault();
 
-        const filteredTrophiesList: TrophyId[] = userInput.trophies!.map(
-            (item: any) => ({ trophyId: item.trophy.id })
-        );
-
-        const playerDTO: PlayerDTO = {
+        const player: Player = {
             id: userInput.id,
-            nickname: userInput.nickname!,
-            name: userInput.name!,
-            age: userInput.age!,
-            nationality: userInput.nationality!,
-            isActive: userInput.isActive!,
-            trophies: filteredTrophiesList,
-            ...(userInput.isActive! === 'true' && {
-                teamId: +userInput.teamId!,
+            nickname: userInput.nickname,
+            name: userInput.name,
+            age: userInput.age,
+            nationality: userInput.nationality,
+            isActive: userInput.isActive,
+            team: userInput.team,
+            trophyIds: filteredTrophiesList,
+            ...(userInput.isActive && {
+                teamId: userInput.teamId!,
             }),
         };
 
         try {
-            await dispatch(editPlayerAsync(playerDTO));
+            const result = await dispatch(editPlayerAsync(player)).unwrap();
 
-            setUserInput({
-                id: '',
-                nickname: '',
-                name: '',
-                age: '',
-                nationality: '',
-                isActive: '',
-                teamId: '',
-                trophies: [],
-            });
+            if (result.statusCode === StatusCode.Success) {
+                setUserInput({
+                    id: '',
+                    nickname: '',
+                    name: '',
+                    age: 0,
+                    nationality: '',
+                    isActive: false,
+                    teamId: '',
+                    team: null,
+                    trophyIds: [],
+                    trophies: [],
+                });
+
+                navigate(`/players/${id}`);
+            }
         } catch (err) {
             console.log(err);
         }
     };
 
-    if (!teamsLoaded || !trophiesLoaded)
+    if (!teamsLoaded && !trophiesLoaded && userInput.trophyIds!.length > 0)
         return <LoadingComponent message='Loading all the info needed...' />;
 
     return (
@@ -166,7 +179,7 @@ const PlayerFormEdit = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
+                <BackButton />
             </Stack>
             <Box
                 sx={{
@@ -266,7 +279,7 @@ const PlayerFormEdit = () => {
                                 Team
                             </option>
                             {teamsList.map((team) => (
-                                <option key={team.id} value={team.id}>
+                                <option key={team.id} value={team.id!}>
                                     {team.name}
                                 </option>
                             ))}
@@ -277,25 +290,22 @@ const PlayerFormEdit = () => {
                             Trophies
                         </FormLabel>
                         {trophiesList.map((trophy) => (
-                            <FormGroup
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                }}
-                                key={trophy.id}
-                            >
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            value={trophy.id}
-                                            onChange={enteredData}
-                                        />
-                                    }
-                                    name='trophies'
-                                    label={trophy.name}
+                            <Box key={trophy.id} sx={customCheckboxDivStyle}>
+                                <input
+                                    type='checkbox'
+                                    id={trophy.id!}
+                                    name='trophyIds'
+                                    checked={filteredTrophiesList.includes(
+                                        trophy.id!
+                                    )}
+                                    value={trophy.id!}
+                                    onChange={() => handleCheck(trophy.id)}
+                                    style={customCheckboxStyle}
                                 />
-                            </FormGroup>
+                                <label htmlFor={trophy.id!}>
+                                    {trophy.name}
+                                </label>
+                            </Box>
                         ))}
                     </Box>
                     <LoadingButton

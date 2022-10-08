@@ -2,11 +2,11 @@ import { Stack } from '@mui/material';
 import { Player } from '../../models/Player';
 import PlayerItem from './PlayerItem';
 
-interface Props {
+interface IPlayerList {
     items: Player[];
 }
 
-const PlayerList = ({ items }: Props) => {
+const PlayerList = ({ items }: IPlayerList) => {
     return (
         <Stack
             direction='row'

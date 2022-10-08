@@ -1,18 +1,19 @@
 import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import BackBtn from '../utils/BackBtn';
+import BackButton from '../shared/BackButton';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { Fragment, useEffect, useState } from 'react';
+import { setEditMode } from '../../store/stateSlices/playersSlice';
+import LoadingComponent from '../shared/LoadingComponent';
+import ActionButton from '../shared/ActionButton';
+import ModalDelete from '../shared/ModalDelete';
+import ReactDOM from 'react-dom';
 import {
     deletePlayerAsync,
     fetchPlayerAsync,
-    setEditMode,
-} from '../../store/playersSlice';
-import LoadingComponent from '../utils/LoadingComponent';
-import ActionBtn from '../utils/ActionBtn';
-import ModalDelete from '../utils/ModalDelete';
-import ReactDOM from 'react-dom';
+} from '../../store/asyncThunks/playerAsyncThunk';
+import { StatusCode } from '../../models/Enums/StatusCode';
 
 const PlayerDetailed = () => {
     const navigate = useNavigate();
@@ -24,12 +25,8 @@ const PlayerDetailed = () => {
     const handleClose = () => setOpen(false);
 
     useEffect(() => {
-        dispatch(fetchPlayerAsync(+id!));
+        dispatch(fetchPlayerAsync(id!));
     }, [dispatch, id]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const openDeleteModal = () => {
         setOpen(true);
@@ -40,15 +37,15 @@ const PlayerDetailed = () => {
         navigate('edit');
     };
 
-    const deletePlayer = async (id: number) => {
+    const deletePlayer = async (id: string) => {
         handleClose();
 
         try {
-            await dispatch(deletePlayerAsync(id));
+            const result = await dispatch(deletePlayerAsync(id)).unwrap();
 
-            setTimeout(() => {
+            if (result.statusCode === StatusCode.Success) {
                 navigate('/players');
-            }, 3000);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -77,16 +74,16 @@ const PlayerDetailed = () => {
                     justifyContent='space-between'
                     alignItems='center'
                 >
-                    <BackBtn onClick={NavigateBack} />
+                    <BackButton />
                     <Stack direction='row' alignItems='center' spacing={2}>
-                        <ActionBtn
+                        <ActionButton
                             variant='outlined'
                             name='Player'
                             color='warning'
                             icon='edit'
                             onClick={editPlayer}
                         />
-                        <ActionBtn
+                        <ActionButton
                             variant='outlined'
                             name='Player'
                             color='error'
@@ -171,7 +168,7 @@ const PlayerDetailed = () => {
                             marginBottom: '20px',
                         }}
                     >
-                        {player?.playerTrophies?.length! > 0 ? (
+                        {player?.trophies?.length! > 0 ? (
                             <>
                                 <Typography
                                     variant='h5'
@@ -189,48 +186,46 @@ const PlayerDetailed = () => {
                                         Year
                                     </Grid>
                                     <Grid item xs={2} textAlign='center'>
-                                        IsMajor
+                                        Is Major
                                     </Grid>
-                                    {player?.playerTrophies?.map(
-                                        ({ trophy }) => (
-                                            <Fragment key={trophy.id}>
-                                                <Grid item xs={8}>
-                                                    <Typography
-                                                        variant='subtitle1'
-                                                        fontWeight='bold'
-                                                        gutterBottom
-                                                    >
-                                                        {trophy.name}
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid
-                                                    item
-                                                    xs={2}
-                                                    textAlign='center'
+                                    {player?.trophies?.map((trophy) => (
+                                        <Fragment key={trophy.id}>
+                                            <Grid item xs={8}>
+                                                <Typography
+                                                    variant='subtitle1'
+                                                    fontWeight='bold'
+                                                    gutterBottom
                                                 >
-                                                    <Typography
-                                                        variant='subtitle1'
-                                                        gutterBottom
-                                                    >
-                                                        {trophy.year}
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid
-                                                    item
-                                                    xs={2}
-                                                    textAlign='center'
+                                                    {trophy.name}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs={2}
+                                                textAlign='center'
+                                            >
+                                                <Typography
+                                                    variant='subtitle1'
+                                                    gutterBottom
                                                 >
-                                                    {trophy.isMajor && (
-                                                        <EmojiEventsIcon
-                                                            sx={{
-                                                                color: '#299cdd',
-                                                            }}
-                                                        />
-                                                    )}
-                                                </Grid>
-                                            </Fragment>
-                                        )
-                                    )}
+                                                    {trophy.year}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid
+                                                item
+                                                xs={2}
+                                                textAlign='center'
+                                            >
+                                                {trophy.isMajor && (
+                                                    <EmojiEventsIcon
+                                                        sx={{
+                                                            color: '#299cdd',
+                                                        }}
+                                                    />
+                                                )}
+                                            </Grid>
+                                        </Fragment>
+                                    ))}
                                 </Grid>
                             </>
                         ) : (

@@ -3,16 +3,16 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Player } from '../../models/Player';
 import { useNavigate } from 'react-router-dom';
 
-interface Props {
+interface IPlayerItem {
     item: Player;
 }
 
-const PlayerItem = ({ item }: Props) => {
+const PlayerItem = ({ item }: IPlayerItem) => {
     const navigate = useNavigate();
 
     const { nickname, name, age, nationality, id } = item;
 
-    const onClickHandler = (id: number) => {
+    const onClickHandler = (id: string) => {
         navigate(`${id}`);
     };
 

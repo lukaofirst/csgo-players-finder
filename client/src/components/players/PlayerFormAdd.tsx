@@ -2,31 +2,31 @@ import { Add } from '@mui/icons-material';
 import { Box, Container, FormControl, Stack, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { addPlayerAsync } from '../../store/playersSlice';
-import { fetchTeamsAsync } from '../../store/teamsSlice';
-import { fetchTrophiesAsync } from '../../store/trophiesSlice';
 import { playerValidatorSchema } from '../../validators/playerValidatorSchema';
 import { yupResolver } from '@hookform/resolvers/yup';
-import BackBtn from '../utils/BackBtn';
-import LoadingComponent from '../utils/LoadingComponent';
-import AppTextInput from '../utils/AppTextInput';
-import AppRadioInput from '../utils/AppRadioInput';
-import AppSelectInput from '../utils/AppSelectInput';
-import AppCheckboxInput from '../utils/AppCheckboxInput';
+import BackButton from '../shared/BackButton';
+import LoadingComponent from '../shared/LoadingComponent';
+import AppTextInput from '../shared/AppTextInput';
+import AppRadioInput from '../shared/AppRadioInput';
+import AppSelectInput from '../shared/AppSelectInput';
+import AppCheckboxInput from '../shared/AppCheckboxInput';
 import { LoadingButton } from '@mui/lab';
-import { PlayerDTO } from '../../models/DTO/PlayerDTO';
-import { Trophy } from '../../models/Trophy';
+import { Player } from '../../models/Player';
+import { fetchTeamsAsync } from '../../store/asyncThunks/teamAsyncThunks';
+import { fetchTrophiesAsync } from '../../store/asyncThunks/trophyAsyncThunks';
+import { addPlayerAsync } from '../../store/asyncThunks/playerAsyncThunk';
+import { StatusCode } from '../../models/Enums/StatusCode';
+import { useNavigate } from 'react-router-dom';
 
 const PlayerFormAdd = () => {
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const {
         handleSubmit,
         control,
         formState: { isSubmitting },
-        reset,
+        reset: resetForm,
     } = useForm<FieldValues>({
         mode: 'all',
         shouldUnregister: true,
@@ -45,34 +45,29 @@ const PlayerFormAdd = () => {
         dispatch(fetchTrophiesAsync());
     }, [dispatch]);
 
-    const NavigateBack = () => {
-        navigate(-1);
-    };
-
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setShowSelectList(e.target.value);
     };
 
     const onSubmitHandler = async (data: FieldValues) => {
-        const filteredTrophiesList: Trophy[] = data.trophies?.map(
-            (item: Trophy) => ({
-                trophyId: item,
-            })
-        );
-
-        const playerDTO: PlayerDTO = {
+        const player: Player = {
             nickname: data.nickname,
             name: data.name,
             age: data.age,
             nationality: data.nationality,
             isActive: data.isActive,
-            trophies: filteredTrophiesList,
-            ...(data.isActive === 'true' && { teamId: parseInt(data.teamId) }),
+            trophyIds: data.trophyIds,
+            ...(data.isActive && { teamId: data.teamId }),
         };
 
         try {
-            await dispatch(addPlayerAsync(playerDTO));
-            reset({});
+            const result = await dispatch(addPlayerAsync(player)).unwrap();
+
+            if (result.statusCode === StatusCode.Created) {
+                resetForm({});
+
+                navigate('/players');
+            }
         } catch (err) {
             console.log(err);
         }
@@ -88,7 +83,7 @@ const PlayerFormAdd = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
+                <BackButton />
             </Stack>
             <Box
                 sx={{
@@ -151,7 +146,7 @@ const PlayerFormAdd = () => {
                         <AppCheckboxInput
                             label='Trophies'
                             trophies={trophiesList}
-                            name='trophies'
+                            name='trophyIds'
                             control={control}
                         />
                     </>
