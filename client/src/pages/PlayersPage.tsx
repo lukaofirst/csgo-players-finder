@@ -2,14 +2,14 @@ import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PlayerList from '../components/players/PlayerList';
-import ActionBtn from '../components/utils/ActionBtn';
-import BackBtn from '../components/utils/BackBtn';
-import LoadingComponent from '../components/utils/LoadingComponent';
+import ActionButton from '../components/shared/ActionButton';
+import BackButton from '../components/shared/BackButton';
+import LoadingComponent from '../components/shared/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { Player } from '../models/Player';
-import { fetchPlayersAsync } from '../store/playersSlice';
+import { fetchPlayersAsync } from '../store/asyncThunks/playerAsyncThunk';
 
-const Players = () => {
+const PlayersPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -27,10 +27,6 @@ const Players = () => {
     useEffect(() => {
         setPlayersListResult(playersList);
     }, [playersList]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const NavigateToAddPlayer = () => {
         navigate('add');
@@ -63,8 +59,8 @@ const Players = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
-                <ActionBtn
+                <BackButton />
+                <ActionButton
                     variant='contained'
                     name='player'
                     color='success'
@@ -98,4 +94,4 @@ const Players = () => {
     );
 };
 
-export default Players;
+export default PlayersPage;

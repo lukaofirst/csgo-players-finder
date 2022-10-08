@@ -2,14 +2,14 @@ import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TrophyList from '../components/trophies/TrophyList';
-import ActionBtn from '../components/utils/ActionBtn';
-import BackBtn from '../components/utils/BackBtn';
-import LoadingComponent from '../components/utils/LoadingComponent';
+import ActionButton from '../components/shared/ActionButton';
+import BackButton from '../components/shared/BackButton';
+import LoadingComponent from '../components/shared/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { Trophy } from '../models/Trophy';
-import { fetchTrophiesAsync } from '../store/trophiesSlice';
+import { fetchTrophiesAsync } from '../store/asyncThunks/trophyAsyncThunks';
 
-const Trophies = () => {
+const TrophiesPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -27,10 +27,6 @@ const Trophies = () => {
     useEffect(() => {
         setTrophiesListResult(trophiesList);
     }, [trophiesList]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const NavigateToAddTrophy = () => {
         navigate('add');
@@ -61,8 +57,8 @@ const Trophies = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
-                <ActionBtn
+                <BackButton />
+                <ActionButton
                     variant='contained'
                     name='trophy'
                     color='success'
@@ -96,4 +92,4 @@ const Trophies = () => {
     );
 };
 
-export default Trophies;
+export default TrophiesPage;

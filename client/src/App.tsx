@@ -13,12 +13,12 @@ import TeamFormAdd from './components/teams/TeamFormAdd';
 import TeamFormEdit from './components/teams/TeamFormEdit';
 import TrophyFormAdd from './components/trophies/TrophyFormAdd';
 import TrophyFormEdit from './components/trophies/TrophyFormEdit';
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import Players from './pages/Players';
-import Teams from './pages/Teams';
-import Trophies from './pages/Trophies';
-import { store } from './store/store';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+import PlayersPage from './pages/PlayersPage';
+import TeamsPage from './pages/TeamsPage';
+import TrophiesPage from './pages/TrophiesPage';
+import { store } from './store';
 
 function App() {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
@@ -44,25 +44,28 @@ function App() {
             <Navbar isMobile={isMobile} />
             <Provider store={store}>
                 <Routes>
-                    <Route path='/' element={<Home isMobile={isMobile} />} />
+                    <Route
+                        path='/'
+                        element={<HomePage isMobile={isMobile} />}
+                    />
                     <Route path='players'>
-                        <Route index={true} element={<Players />} />
+                        <Route index element={<PlayersPage />} />
                         <Route path='add' element={<PlayerFormAdd />} />
                         <Route path=':id' element={<PlayerDetailed />} />
                         <Route path=':id/edit' element={<PlayerFormEdit />} />
                     </Route>
                     <Route path='teams'>
-                        <Route index={true} element={<Teams />} />
+                        <Route index element={<TeamsPage />} />
                         <Route path='add' element={<TeamFormAdd />} />
                         <Route path=':id' element={<TeamDetailed />} />
                         <Route path=':id/edit' element={<TeamFormEdit />} />
                     </Route>
                     <Route path='trophies'>
-                        <Route index={true} element={<Trophies />} />
+                        <Route index element={<TrophiesPage />} />
                         <Route path='add' element={<TrophyFormAdd />} />
                         <Route path=':id/edit' element={<TrophyFormEdit />} />
                     </Route>
-                    <Route path='*' element={<NotFound />} />
+                    <Route path='*' element={<NotFoundPage />} />
                 </Routes>
             </Provider>
             <Footer isMobile={isMobile} />

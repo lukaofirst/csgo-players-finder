@@ -2,14 +2,14 @@ import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TeamList from '../components/teams/TeamList';
-import ActionBtn from '../components/utils/ActionBtn';
-import BackBtn from '../components/utils/BackBtn';
-import LoadingComponent from '../components/utils/LoadingComponent';
+import ActionButton from '../components/shared/ActionButton';
+import BackButton from '../components/shared/BackButton';
+import LoadingComponent from '../components/shared/LoadingComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import { Team } from '../models/Team';
-import { fetchTeamsAsync } from '../store/teamsSlice';
+import { fetchTeamsAsync } from '../store/asyncThunks/teamAsyncThunks';
 
-const Teams = () => {
+const TeamsPage = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -25,10 +25,6 @@ const Teams = () => {
     useEffect(() => {
         setTeamsListResult(teamsList);
     }, [teamsList]);
-
-    const NavigateBack = () => {
-        navigate(-1);
-    };
 
     const NavigateToAddTeam = () => {
         navigate('add');
@@ -60,8 +56,8 @@ const Teams = () => {
                 justifyContent='space-between'
                 alignItems='center'
             >
-                <BackBtn onClick={NavigateBack} />
-                <ActionBtn
+                <BackButton />
+                <ActionButton
                     variant='contained'
                     name='team'
                     color='success'
@@ -96,4 +92,4 @@ const Teams = () => {
     );
 };
 
-export default Teams;
+export default TeamsPage;
